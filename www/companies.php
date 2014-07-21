@@ -17,7 +17,7 @@
 	
 <h2>Companies</h2>
 
-<em><a href='addnewcompany.php'>Add New Company</a></em><br/><br/>
+<em><a href='addNewCompany.php'>Add New Company</a></em><br/><br/>
 
 <table>
 	<tr>
@@ -53,7 +53,8 @@
 			"<td>$city</td>" .
 			"<td>$state</td>" .
 			"<td>$zip</td>" .
-			"<td><a href='detail.php?cid=$cmp_id'>Edit</a></td></tr>";
+			"<td><a href='detail.php?cid=$cmp_id'>Edit</a></td>" .
+			"<td><a href='deleteCompany.php?cid=$cmp_id'>Delete</a></td></tr>";
 		}
 	}
 
