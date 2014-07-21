@@ -6,8 +6,8 @@
 		
 		//THESE NEED CHANGING ONCE PRODUCTION SERVER IS LIVE
 		const HOST = "localhost"; 
-		const USER = "dbWorker";
-		const PW = "password";
+		const USER = "root";
+		const PW = "abcd1234";
 		const DBNAME = "athena";
 		
 		public function doConnect();
