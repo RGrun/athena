@@ -2,16 +2,16 @@
 
 	//dbConnector.php
 	
-	include_once("connection_info.php");
+	require_once("connection_info.php");
 	
 	class dbConnector implements dbConnectInfo {
 	
 		//constants from interface
-		private static $server = dbConnectInfo::HOST;
-		private static $db = dbConnectInfo::DBNAME;
-		private static $user = dbConnectInfo::USER;
-		private static $pass = dbConnectInfo::PW;
-		private $hookup;
+		protected static $server = dbConnectInfo::HOST;
+		protected static $db = dbConnectInfo::DBNAME;
+		protected static $user = dbConnectInfo::USER;
+		protected static $pass = dbConnectInfo::PW;
+		protected $hookup;
 		
 		
 		//returns active db connection
@@ -26,6 +26,7 @@
 			return $hookup;
 		}
 		
+
 	}
 ?>
 	
