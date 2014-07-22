@@ -4,18 +4,15 @@
 	
 
 	include_once("htmlUtils.php");
-	include_once("companyUpdater.php");
-	//include_once("dbConnector.php");
+	include_once("dbWorker.php");
 	
 	//connect to the DB
-	$worker = new companyUpdater();
-	
-	//$database = new dbConnector();
-	//$connection = $database->doConnect();
+	$worker = new dbWorker();
 	
 	$htmlUtils = new htmlUtils();
 	
 	$htmlUtils->makeHeader();
+	
 	if(isset($_GET['mtd'])){
 		$selectedMethod = $_GET['mtd'];
 		$_SESSION['selectedMethod'] = $selectedMethod;
@@ -24,14 +21,14 @@
 	}
 	$currentCompany = $_SESSION['currentCompany'];
 	
-	echo "<h2>Edit Company Info: Editing Company</h2>";
+	echo "<h2>Edit Company Info: </h2>";
 	
 
 	if(isset($_POST['changeActivity'])) {
-		$worker->update('activity', $currentCompany, null);
+		$worker->editCompanyDatabase('active', $currentCompany);
 		$worker->closeConnection();
 	} else if(isset($_POST['newData'])) {
-		$worker->update($selectedMethod, $currentCompany, $_POST['newData']);
+		$worker->editCompanyDatabase($selectedMethod, $currentCompany, $_POST['newData']);
 		$worker->closeConnection();
 	} else {
 		$activityForm = "<form method='post' action='editCompanyInfo.php'>" .

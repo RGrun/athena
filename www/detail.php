@@ -52,6 +52,7 @@
 </table>
 
 <?php
+	echo "<p><a href='companies.php'>Back to companies list</a></p>";
 	$htmlUtils->makeFooter();
 	mysqli_close($connection);
 ?>
