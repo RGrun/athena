@@ -4,7 +4,7 @@
 	
 
 	include_once("htmlUtils.php");
-	include_once("dbWorker.php");
+	include_once("/dbWorker.php");
 	
 	//connect to the DB
 	$worker = new dbWorker();
