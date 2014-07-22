@@ -1,11 +1,9 @@
 <?php
 
-	//editCompanyInfo.php
+	//editUserInfo.php
 	
-
 	require_once "includes.php";
 	
-	//connect to the DB
 	$worker = new dbWorker();
 	
 	$htmlUtils = new htmlUtils();
@@ -18,27 +16,27 @@
 	} else {
 		$selectedMethod = $_SESSION['selectedMethod'];
 	}
-	$currentCompany = $_SESSION['currentCompany'];
+	$currentUser = $_SESSION['currentUserId'];
 	
-	echo "<h2>Edit Company Info: </h2>";
+	echo "<h2>Edit User Info: </h2>";
 	
 
 	if(isset($_POST['changeActivity'])) {
-		$worker->editCompanyDatabase('active', $currentCompany);
+		$worker->editUserDatabase('active', $currentUser);
 		$worker->closeConnection();
 	} else if(isset($_POST['newData'])) {
-		$worker->editCompanyDatabase($selectedMethod, $currentCompany, $_POST['newData']);
+		$worker->editUserDatabase($selectedMethod, $currentUser, $_POST['newData']);
 		$worker->closeConnection();
 	} else {
-		$activityForm = "<form method='post' action='editCompanyInfo.php'>" .
+		$activityForm = "<form method='post' action='editUserInfo.php'>" .
 			"<input type='hidden' name='changeActivity' />" .
 			"<input type='submit' value='Change Activity' /> </form> <br />";
 			
-		$form = "<form method='post' action='editCompanyInfo.php'>" .
+		$form = "<form method='post' action='editUserInfo.php'>" .
 		"<textarea name='newData' cols='20' rows='5'>Enter New Data Here</textarea><br />" .
 		"<input type='submit' value='Commit Changes' /></form> <br/>";
 		
-		$sql = "SELECT $selectedMethod FROM company WHERE cmp_id='$currentCompany'";
+		$sql = "SELECT $selectedMethod FROM users WHERE usr_id='$currentUser'";
 		
 		if($result = $worker->query($sql)) {
 			
@@ -49,10 +47,10 @@
 			echo "Current Value: <br />";
 			
 			if($selectedMethod == "active" && $currentData == 1) {
-				echo "Company is active. <br />";
+				echo "User is active. <br />";
 				echo $activityForm;
 			} else if($selectedMethod == "active" && $currentData == 0) {
-				echo "Company is inactive. <br />";
+				echo "User is inactive. <br />";
 				echo $activityForm;
 			} else {
 				echo "<p>$currentData</p>";
@@ -65,4 +63,3 @@
 		$worker->closeConnection();
 	}
 ?>
-		

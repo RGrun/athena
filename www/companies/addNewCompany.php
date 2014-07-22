@@ -1,8 +1,7 @@
 <?php
 	//addNewCompany.php
 	
-	include_once("htmlUtils.php");
-	include_once("dbConnector.php");
+	require_once "includes.php";
 	
 	//establish connection to db
 	$database = new dbConnector();
@@ -12,7 +11,7 @@
 	
 	$htmlUtils->makeHeader();
 	
-	if(isset($_POST['newName'])) {
+	if(isset($_POST['isActive'])) {
 	
 		extract($_POST);
 	

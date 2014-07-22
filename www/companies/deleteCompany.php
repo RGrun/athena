@@ -2,16 +2,11 @@
 
 	//deleteCompany.php
 	
-	include_once("htmlUtils.php");
-	include_once("dbConnector.php");
+	include_once("includes.php");
 	
 	//establish connection to db
 	$database = new dbConnector();
 	$connection = $database->doConnect();
-	
-	$htmlUtils = new htmlUtils();
-	
-	$htmlUtils->makeHeader();
 	
 	$companyToDelete = $_GET['cid'];
 	

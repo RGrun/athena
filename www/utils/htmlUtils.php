@@ -10,17 +10,27 @@
 		public function makeHeader() {
 		
 		session_start();
+		
+		//This MUST be changed before deployment
+		$rt = "athenalocal";
 			
 			$header = <<<_END
 <!DOCTYPE html>
 <html>
 	<head>
 		<title>Athena System</title>
+		<style>
+			li { display: inline; }
+		</style>
 	</head>	
 	<body>
-		<h1>Athena header</h1>
-		<br />
-		<br />
+		<h1>Welcome to Athena</h1>
+		<ul>
+			<li><a href='/athenalocal/companies/companies.php'>Companies Table</a></li>
+			<li><a href='/athenalocal/users/users.php'>Users Table</a></li>
+			<li><a href='/athenalocal/sites/sites.php'>Sites Table</a></li>
+			<li><a href='/athenalocal/clients/clients.php'>Clients Table</a></li>
+		</ul>
 _END;
 			echo $header;
 		}

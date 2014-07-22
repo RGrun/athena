@@ -2,7 +2,7 @@
 
 	//companyUpdater.php
 	
-	include_once("dbConnector.php");
+	require_once "includes.php"
 	
 	class companyUpdater {
 		

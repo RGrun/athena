@@ -2,8 +2,8 @@
 
 	//detail.php
 	
-	include_once("htmlUtils.php");
-	include_once("dbConnector.php");
+	require_once "includes.php";
+	
 	
 	//establish db connection
 	$database = new dbConnector();
