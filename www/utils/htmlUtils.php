@@ -13,6 +13,7 @@
 		
 		//This MUST be changed before deployment
 		$rt = "athenalocal";
+		
 			
 			$header = <<<_END
 <!DOCTYPE html>
@@ -26,10 +27,10 @@
 	<body>
 		<h1>Welcome to Athena</h1>
 		<ul>
-			<li><a href='/athenalocal/companies/companies.php'>Companies Table</a></li>
-			<li><a href='/athenalocal/users/users.php'>Users Table</a></li>
-			<li><a href='/athenalocal/sites/sites.php'>Sites Table</a></li>
-			<li><a href='/athenalocal/clients/clients.php'>Clients Table</a></li>
+			<li><a href='/athena/www/companies/companies.php'>Companies Table</a></li>
+			<li><a href='/athena/www/users/users.php'>Users Table</a></li>
+			<li><a href='/athena/www/sites/sites.php'>Sites Table</a></li>
+			<li><a href='/athena/www/clients/clients.php'>Clients Table</a></li>
 		</ul>
 _END;
 			echo $header;
