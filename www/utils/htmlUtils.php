@@ -32,7 +32,6 @@
 			<li><a href='/athenalocal/clients/clients.php'>Clients Table</a></li>
 		</ul>
 _END;
-			error_reporting(E_ALL);
 			echo $header;
 		}
 		
