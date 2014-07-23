@@ -28,7 +28,7 @@
 	
 			$table .= ("<tr><td>$cli_id</td><td>$isActive</td><td>$fname</td><td>$lname</td><td>$uname</td>" .
 			"<td>$email</td><td>$phone</td><td>$sms</td></td>" .
-			"<td><a href='clientDetail.php?cid=$cli_id'>Detail</a></td><td><a href='editClientInfo.php?cid=$cli_id'>Delete</a></td>");
+			"<td><a href='clientDetail.php?cid=$cli_id'>Detail</a></td><td><a href='deleteClient.php?cid=$cli_id'>Delete</a></td>");
 
 		}
 		

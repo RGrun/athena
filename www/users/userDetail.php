@@ -27,7 +27,7 @@
 		$table = "<table>" .
 		"<tr><td><em>Active User?</em></td><td>$activeUser</td><td><a href='editUserInfo.php?mtd=active'>Edit</a></td></tr>" .
 		"<tr><td><em>First Name</em></td><td>$fname</td><td><a href='editUserInfo.php?mtd=fname'>Edit</a></td></tr>" .
-		"<tr><td><em>Last Name</em></td><td>$uname</td><td><a href='editUserInfo.php?mtd=uname'>Edit</a></td></tr>" .
+		"<tr><td><em>Last Name</em></td><td>$lname</td><td><a href='editUserInfo.php?mtd=uname'>Edit</a></td></tr>" .
 		"<tr><td><em>Team ID</em></td><td>$team_id</td><td><a href='editUserInfo.php?mtd=team_id'>Edit</a></td></tr>" .
 		"<tr><td><em>Email</em></td><td>$email</td><td><a href='editUserInfo.php?mtd=email'>Edit</a></td></tr>" .
 		"<tr><td><em>Phone</em></td><td>$phone</td><td><a href='editUserInfo.php?mtd=phone'>Edit</a></td></tr>" .
