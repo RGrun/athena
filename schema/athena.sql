@@ -141,7 +141,7 @@ drop table if exists teams;
 create table if not exists teams 
 ( team_id   int(10)      not null auto_increment,
   name      varchar(255) not null,
-  region    varchar(40)  not null default '',
+  reg_id    varchar(40)  not null default '',
   state     varchar(3)   not null,
   cmp_id    int(10)      not null default 0,    -- teams are owned by ONE company or distributor
   head_id   int(10)      not null default 0,    -- user responsible for the team
