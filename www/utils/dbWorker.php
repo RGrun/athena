@@ -293,6 +293,17 @@
 			return $row["$requestedField"];
 		}	
 		
+		public function findClient($uid, $requestedField) {
+					
+			//$requestedField MUST match the name of a database column
+			
+			$sql = "SELECT * FROM clients WHERE cli_id='$uid'";
+			$result = $this->query($sql);
+			$row = mysqli_fetch_assoc($result);
+			
+			return $row["$requestedField"];
+		}	
+		
 		//Other functions
 		
 		public static function rowMachine($data) {
