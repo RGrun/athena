@@ -13,8 +13,10 @@
 	
 		extract($_POST);
 		
+		$region = $worker->findRegion($newregions);
+		
 		$sql = "INSERT INTO teams (name, region, state, cmp_id, head_id)" .
-		"VALUES ('$newName', '$newregions', '$newState', '$newcompany', '$newusers')";
+		"VALUES ('$newName', '$region', '$newState', '$newcompany', '$newusers')";
 		
 		$worker->query($sql);
 		$worker->closeConnection();

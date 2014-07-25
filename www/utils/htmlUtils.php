@@ -19,6 +19,9 @@
 		<title>Athena System</title>
 		<style>
 			li { display: inline; }
+			table, th, td {
+				border: 1px solid black;
+			}
 		</style>
 	</head>	
 	<body>
