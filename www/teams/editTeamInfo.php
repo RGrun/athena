@@ -32,7 +32,7 @@
 		$worker->editTeamDatabase($selectedMethod, $currentTeam, $_POST['newusers']);
 		$worker->closeConnection();
 	} else if (isset($_POST['newregions'])) {
-		$region = $worker->findRegion($_POST['newregions']);
+		$region = $worker->findRegion($_POST['newregions'], "name");
 		$worker->editTeamDatabase($selectedMethod, $currentTeam, $region);
 		$worker->closeConnection();
 	} else {
