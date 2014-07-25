@@ -21,6 +21,7 @@
 			li { display: inline; }
 			table, th, td {
 				border: 1px solid black;
+				padding: 3px;
 			}
 		</style>
 	</head>	
