@@ -37,7 +37,10 @@
 			if(mysqli_num_rows($result) == 0) {
 				$error = "<span class='error'>Username/Password invalid.</span><br/><br/>";
 			} else {
+				$sql = "SELECT usr_id FROM users WHERE uname='$user'";
+				$userId = $worker->query($sql);
 				$_SESSION['user'] = $user;
+				$_SESSION['userId'] = $userId;
 				$_SESSION['pass'] = $pass;
 				die("You are now logged in. Please <a href='landing.php'>Click here</a> to continue.<br/><br/>");
 			}
