@@ -13,7 +13,7 @@
 	
 		extract($_POST);
 		
-		$region = $worker->findRegion($newregions);
+		$region = $worker->findRegion($newregions, "name");
 		
 		$sql = "INSERT INTO teams (name, region, state, cmp_id, head_id)" .
 		"VALUES ('$newName', '$region', '$newState', '$newcompany', '$newusers')";
