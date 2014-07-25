@@ -26,7 +26,6 @@
 			
 			$company = $worker->findCompany($cmp_id, "name");
 			$leader = $worker->findUser($head_id, "uname");
-			$region = $worker->findRegion($reg_id, "name");
 	
 			$table .= ("<tr><td>$team_id</td><td>$name</td><td>$region</td><td>$state</td>" .
 			"<td>$company</td><td>$leader</td></td>" .
