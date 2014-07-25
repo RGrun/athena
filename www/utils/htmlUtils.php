@@ -75,9 +75,6 @@ _END;
 	</head>	
 	<body>
 		<h1>Welcome to Athena</h1>
-		<ul>
-			<li><a href='/athena/www/login.php'>Log In</a></li>
-		</ul>
 		<div class='main'><h3>Please enter your username and password to log in</h3>
 		<p>$loginForm</p>
 		

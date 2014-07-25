@@ -36,6 +36,7 @@
 				$result2 = $worker->query($sql);
 				$row = mysqli_fetch_array($result2);
 				
+				
 				$_SESSION['user'] = $user;
 				$_SESSION['userId'] = $row[0];
 				$_SESSION['pass'] = $pass;

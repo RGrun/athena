@@ -10,7 +10,6 @@
 	
 	$htmlUtils->makeHeader();
 	
-	if($loggedIn) {
 	
 	$userStr = $_SESSION['user'];
 	$userId = $_SESSION['userId'];
@@ -55,5 +54,5 @@
 	}
 	
 	$htmlUtils->makeFooter();
-}
+
 ?>
