@@ -5,7 +5,9 @@
 	require_once $_SERVER['DOCUMENT_ROOT'] . "/athena/www/utils/dbWorker.php";
 	
 	$worker = new dbWorker();
-		
+	
+	session_start();
+	
 	$error = $user = $pass = "";
 	
 	$loginForm = "<form method='post' action='login.php'>$error" .
