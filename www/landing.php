@@ -11,7 +11,7 @@
 	$htmlUtils->makeHeader();
 	
 	$userStr = $_SESSION['user'];
-	$userId = $_SESSION['userId']:
+	$userId = $_SESSION['userId'];
 	
 	$sql = "SELECT * from assigns WHERE usr_id='$userId'";
 	
