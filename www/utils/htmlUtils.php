@@ -53,7 +53,27 @@
 			<li><a href='/athena/www/assignments/assignments.php'>Assignments Table</a></li>
 		</ul>
 _END;
+	
+			$notLoggedInHeader = <<<_END
 			
+			<!DOCTYPE html>
+<html>
+	<head>
+		<title>Athena System</title>
+		<style>
+			li { display: inline; }
+			table, th, td {
+				border: 1px solid black;
+				padding: 3px;
+			}
+		</style>
+	</head>	
+	<body>
+		<h1>Welcome to Athena</h1>
+		<ul>
+			<li><a href='/athena/www/login.php'>Log In</a></li>
+		</ul>
+_END;
 			
 			if($loggedIn) {
 				
