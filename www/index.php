@@ -9,7 +9,8 @@
 	
 	$htmlUtils->makeHeader();
 	
-	echo "<p>Welcome to Athena. Please select a table to view from the list.</p>";
+
+	
 	
 	$htmlUtils->makeFooter();
 	

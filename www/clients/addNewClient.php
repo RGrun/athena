@@ -13,8 +13,14 @@
 	
 		extract($_POST);
 		
-		if(isset($_POST['newPassword'])) $pass = md5($_POST['newPassword']);
-		else $pass = "";
+		if(isset($_POST['newPassword'])) {
+			
+			$pass= $_POST['newPassword'];
+			$pass = "!@#$pass!@#";
+			$pass = md5($pass);
+		} else {
+			$pass = "";
+		}
 		
 		$sql = "INSERT INTO clients (active, fname, lname, uname, pwd, email, phone, sms)" .
 		"VALUES ('$isActive', '$newFName', '$newLName', '$newUserName', '$pass', '$newEmail', '$newPhone', '$newSMS')";

@@ -13,6 +13,7 @@
 	
 		extract($_POST);
 		
+		//this salts the password
 		if(isset($_POST['newPassword'])) {
 			
 			$pass= $_POST['newPassword'];

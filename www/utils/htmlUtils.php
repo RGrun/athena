@@ -9,7 +9,18 @@
 		//function prints html header and opening <body> tag
 		public function makeHeader() {
 		
+		
+		//session control
 		session_start();
+		
+		if(isset($_SESSION['user'])) {
+			$currentUser = $_SESSION['user'];
+			$loggedIn = TRUE;
+			$userStr = $currentUser;
+		} else {
+			$loggedIn = FALSE;
+			$userStr = "Guest";
+		}
 		
 			
 			$header = <<<_END
@@ -42,14 +53,21 @@
 			<li><a href='/athena/www/assignments/assignments.php'>Assignments Table</a></li>
 		</ul>
 _END;
-			echo $header;
-		}
+			
+			
+			if($loggedIn) {
+				
+				echo $header;
+				echo "Current User: $userStr <br/>";
+			} else {
+				header("Location: login.php");	
+			}
 		
 		//closes up the page
 		public function makeFooter() {
 		
 			$footer = <<<_END
-			<a href='/athena/www/index.php'>Home</a>
+			<br/><a href='/athena/www/index.php'>Home</a>
 	</body>
 </html>
 _END;
