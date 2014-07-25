@@ -34,13 +34,16 @@
 	} else {
 		$companySelector = $worker->createSelector("company", "name", "cmp_id");
 		$leaderSelector = $worker->createSelector("users", "uname", "usr_id");
+		$regionSelector = $worker->createSelector("regions", "name", "reg_id");
 		
 		$companyForm = "<form method='post' action='editTeamInfo.php'>$companySelector <br /> <br/>" .
 		"<input type='submit' value='Commit Changes' /> </form>";
 		$leaderForm = "<form method='post' action='editTeamInfo.php'>$leaderSelector <br/> <br/>" .
 		"<input type='submit' value='Commit Changes' /> </form>";
 			
-
+		$regionForm = "<form method='post' action='editTeamInfo.php'>$regionSelector <br/> <br/>" .
+		"<input type='submit' value='Commit Changes' /> </form>";
+			
 
 		
 		$sql = "SELECT $selectedMethod FROM teams WHERE team_id='$currentTeam'";
@@ -59,12 +62,12 @@
 			
 			if($selectedMethod == "cmp_id") {
 				$company = $worker->findCompany($currentData, "name");
-				echo "$company <br/>";
 				echo "<p>$companyForm</p>";
 			} else if($selectedMethod == "head_id") {
 				$leader = $worker->findUser($currentData, "uname");
-				echo "$leader <br />";
 				echo "<p>$leaderForm</p>";
+			} else if($selectedMethod== "reg_id") {
+				echo "<p>$regionForm</p>";
 			} else {
 				echo $form;
 			}
