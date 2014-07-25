@@ -41,7 +41,7 @@
 			echo "<td>$cmt</td>";
 			$kind = ($kind == 1) ? "Drop" : "Pickup";
 			echo "<td>$kind</td>";
-			echo "<td><a href='athena/www/assignments/assignmentDetail.php?aid=$asgn_id'>Detail</a></td>";
+			echo "<td><a href='/athena/www/assignments/assignmentDetail.php?aid=$asgn_id'>Detail</a></td>";
 			echo "<td><a href='/athena/www/assignments/deleteAssignment.php?aid=$asgn_id'>Delete</a></td></tr>";
 			
 		}
