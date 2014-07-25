@@ -10,6 +10,8 @@
 	
 	$htmlUtils->makeHeader();
 	
+	$userStr = $_SESSION['user'];
+	
 	$sql = "SELECT * from assigns WHERE usr_id='$userStr'";
 	
 	if($result = $worker->query($sql)) {
