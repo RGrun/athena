@@ -32,6 +32,9 @@
 			<li><a href='/athena/www/doctors/doctors.php'>Doctors Table</a></li>
 			<li><a href='/athena/www/instruments/instruments.php'>Instruments Table</a></li>
 			<li><a href='/athena/www/trays/trays.php'>Trays Table</a></li>
+			<li><a href='/athena/www/procedures/procedures.php'>Procedures Table</a></li>
+			<li><a href='/athena/www/cases/cases.php'>Cases Table</a></li>
+			<li><a href='/athena/www/assignments/assignments.php'>Assignments Table</a></li>
 		</ul>
 _END;
 			echo $header;

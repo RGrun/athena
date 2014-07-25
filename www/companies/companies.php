@@ -52,7 +52,7 @@
 			"<td>$city</td>" .
 			"<td>$state</td>" .
 			"<td>$zip</td>" .
-			"<td><a href='detail.php?cid=$cmp_id'>Detail</a></td>" .
+			"<td><a href='companyDetail.php?cid=$cmp_id'>Detail</a></td>" .
 			"<td><a href='deleteCompany.php?cid=$cmp_id'>Delete</a></td></tr>";
 		}
 	}

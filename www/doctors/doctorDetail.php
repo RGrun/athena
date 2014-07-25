@@ -14,6 +14,30 @@
 	
 	$_SESSION['currentDoctorId'] = $currentDoctorId;
 	
+	//delete relationship
+	if(isset($_GET['del'])) {
+	
+		$toDelete = $_GET['del'];
+		$sql = "DELETE FROM doc_site WHERE site_id='$toDelete' AND doc_id='$currentDoctorId'";
+		
+		$worker->query($sql);
+		
+		echo "Data successfully updated.";
+	}
+	
+	//data input from form at bottom of page
+	if(isset($_POST['newsites'])) {
+		
+		$site = $_POST['newsites'];
+		
+		$sql = "INSERT INTO doc_site (doc_id, site_id)" .
+		"VALUES ('$currentDoctorId', '$site')";
+		
+		$worker->query($sql);
+		
+		echo "Data successfully updated";
+	}
+	
 	$sql = "SELECT * FROM doctors WHERE doc_id='$currentDoctorId'";
 	
 	if($result = $worker->query($sql)) {
@@ -32,6 +56,39 @@
 		"</table>";
 		
 		echo "<p>$table</p>";
+		
+		//create doctor-site relation table
+		$sql = "SELECT * FROM doc_site WHERE doc_id='$currentDoctorId'";
+
+		if($result = $worker->query($sql)) {
+		
+			$doc_site = "<table>" .
+			"<tr><th>Works at:</th></tr>";
+			
+			while ($row = mysqli_fetch_assoc($result)) {
+				
+				extract($row);
+				
+				$site = $worker->findSite($site_id, "name");
+				
+				$doc_site .= "<tr><td>$site</td>" .
+				"<td><a href='doctorDetail.php?del=$site_id&did=$currentDoctorId'>Remove</a></td></tr>";
+				
+			}
+			
+			$doc_site .= "</table>";
+			
+			echo "<p>$doc_site</p>";
+			
+		}
+		
+		$siteSelector = $worker->createSelector("sites", "name", "site_id");
+		
+		$siteForm = "<form action='doctorDetail.php?did=$currentDoctorId' method='post'>" .
+		"Add Site: $siteSelector <br/>" .
+		"<input type='submit' value='Commit Changes' />  </form>";
+		
+		echo "<p>$siteForm</p>";
 		
 	} else {
 		echo "Error connecting to database";
