@@ -269,7 +269,29 @@
 			
 			return $row["$requestedField"];
 		}
+		
+		public function findProcedure($uid, $requestedField) {
+					
+			//$requestedField MUST match the name of a database column
 			
+			$sql = "SELECT * FROM procs WHERE proc_id='$uid'";
+			$result = $this->query($sql);
+			$row = mysqli_fetch_assoc($result);
+			
+			return $row["$requestedField"];
+		}
+				
+				
+		public function findTray($uid, $requestedField) {
+					
+			//$requestedField MUST match the name of a database column
+			
+			$sql = "SELECT * FROM trays WHERE tray_id='$uid'";
+			$result = $this->query($sql);
+			$row = mysqli_fetch_assoc($result);
+			
+			return $row["$requestedField"];
+		}	
 		
 		//Other functions
 		
