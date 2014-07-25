@@ -11,6 +11,7 @@
 	$htmlUtils->makeHeader();
 	
 	$userStr = $_SESSION['user'];
+	$userStr = $worker->findUser($userStr, "uname");
 	
 	$sql = "SELECT * from assigns WHERE usr_id='$userStr'";
 	
