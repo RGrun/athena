@@ -10,7 +10,7 @@
 	
 	$htmlUtils->makeHeader();
 	
-	$sql = "SELECT * from assigns WHERE usr_id='$usrStr'";
+	$sql = "SELECT * from assigns WHERE usr_id='$userStr'";
 	
 	if($result = $worker->query($sql)) {
 	

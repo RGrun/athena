@@ -39,7 +39,7 @@
 			} else {
 				$_SESSION['user'] = $user;
 				$_SESSION['pass'] = $pass;
-				die("You are not logged in. Please <a href='landing.php'>Click here</a> to continue.<br/><br/>");
+				die("You are now logged in. Please <a href='landing.php'>Click here</a> to continue.<br/><br/>");
 			}
 		}
 	}
