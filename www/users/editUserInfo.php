@@ -27,6 +27,9 @@
 	} else if(isset($_POST['newData'])) {
 		$worker->editUserDatabase($selectedMethod, $currentUser, $_POST['newData']);
 		$worker->closeConnection();
+	} else if(isset($_POST['newteams'])) {
+		$worker->editUserDatabase($selectedMethod, $currentUser, $_POST['newteams']);
+		$worker->closeConnection();
 	} else {
 		$activityForm = "<form method='post' action='editUserInfo.php'>" .
 			"<input type='hidden' name='changeActivity' />" .
@@ -42,6 +45,12 @@
 			
 			$currentData = $row[0];
 			
+			$teamSelector = $worker->createSelector("teams", "name", "team_id");
+
+			$teamForm = "<form method='post' action='editUserInfo.php'>" .
+			"$teamSelector<br />" .
+			"<input type='submit' value='Commit Changes' /></form> <br/>";
+			
 			$form = "<form method='post' action='editUserInfo.php'>" .
 			"<textarea name='newData' cols='20' rows='5'>$currentData</textarea><br />" .
 			"<input type='submit' value='Commit Changes' /></form> <br/>";
@@ -52,6 +61,8 @@
 			} else if($selectedMethod == "active" && $currentData == 0) {
 				echo "User is inactive. <br />";
 				echo $activityForm;
+			} else if($selectedMethod == "team_id") {
+				echo $teamForm;
 			} else {
 				echo $form;
 			}
