@@ -175,7 +175,7 @@
 		public function editRegionDatabase($column, $id, $newData = null) {
 				$sql = "UPDATE regions SET $column='$newData' WHERE reg_id='$id'";
 				//echo $sql;
-				if($this->query($sql)) header( "Location: trayDetail.php?tid=$id" );
+				if($this->query($sql)) header( "Location: regionDetail.php?rid=$id" );
 		}
 				
 		//creative functions
