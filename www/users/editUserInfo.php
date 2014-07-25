@@ -32,9 +32,7 @@
 			"<input type='hidden' name='changeActivity' />" .
 			"<input type='submit' value='Change Activity' /> </form> <br />";
 			
-		$form = "<form method='post' action='editUserInfo.php'>" .
-		"<textarea name='newData' cols='20' rows='5'>Enter New Data Here</textarea><br />" .
-		"<input type='submit' value='Commit Changes' /></form> <br/>";
+
 		
 		$sql = "SELECT $selectedMethod FROM users WHERE usr_id='$currentUser'";
 		
@@ -44,7 +42,9 @@
 			
 			$currentData = $row[0];
 			
-			echo "Current Value: <br />";
+			$form = "<form method='post' action='editUserInfo.php'>" .
+			"<textarea name='newData' cols='20' rows='5'>$currentData</textarea><br />" .
+			"<input type='submit' value='Commit Changes' /></form> <br/>";
 			
 			if($selectedMethod == "active" && $currentData == 1) {
 				echo "User is active. <br />";
@@ -53,7 +53,6 @@
 				echo "User is inactive. <br />";
 				echo $activityForm;
 			} else {
-				echo "<p>$currentData</p>";
 				echo $form;
 			}
 			

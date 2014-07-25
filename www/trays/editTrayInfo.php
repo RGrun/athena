@@ -47,10 +47,7 @@
 		$siteForm = "<form method='post action='editTrayInfo.php'>$siteSelector <br/> <br/> " .
 		"<input type='submit' value='Commit Changes' /> </form>";
 			
-		$form = "<form method='post' action='editTrayInfo.php'>" .
-		"<textarea name='newData' cols='20' rows='5'>Enter New Data Here</textarea><br />" .
-		"<input type='submit' value='Commit Changes' /></form> <br/>";
-		
+
 
 		
 		$sql = "SELECT $selectedMethod FROM trays WHERE tray_id='$currentTray'";
@@ -62,7 +59,10 @@
 			
 			$currentData = $row[0];
 			
-			echo "Current Value: ";
+			$form = "<form method='post' action='editTrayInfo.php'>" .
+			"<textarea name='newData' cols='20' rows='5'>$currentData</textarea><br />" .
+			"<input type='submit' value='Commit Changes' /></form> <br/>";
+		
 			
 			if($selectedMethod == "cmp_id") {
 				$company = $worker->findCompany($currentData, "name");
@@ -77,7 +77,6 @@
 				echo "$site <br/>";
 				echo "<p>$siteForm</p>";
 			} else {
-				echo "<p>$currentData</p>";
 				echo $form;
 			}
 			

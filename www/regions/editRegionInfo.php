@@ -26,9 +26,7 @@
 		$worker->closeConnection();
 	} else {
 
-		$form = "<form method='post' action='editRegionInfo.php'>" .
-		"<textarea name='newData' cols='20' rows='5'>Enter New Data Here</textarea><br />" .
-		"<input type='submit' value='Commit Changes' /></form> <br/>";
+
 		
 		$stateChangeForm = "<form method='post' action='editRegionInfo.php'>" .
 		"<input type='text' name='newData' maxLength='2' /><br />" .
@@ -42,13 +40,14 @@
 			
 			$currentData = $row[0];
 			
-			echo "Current Value: <br />";
+			$form = "<form method='post' action='editRegionInfo.php'>" .
+			"<textarea name='newData' cols='20' rows='5'>$currentData</textarea><br />" .
+			"<input type='submit' value='Commit Changes' /></form> <br/>";
 			
 			if($selectedMethod == "state") {
 				echo "<p>$currentData</p>";
 				echo $stateChangeForm;
 			} else {
-				echo "<p>$currentData</p>";
 				echo $form;
 			}
 			

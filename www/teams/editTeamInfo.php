@@ -40,10 +40,7 @@
 		$leaderForm = "<form method='post' action='editTeamInfo.php'>$leaderSelector <br/> <br/>" .
 		"<input type='submit' value='Commit Changes' /> </form>";
 			
-		$form = "<form method='post' action='editTeamInfo.php'>" .
-		"<textarea name='newData' cols='20' rows='5'>Enter New Data Here</textarea><br />" .
-		"<input type='submit' value='Commit Changes' /></form> <br/>";
-		
+
 
 		
 		$sql = "SELECT $selectedMethod FROM teams WHERE team_id='$currentTeam'";
@@ -55,7 +52,10 @@
 			
 			$currentData = $row[0];
 			
-			echo "Current Value: ";
+			$form = "<form method='post' action='editTeamInfo.php'>" .
+			"<textarea name='newData' cols='20' rows='5'>$currentData</textarea><br />" .
+			"<input type='submit' value='Commit Changes' /></form> <br/>";
+		
 			
 			if($selectedMethod == "cmp_id") {
 				$company = $worker->findCompany($currentData, "name");
@@ -66,7 +66,6 @@
 				echo "$leader <br />";
 				echo "<p>$leaderForm</p>";
 			} else {
-				echo "<p>$currentData</p>";
 				echo $form;
 			}
 			

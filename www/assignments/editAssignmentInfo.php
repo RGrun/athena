@@ -37,9 +37,7 @@
 		$worker->closeConnection();
 	} else {
 
-		$form = "<form method='post' action='editAssignmentInfo.php'>" .
-		"<textarea name='newData' cols='20' rows='5'>Enter New Data Here</textarea><br />" .
-		"<input type='submit' value='Commit Changes' /></form> <br/>";
+
 		
 		$caseSelector = $worker->createSelector("cases", "case_id", "case_id");
 		$traySelector = $worker->createSelector("trays", "name", "tray_id");
@@ -94,6 +92,10 @@
 			
 			$currentData = $row[0];
 			
+			$form = "<form method='post' action='editAssignmentInfo.php'>" .
+			"<textarea name='newData' cols='20' rows='5'>$currentData</textarea><br />" .
+			"<input type='submit' value='Commit Changes' /></form> <br/>";
+			
 			echo "Current Value: <br />";
 			
 			if($selectedMethod == "case_id") {
@@ -118,7 +120,6 @@
 				echo "<p>$currentData</p>";
 				echo $kindForm;
 			} else {
-				echo "<p>$currentData</p>";
 				echo $form;
 			}
 			

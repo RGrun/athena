@@ -24,9 +24,7 @@
 		$worker->editInstrumentDatabase($selectedMethod, $currentInstrument, $_POST['newData']);
 		$worker->closeConnection();
 	} else {
-		$form = "<form method='post' action='editInstrumentInfo.php'>" .
-		"<textarea name='newData' cols='20' rows='5'>Enter New Data Here</textarea><br />" .
-		"<input type='submit' value='Commit Changes' /></form> <br/>";
+
 		
 		$sql = "SELECT $selectedMethod FROM instruments WHERE inst_id='$currentInstrument'";
 		
@@ -36,9 +34,11 @@
 			
 			$currentData = $row[0];
 			
-			echo "Current Value: <br />";
+			$form = "<form method='post' action='editInstrumentInfo.php'>" .
+			"<textarea name='newData' cols='20' rows='5'>$currentData</textarea><br />" .
+			"<input type='submit' value='Commit Changes' /></form> <br/>";
 			
-				echo "<p>$currentData</p>";
+			
 				echo $form;
 			}
 			

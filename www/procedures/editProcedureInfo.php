@@ -24,9 +24,7 @@
 		$worker->editProcedureDatabase($selectedMethod, $currentProcedure, $_POST['newData']);
 		$worker->closeConnection();
 	} else {
-		$form = "<form method='post' action='editProcedureInfo.php'>" .
-		"<textarea name='newData' cols='20' rows='5'>Enter New Data Here</textarea><br />" .
-		"<input type='submit' value='Commit Changes' /></form> <br/>";
+
 		
 		$sql = "SELECT $selectedMethod FROM procs WHERE proc_id='$currentProcedure'";
 		
@@ -37,9 +35,10 @@
 			
 			$currentData = $row[0];
 			
-			echo "Current Value: <br />";
-			
-				echo "<p>$currentData</p>";
+			$form = "<form method='post' action='editProcedureInfo.php'>" .
+			"<textarea name='newData' cols='20' rows='5'>$currentData</textarea><br />" .
+			"<input type='submit' value='Commit Changes' /></form> <br/>";
+
 				echo $form;
 			}
 			

@@ -37,9 +37,7 @@
 		$worker->closeConnection();
 	} else {
 
-		$form = "<form method='post' action='editCaseInfo.php'>" .
-		"<textarea name='newData' cols='20' rows='5'>Enter New Data Here</textarea><br />" .
-		"<input type='submit' value='Commit Changes' /></form> <br/>";
+
 		
 		$teamSelector = $worker->createSelector("teams", "name", "team_id");
 		$doctorSelector = $worker->createSelector("doctors", "name", "doc_id");
@@ -75,7 +73,9 @@
 			
 			$currentData = $row[0];
 			
-			echo "Current Value: <br />";
+			$form = "<form method='post' action='editCaseInfo.php'>" .
+			"<textarea name='newData' cols='20' rows='5'>$currentData</textarea><br />" .
+			"<input type='submit' value='Commit Changes' /></form> <br/>";
 			
 			if($selectedMethod == "team_id") {
 				$currentData = $worker->findTeam($currentData, "name");
@@ -94,7 +94,6 @@
 				echo "<p>$currentData</p>";
 				echo $siteForm;
 			} else {
-				echo "<p>$currentData</p>";
 				echo $form;
 			}
 			

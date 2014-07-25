@@ -32,7 +32,9 @@
 			if($active == 1) echo "<td>Yes</td>";
 			else echo "<td>No</td>";
 			
-			echo "<td>$team_id</td>";
+			$team = $worker->findTeam($team_id, "name");
+			
+			echo "<td>$team</td>";
 			echo "<td>$fname</td>";
 			echo "<td>$lname</td>";
 			echo "<td>$uname</td>";
