@@ -29,11 +29,9 @@
 		
 		$region = $_POST['newregions'];
 		
-		//map id to region name
-		$region = $worker->findRegion($region, "name");
 		
 		
-		$sql = "INSERT INTO site_region (site_id, region)" .
+		$sql = "INSERT INTO site_region (site_id, reg_id)" .
 		"VALUES ('$currentSite', '$region')";
 		
 		$worker->query($sql);
@@ -75,6 +73,8 @@
 			while ($row = mysqli_fetch_assoc($result)) {
 				
 				extract($row);
+				
+				$region = $worker->findRegion($reg_id, "name");
 				
 				$site_region .= "<tr><td>$region</td>" .
 				"<td><a href='siteDetail.php?del=$region&sid=$currentSite'>Remove</a></td></tr>";
