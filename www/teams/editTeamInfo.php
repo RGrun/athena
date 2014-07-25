@@ -66,7 +66,7 @@
 			} else if($selectedMethod == "head_id") {
 				$leader = $worker->findUser($currentData, "uname");
 				echo "<p>$leaderForm</p>";
-			} else if($selectedMethod== "reg_id") {
+			} else if($selectedMethod== "region") {
 				echo "<p>$regionForm</p>";
 			} else {
 				echo $form;
