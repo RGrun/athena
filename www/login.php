@@ -38,9 +38,11 @@
 				$error = "<span class='error'>Username/Password invalid.</span><br/><br/>";
 			} else {
 				$sql = "SELECT usr_id FROM users WHERE uname='$user'";
-				$userId = $worker->query($sql);
+				$result2 = $worker->query($sql);
+				$row = mysqli_fetch_attay($result2);
+				
 				$_SESSION['user'] = $user;
-				$_SESSION['userId'] = $userId;
+				$_SESSION['userId'] = $row[0];
 				$_SESSION['pass'] = $pass;
 				die("You are now logged in. Please <a href='landing.php'>Click here</a> to continue.<br/><br/>");
 			}
