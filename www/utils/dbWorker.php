@@ -247,6 +247,17 @@
 			
 			return $row["$requestedField"];
 		}
+		
+		public function findInstrument($uid, $requestedField) {
+					
+			//$requestedField MUST match the name of a database column
+			
+			$sql = "SELECT * FROM instruments WHERE inst_id='$uid'";
+			$result = $this->query($sql);
+			$row = mysqli_fetch_assoc($result);
+			
+			return $row["$requestedField"];
+		}
 			
 		
 		//Other functions
