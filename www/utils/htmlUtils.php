@@ -60,8 +60,9 @@ _END;
 				echo $header;
 				echo "Current User: $userStr <br/>";
 			} else {
-				header("Location: login.php");	
+				echo "<p>Please log in to Athena. <br/> <br/> <a href='login.php'>Click Here</a> to log in.</p>";
 			}
+		}
 		
 		//closes up the page
 		public function makeFooter() {
