@@ -258,6 +258,17 @@
 			
 			return $row["$requestedField"];
 		}
+		
+		public function findDoctor($uid, $requestedField) {
+					
+			//$requestedField MUST match the name of a database column
+			
+			$sql = "SELECT * FROM doctors WHERE doc_id='$uid'";
+			$result = $this->query($sql);
+			$row = mysqli_fetch_assoc($result);
+			
+			return $row["$requestedField"];
+		}
 			
 		
 		//Other functions
