@@ -61,7 +61,8 @@ _END;
 				echo "Current User: $userStr <br/>";
 				echo "<a href='/athena/www/landing.php'>Return to landing.</a><br/><br/>";
 			} else {
-				echo "<p>Please log in to Athena. <br/> <br/> <a href='login.php'>Click Here</a> to log in.</p>";
+				die("<p>Please log in to Athena. <br/> <br/> <a href='login.php'>Click Here</a> to log in.</p>");
+				
 			}
 		}
 		
