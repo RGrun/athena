@@ -204,6 +204,17 @@
 			return $row["$requestedField"];
 		}
 		
+		public function findRegion($cid, $requestedField) {
+		
+			//$requestedField MUST match the name of a database column
+			
+			$sql = "SELECT * FROM regions WHERE reg_id='$rid'";
+			$result = $this->query($sql);
+			$row = mysqli_fetch_assoc($result);
+			
+			return $row["$requestedField"];
+		}
+		
 		public function findUser($uid, $requestedField) {
 					
 			//$requestedField MUST match the name of a database column
