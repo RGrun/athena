@@ -208,7 +208,7 @@
 		
 			//$requestedField MUST match the name of a database column
 			
-			$sql = "SELECT * FROM regions WHERE reg_id='$rid'";
+			$sql = "SELECT * FROM regions WHERE reg_id='$cid'";
 			$result = $this->query($sql);
 			$row = mysqli_fetch_assoc($result);
 			
