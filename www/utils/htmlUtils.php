@@ -30,6 +30,7 @@
 			<li><a href='/athena/www/clients/clients.php'>Clients Table</a></li>
 			<li><a href='/athena/www/teams/teams.php'>Teams Table</a></li>
 			<li><a href='/athena/www/doctors/doctors.php'>Doctors Table</a></li>
+			<li><a href='/athena/www/regions/regions.php'>Regions Table</a></li>
 			<li><a href='/athena/www/instruments/instruments.php'>Instruments Table</a></li>
 			<li><a href='/athena/www/trays/trays.php'>Trays Table</a></li>
 			<li><a href='/athena/www/procedures/procedures.php'>Procedures Table</a></li>
