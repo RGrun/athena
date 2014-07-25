@@ -32,7 +32,7 @@
 		$worker->editTeamDatabase($selectedMethod, $currentTeam, $_POST['newusers']);
 		$worker->closeConnection();
 	} else if (isset($_POST['newregions'])) {
-		$worker->editRegionsDatabase($selectedMethod, $currentTeam, $_POST['newregions']);
+		$worker->editTeamDatabase($selectedMethod, $currentTeam, $_POST['newregions']);
 		$worker->closeConnection();
 	} else {
 		$companySelector = $worker->createSelector("company", "name", "cmp_id");

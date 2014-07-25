@@ -171,7 +171,7 @@
 				//echo $sql;
 				if($this->query($sql)) header( "Location: trayDetail.php?tid=$id" );
 		}
-		
+				
 		//creative functions
 		
 		public function createSelector($requestTable, $field, $nameOfId) {
