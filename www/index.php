@@ -9,7 +9,11 @@
 	
 	$htmlUtils->makeHeader();
 	
-
+	if(isset($_GET['a'])) {
+		echo "Login error, please try again";
+	} else {
+		echo "Welcome to Athena, please select a table from the list to view it.";
+	}
 	
 	
 	$htmlUtils->makeFooter();

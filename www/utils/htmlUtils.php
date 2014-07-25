@@ -53,6 +53,11 @@
 			<li><a href='/athena/www/assignments/assignments.php'>Assignments Table</a></li>
 		</ul>
 _END;
+
+		$loginForm = "<form method='post' action='login.php'>" .
+		"<span class='fieldname'>Username</span><input type='text' name='user' /><br/>".
+		"<span class='fieldname'>Password</span><input type='password' name='pass' /><br/>" .
+		"<input type='submit' value='Login' /> </form>";
 	
 			$notLoggedInHeader = <<<_END
 			
@@ -73,6 +78,9 @@ _END;
 		<ul>
 			<li><a href='/athena/www/login.php'>Log In</a></li>
 		</ul>
+		<div class='main'><h3>Please enter your username and password to log in</h3>
+		<p>$loginForm</p>
+		
 _END;
 			
 			if($loggedIn) {
@@ -99,5 +107,7 @@ _END;
 		}
 		
 	}
+	
+	
 	
 ?>

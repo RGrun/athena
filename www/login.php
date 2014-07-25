@@ -2,16 +2,10 @@
 
 	//login.php
 	
-	require_once $_SERVER['DOCUMENT_ROOT'] . "/athena/www/utils/htmlUtils.php";
 	require_once $_SERVER['DOCUMENT_ROOT'] . "/athena/www/utils/dbWorker.php";
 	
-	$htmlUtils = new htmlUtils();
 	$worker = new dbWorker();
-	
-	$htmlUtils->makeHeader();
-	
-	echo "<div class='main'><h3>Please enter your username and password to log in</h3>";
-	
+		
 	$error = $user = $pass = "";
 	
 	$loginForm = "<form method='post' action='login.php'>$error" .
@@ -25,7 +19,8 @@
 		$pass = $_POST['pass'];
 		
 		if($user == "" || $pass == "") {
-			$error = "Not all fields were entered <br/>";
+			//$error = "Not all fields were entered <br/>";
+			header("Location: index.php?a=loginError");
 		} else  {
 		
 			$pass = "!@#$pass!@#";
@@ -49,7 +44,4 @@
 		}
 	}
 	
-	 echo $loginForm;
-	 
-	 $htmlUtils->makeFooter();
 ?>
