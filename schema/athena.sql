@@ -81,14 +81,27 @@ create table if not exists sites
 );
 
 -- --------------------------------------------------------
+-- Regions - sites belong to regions
+-- --------------------------------------------------------
+drop table if exists regions;
+create table if not exists regions 
+( reg_id    int(10)      not null auto_increment,
+  name      varchar(255) not null,
+  city      varchar(255) not null,
+  state     varchar(2)   not null,
+  unique index (name),
+  primary key (reg_id)
+);
+
+-- --------------------------------------------------------
 -- Site <> Regions map
 -- A site can be in many regions
 -- --------------------------------------------------------
 drop table if exists site_region;
 create table if not exists site_region
 ( site_id    int(10)      not null,
-  region     varchar(40)  not null,
-  unique index (site_id, region)
+  reg_id     int(10)      not null,
+  unique index (site_id, reg_id)
 );
 
 -- --------------------------------------------------------
@@ -187,15 +200,15 @@ create table if not exists trays
 );
 
 -- --------------------------------------------------------
--- The actual contents of a specific tray
+-- The actual contents of a specific tray (current)
 -- --------------------------------------------------------
 drop table if exists traycont;
 create table if not exists traycont 
-( asgn_id   int(10)      not null,
-  tray_id   int(10)      not null,
+( tray_id   int(10)      not null,
   inst_id   int(10)      not null,
   quant     int(4)       not null default 1,
-  cmt       varchar(255) not null default ''
+  state     varchar(20)  not null default 'p'     -- Present, Missing, Removed, Broken, Spent
+  cmt       varchar(255) not null default ''      -- special information about this instrument for this tray
 );
 
 -- --------------------------------------------------------
@@ -215,6 +228,21 @@ create table if not exists traytrans
   dttm      datetime     not null default '0/0/0',   -- date/time of loan
   cmt       varchar(255) not null default '',
   primary key (tran_id)
+);
+
+-- --------------------------------------------------------
+-- The history of tray content changes. 
+-- If the change occurs at an assign, then the asgn_id is
+-- non-zero. 
+-- --------------------------------------------------------
+drop table if exists traydelta;
+create table if not exists traydelta 
+( asgn_id   int(10)      not null default 0,       -- after the tray returns from an assignment, the contents may have changed
+  tray_id   int(10)      not null,
+  inst_id   int(10)      not null,
+  quant     int(4)       not null default 1,
+  state     varchar(20)  not null default 'p',     -- Missing, Broken, Spent
+  cmt       varchar(255) not null default ''       -- description of change from assignment, or other source.
 );
 
 -- --------------------------------------------------------
@@ -293,5 +321,10 @@ create table if not exists pwdresets
   primary key (rst_id)
 );
 
-
-
+-- ----------------------------------------------------------------------------------
+-- Commands to build database
+-- ----------------------------------------------------------------------------------
+-- create database athena;
+-- use athena;
+-- GRANT ALL ON athena.* TO 'athena'@'localhost' identified by 'abcd1234';
+-- ----------------------------------------------------------------------------------
