@@ -40,7 +40,7 @@
 		<h1>Welcome to Athena</h1>
 		<div class='headernav'>
 		<ul>
-			<li><a href='/athena/www/landing.php'>Return to landing.</a></li>";
+			<li><a href='/athena/www/landing.php'>Return to landing.</a></li>
 			<li><a href='/athena/www/admin.php'>Admin Panel</a></li>				
 		</ul>
 		</div>
