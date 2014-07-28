@@ -12,9 +12,7 @@
 	
 	$error = $user = $pass = "";
 	
-	if(isset($_GET['a'])) {
-		$error = "Not all fields were entered <br/>";
-	}
+
 	
 	$loginForm = "<form method='post' action='login.php'>$error" .
 	"Username: <input type='text' name='user' /><br/>".
@@ -24,12 +22,9 @@
 	
 	if(isset($_POST['user'])) {
 	
-		//clean up user inupt
 		$user = $_POST['user'];
 		$pass = $_POST['pass'];
-		
-		echo $user;
-		echo $pass;
+
 		
 		if($user == "" || $pass == "") {
 			header("Location: index.php?a=loginError");
@@ -43,10 +38,8 @@
 			
 			$result = $worker->query($sql);
 			
-			if(mysqli_num_rows($result) == 0) {
-				$error = "<br/><span class='error'>Username/Password invalid.</span><br/>";
-			} else {
-				
+			if(mysqli_num_rows($result) != 0) {
+				//see if its a user
 				$sql = "SELECT usr_id FROM users WHERE uname='$user'";
 				$result3 = $worker->query($sql);
 				$row = mysqli_fetch_array($result3);
@@ -56,7 +49,25 @@
 				$_SESSION['userId'] = $row[0];
 				$_SESSION['pass'] = $pass;
 				header("Location: landing.php");
-				die("You are now logged in. Please <a href='landing.php'>Click here</a> to continue.<br/><br/>");
+				
+			} else {
+				//...or a client
+				
+				$sql = "SELECT uname, pwd from cilents WHERE uname='$user' AND pwd='$pass'";
+				
+				$result = $worker->query($sql);
+				
+				if(mysqli_num_rows($result) !=0 ) {
+					$sql = "SELECT cli_id from clients WHERE uname='$user'";
+					$result = $worker->query($sql);
+					$row = mysqli_fetch_array($result);
+					
+					$_SESSION['user'] = $user;
+					$_SESSION['userId'] = $row[0];
+					header("Location: landing.php");
+				} else {
+					header{"Location: index.php?a=loginError");
+				}
 			}
 		}	
 	} else {
