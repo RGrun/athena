@@ -59,7 +59,7 @@
 	
 _END;
 
-		$loginForm = "<form method='post' action='login.php'>$error" .
+		$loginForm = "<form method='post' action='/athena/www/login.php'>$error" .
 		"<span class='fieldname'>Username: </span><input type='text' name='user' /><br/>".
 		"<span class='fieldname'>Password: </span><input type='password' name='pass' /><br/>" .
 		"<input type='submit' value='Login' /> </form>";
