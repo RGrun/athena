@@ -53,7 +53,7 @@
 			} else {
 				//...or a client
 				//THIS CURRENTLY DOES NOT WORK
-				$sql = "SELECT uname, pwd from cilents WHERE uname='$user'"// AND pwd='$pass'";
+				$sql = "SELECT uname, pwd from cilents WHERE uname='$user'";// AND pwd='$pass'";
 				
 				$result = $worker->query($sql);
 				
