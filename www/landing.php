@@ -17,7 +17,11 @@
 	//mark assignment as completed
 	if(isset($_GET['complete']) && isset($_GET['aid'])) {
 		
-		$worker->editAssignmentDatabase("status", $_GET['aid'], "Complete");
+		$aid = $_GET['aid'];
+		
+		$sql = "UPDATE assigns SET status='Complte' WHERE asgn_id='$aid'";
+		//echo $sql;
+		if($this->query($sql)) header( "Location: assignmentDetail.php?aid=$id" );
 		
 	}
 	
