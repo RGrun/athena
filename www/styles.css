@@ -1,7 +1,7 @@
 			
 			
 			
-			li { display: inline; }
+			
 			
 			body {
 				font-family: arial, sans-serif;
@@ -38,6 +38,7 @@
 				color: white;
 			}
 
+			.headernav li { display: inline; }
 			
 			.footer  {
 				margin-top: 10px;
