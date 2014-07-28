@@ -33,7 +33,7 @@
 	<body>
 	<div class='header'>
 		<h1>Welcome to Athena</h1>
-		<div class='headerlist'>
+		<div class='headernav'>
 		<ul>
 			<li><a href='/athena/www/companies/companies.php'>Companies Table</a></li>
 			<li><a href='/athena/www/users/users.php'>Users Table</a></li>
