@@ -318,34 +318,38 @@
 		
 		//Other functions
 		
-		public static function rowMachine($data) {
+		public function makeTraysTable($usr_id, $asgn_id) {
+		
+			$sql = "SELECT * from assigns WHERE usr_id='$userId' AND asgn_id='$asgn_id'";
+		
+			if($result = $this->query($sql)) {
 			
-			//WARNING: EXPERIMENTAL
-			
-			$rows = "";
-			
-			foreach($data as $key => $value) {
-				
-				$rows .= "<tr>";
-				
-				if($key == "pwd") continue;
-				
-				if($key == "active") { 
+				//get assoc array and print table data
+				$row = mysqli_fetch_assoc($result) 
 					
-					$isActive = ($key == 1) ? 1 : 0;
+				extract($row);
+				
+				$tray = $this->findTray($tray_id, "name");
+				$client = $worker->findClient($cli_id, "uname");
+				$kind = ($kind == 1) ? "Drop" : "Pickup";
 					
-					$rows .= "<td>$isActive</td>";
-					
-					continue;
+				$trayTable = 
+				"<tr><td><em>Assignment ID</em></td><td>$asgn_id</td></tr>" .
+				"<tr><td><em>Tray</em></td><td>$tray</td></tr>" .
+				"<tr><td><em>Client</em></td><td>$client</td></tr>" .
+				"<tr><td><em>Date</em></td><td>$dttm</td></tr>" .
+				"<tr><td><em>Status</em></td><td>$status</td></tr>" .
+				"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
+				"<tr><td><em>Type</em></td><td>$kind</td></tr>" .
+				"<tr><td><a href='landing.php?complete=1&aid=$asgn_id'>Mark as completed</a></td></tr>" .
+				"</table>";
+				
+				return "<div class='assignment'>$traytable</div>";
+				
 				}
-				
-				$rows .= "<td>$value</td>";
-				
-				$rows .= "</tr>";
-				
 			}
-			
-			return $rows;
 		}
+				
+				
 	}
 ?>
