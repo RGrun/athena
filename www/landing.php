@@ -38,10 +38,24 @@
 			//loop through assignments and print each one as a div
 			echo $worker->makeTraysTable($row['usr_id'], $row['asgn_id']);
 			
-			echo "<h2>Completed Assignments: </h2>";
+		}
+		
+	}
+	else {
+		echo "Database Connection Error";
+		$worker->closeConnection();
+	}
+	
+	//make completed assignments table
+	$sql = "SELECT * FROM assigns WHERE usr_id='$userId'";
+	
+	if($result = $worker->query($sql)) {
+		
+		echo "<h2>Completed Assignments: </h2>";
+		
+		while($row = mysqli_fetch_assoc($result)) {
 			
 			echo $worker->makeCompletedTraysTable($row['usr_id'], $row['asgn_id']);
-			
 			
 		}
 		
