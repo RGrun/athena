@@ -327,7 +327,7 @@
 					//get assoc array and print table data
 					$row = mysqli_fetch_assoc($result);
 						
-					
+					extract($row);
 					
 					$tray = $this->findTray($row['tray_id'], "name");
 					$client = $this->findClient($row['cli_id'], "uname");
