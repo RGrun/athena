@@ -333,7 +333,7 @@
 					$client = $this->findClient($row['cli_id'], "uname");
 					$kind = ($row['kind'] == 1) ? "Drop" : "Pickup";
 						
-					$trayTable = 
+					$trayTable = "<table>" .
 					"<tr><td><em>Assignment ID</em></td><td>$asgn_id</td></tr>" .
 					"<tr><td><em>Tray</em></td><td>$tray</td></tr>" .
 					"<tr><td><em>Client</em></td><td>$client</td></tr>" .
