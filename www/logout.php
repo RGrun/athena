@@ -23,7 +23,7 @@
 	
 	$htmlUtils->makeHeader();
 	
-	echo "Logout successful."
+	echo "Logout successful.";
 	
 	$htmlUtils->makeFooter();
 	
