@@ -14,6 +14,8 @@
 	
 	if(isset($_GET['a'])) {
 		$error = "Not all fields were entered <br/>";
+		echo $htmlUtils->sanitizeString($_POST['user']);
+		echo $htmlUtils->sanitizeString($_POST['pass']);
 	}
 	
 	$loginForm = "<form method='post' action='login.php'>$error" .

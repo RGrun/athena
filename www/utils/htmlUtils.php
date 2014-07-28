@@ -113,7 +113,6 @@ _END;
 			$string = htmlentities($string);
 			$string = stripslashes($string);
 			$string = mysqli_real_escape_string($string);
-			echo $string;
 			return $string;
 		}
 		
