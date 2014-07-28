@@ -40,12 +40,13 @@
 		<h1>Welcome to Athena</h1>
 		<div class='headernav'>
 		<ul>
-			<li><a href='/athena/www/admin.php'>Admin Panel</a></li>
+			<li><a href='/athena/www/landing.php'>Return to landing.</a></li>";
+			<li><a href='/athena/www/admin.php'>Admin Panel</a></li>				
 		</ul>
 		</div>
 		</div>
 		<div class='main'>
-	
+
 _END;
 
 		$loginForm = "<form method='post' action='/athena/www/login.php'>$error" .
@@ -78,7 +79,6 @@ _END;
 				
 				echo $header;
 				echo "Current User: $userStr <br/>";
-				echo "<a href='/athena/www/landing.php'>Return to landing.</a><br/><br/>";
 			} else {
 				echo $notLoggedInHeader;
 				die("<p>Please log in to Athena. <br/> <br/> <a href='login.php'>Click Here</a> to log in.</p>");
