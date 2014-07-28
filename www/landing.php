@@ -19,7 +19,7 @@
 		
 		$aid = $_GET['aid'];
 		
-		$sql = "UPDATE assigns SET status='Complte' WHERE asgn_id='$aid'";
+		$sql = "UPDATE assigns SET status='Complete' WHERE asgn_id='$aid'";
 		//echo $sql;
 		if($worker->query($sql)) header( "Location: landing.php" );
 		
