@@ -377,7 +377,7 @@
 						"<tr><td><em>Status</em></td><td>$status</td></tr>" .
 						"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
 						"<tr><td><em>Type</em></td><td>$kind</td></tr>" .
-						"<tr><td><a href='landing.php?complete=1&aid=$asgn_id'>Mark as completed</a></td></tr>" .
+						"<tr><td><a href='landing.php?pending=1&aid=$asgn_id'>Mark as pending</a></td></tr>" .
 						"</table>";
 						
 						return "<div class='completed'>$trayTable</div>";

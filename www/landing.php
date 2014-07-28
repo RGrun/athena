@@ -25,6 +25,16 @@
 		
 	}
 	
+	//mark assignment as pending
+	if(isset($_GET['pending']) && isset($_GET['aid'])) {
+		
+		$aid = $_GET['aid'];
+		
+		$sql = "UPDATE assigns SET status='Pending' Where asgn_id='$aid'";
+		
+		if($worker->query($sql)) header("Location: landing.php");
+	}
+	
 	
 	$sql = "SELECT * from assigns WHERE usr_id='$userId'";
 	
