@@ -66,7 +66,7 @@
 					$_SESSION['userId'] = $row[0];
 					header("Location: landing.php");
 				} else {
-					header{"Location: index.php?a=loginError");
+					header("Location: index.php?a=loginError");
 				}
 			}
 		}	
