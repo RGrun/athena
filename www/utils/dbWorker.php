@@ -177,6 +177,12 @@
 				//echo $sql;
 				if($this->query($sql)) header( "Location: regionDetail.php?rid=$id" );
 		}
+		
+		public function editAssignmentDatabase($column, $id, $newData = null) {
+				$sql = "UPDATE assigns SET $column='$newData' WHERE asgn_id='$id'";
+				//echo $sql;
+				if($this->query($sql)) header( "Location: assignmentDetail.php?aid=$id" );
+		}
 				
 		//creative functions
 		

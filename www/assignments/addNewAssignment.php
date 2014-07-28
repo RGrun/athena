@@ -32,9 +32,9 @@
 	$clientSelector = $worker->createSelector("clients", "uname", "cli_id");
 	
 	$statusSelector = "<select name='newStatus' size='1'>" .
-	"<option value='pending'>Pending</option>" .
-	"<option value='overdue'>Overdue</option>" .
-	"<option value='complete'>Complete</option>" .
+	"<option value='Pending'>Pending</option>" .
+	"<option value='Overdue'>Overdue</option>" .
+	"<option value='Complete'>Complete</option>" .
 	"</select>";
 	
 	$kindSelector = "<select name='newKind' size='1'>" . 

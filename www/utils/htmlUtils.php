@@ -52,7 +52,7 @@
 			<li><a href='/athena/www/cases/cases.php'>Cases Table</a></li>
 			<li><a href='/athena/www/assignments/assignments.php'>Assignments Table</a></li>
 		</ul>
-		<a href='/athena/www/logout.php'>Logout</a>
+		<br/><a href='/athena/www/logout.php'>Logout</a><br/>
 		<div class='main'>
 	
 _END;
