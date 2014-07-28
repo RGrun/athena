@@ -14,12 +14,19 @@
 	$userStr = $_SESSION['user'];
 	$userId = $_SESSION['userId'];
 	
+	//mark assignment as completed
+	if(isset($_GET['complete']) && isset($_GET['aid'])) {
+		
+		$worker->editAssignmentDatabase("status", $_GET['aid'], "Complete");
+		
+	}
+	
 	
 	$sql = "SELECT * from assigns WHERE usr_id='$userId'";
 	
 	if($result = $worker->query($sql)) {
 	
-		echo "<h2>Current Assignments:</h2>";
+		echo "<h2>Pending Assignments:</h2>";
 		
 		//get assoc array and print table data
 		while($row = mysqli_fetch_assoc($result)) {
