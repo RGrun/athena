@@ -34,6 +34,10 @@
 				border: 1px solid black;
 				padding: 3px;
 			}
+			.assignment {
+				margin-top:10px;
+				margin-bottom:10px;
+			}
 		</style>
 	</head>	
 	<body>
