@@ -25,8 +25,8 @@
 	if(isset($_POST['user'])) {
 	
 		//clean up user inupt
-		$user = $htmlUtils->sanitizeString($_POST['user']);
-		$pass = $htmlUtils->sanitizeString($_POST['pass']);
+		$user = $_POST['user'];
+		$pass = $_POST['pass'];
 		
 		echo $user;
 		echo $pass;
