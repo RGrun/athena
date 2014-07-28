@@ -23,7 +23,7 @@
 		}
 		
 		if(isset($_GET['a'])) {
-			$error = "<span class='error'>Login error, please try again</span>";
+			$error = "<span class='error'>Login error, please try again</span><br/>";
 		}
 			
 			$header = <<<_END
