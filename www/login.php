@@ -44,7 +44,7 @@
 				$_SESSION['user'] = $user;
 				$_SESSION['userId'] = $row[0];
 				$_SESSION['pass'] = $pass;
-				header("Location: athena/www/landing.php");
+				header("Location: landing.php");
 				die("You are now logged in. Please <a href='landing.php'>Click here</a> to continue.<br/><br/>");
 			}
 		}	
