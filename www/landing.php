@@ -38,7 +38,7 @@
 			//loop through assignments and print each one as a div
 			echo $worker->makeTraysTable($row['usr_id'], $row['asgn_id']);
 			
-			echo "<h2>Completed Assignments: </h2>
+			echo "<h2>Completed Assignments: </h2>"
 			
 			echo $worker->makeCompletedTraysTable($row['usr_id'], $row['asgn_id']);
 			
