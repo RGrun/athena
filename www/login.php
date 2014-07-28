@@ -41,8 +41,8 @@
 			if(mysqli_num_rows($result) != 0) {
 				//see if its a user
 				$sql = "SELECT usr_id FROM users WHERE uname='$user'";
-				$result3 = $worker->query($sql);
-				$row = mysqli_fetch_array($result3);
+				$result = $worker->query($sql);
+				$row = mysqli_fetch_array($result);
 				
 				
 				$_SESSION['user'] = $user;
@@ -53,11 +53,11 @@
 			} else {
 				//...or a client
 				//THIS CURRENTLY DOES NOT WORK
-				$sql = "SELECT uname, pwd from cilents WHERE uname='$user'";// AND pwd='$pass'";
+				$sql = "SELECT uname, pwd from cilents WHERE uname='$user'"; // AND pwd='$pass'";
 				
 				$result = $worker->query($sql);
 				
-				if(mysqli_num_rows($result) !=0 ) {
+				if(mysqli_num_rows($result) != 0 ) {
 					$sql = "SELECT cli_id from clients WHERE uname='$user'";
 					$result = $worker->query($sql);
 					$row = mysqli_fetch_array($result);
