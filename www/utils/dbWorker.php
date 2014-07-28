@@ -325,7 +325,7 @@
 			if($result = $this->query($sql)) {
 			
 				//get assoc array and print table data
-				$row = mysqli_fetch_assoc($result) 
+				$row = mysqli_fetch_assoc($result);
 					
 				
 				
