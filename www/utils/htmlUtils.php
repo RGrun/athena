@@ -25,7 +25,7 @@
 		if(isset($_GET['a'])) {
 			$error = "<span class='error'>Login error, please try again</span><br/>";
 		} else {
-			$error = ""
+			$error = "";
 		}
 			
 			$header = <<<_END
