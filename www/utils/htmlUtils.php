@@ -40,7 +40,7 @@
 		<h1>Welcome to Athena</h1>
 		<div class='headernav'>
 		<ul>
-			<li><a href='/athena/www/landing.php'>Return to landing.</a></li>
+			<li><a href='/athena/www/landing.php'>Return to Landing</a></li>
 			<li><a href='/athena/www/admin.php'>Admin Panel</a></li>				
 		</ul>
 		</div>
@@ -60,13 +60,6 @@ _END;
 <html>
 	<head>
 		<title>Athena System</title>
-		<style>
-			li { display: inline; }
-			table, th, td {
-				border: 1px solid black;
-				padding: 3px;
-			}
-		</style>
 	</head>	
 	<body>
 		<h1>Welcome to Athena</h1>
@@ -93,8 +86,8 @@ _END;
 			
 			</div>
 			<div class='footer'>
-			<br/><a href='/athena/www/index.php'>Home</a>
-			<br/><a href='/athena/www/logout.php'>Logout</a><br/>
+			<a href='/athena/www/index.php'>Home</a>
+			<a href='/athena/www/logout.php'>Logout</a>
 			</div>
 	</body>
 </html>
