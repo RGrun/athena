@@ -28,19 +28,10 @@
 <html>
 	<head>
 		<title>Athena System</title>
-		<style>
-			li { display: inline; }
-			table, th, td {
-				border: 1px solid black;
-				padding: 3px;
-			}
-			.assignment {
-				margin-top:10px;
-				margin-bottom:10px;
-			}
-		</style>
+		<link rel="stylesheet" type="text/css" href="/athena/www/styles.css">
 	</head>	
 	<body>
+	<div class='header'>
 		<h1>Welcome to Athena</h1>
 		<ul>
 			<li><a href='/athena/www/companies/companies.php'>Companies Table</a></li>
@@ -56,7 +47,7 @@
 			<li><a href='/athena/www/cases/cases.php'>Cases Table</a></li>
 			<li><a href='/athena/www/assignments/assignments.php'>Assignments Table</a></li>
 		</ul>
-		<br/><a href='/athena/www/logout.php'>Logout</a><br/>
+		</div>
 		<div class='main'>
 	
 _END;
@@ -103,8 +94,12 @@ _END;
 		public function makeFooter() {
 		
 			$footer = <<<_END
+			
 			</div>
+			<div class='footer'>
 			<br/><a href='/athena/www/index.php'>Home</a>
+			<br/><a href='/athena/www/logout.php'>Logout</a><br/>
+			</div>
 	</body>
 </html>
 _END;

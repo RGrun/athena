@@ -1,0 +1,27 @@
+			
+			
+			
+			li { display: inline; }
+			
+			table, th, td {
+				border: 1px solid black;
+				padding: 3px;
+			}
+			.assignment {
+				margin-top:10px;
+				margin-bottom:10px;
+			}
+			
+			.header {
+				margin-bottom: 10px;
+				background: #33CC33;
+				
+			}
+			
+			.footer  {
+				margin-top: 10px;
+				background: #006600;
+				color: white;
+			}
+			
+		
