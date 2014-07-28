@@ -330,7 +330,7 @@
 					
 					
 					$tray = $this->findTray($row['tray_id'], "name");
-					$client = $worker->findClient($row['cli_id'], "uname");
+					$client = $this->findClient($row['cli_id'], "uname");
 					$kind = ($row['kind'] == 1) ? "Drop" : "Pickup";
 						
 					$trayTable = 
