@@ -112,7 +112,9 @@ _END;
 			$string = strip_tags($string);
 			$string = htmlentities($string);
 			$string = stripslashes($string);
-			return mysqli_real_escape_string($string);
+			$string = mysqli_real_escape_string($string);
+			echo $string;
+			return $string;
 		}
 		
 	}
