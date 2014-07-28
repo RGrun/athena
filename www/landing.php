@@ -14,14 +14,17 @@
 	$userStr = $_SESSION['user'];
 	$userId = $_SESSION['userId'];
 	
+	
 	$sql = "SELECT * from assigns WHERE usr_id='$userId'";
 	
 	if($result = $worker->query($sql)) {
 	
+		echo "<h2>Current Assignments:</h2>";
 		
 		//get assoc array and print table data
 		while($row = mysqli_fetch_assoc($result)) {
 			
+			//loop through assignments and print each one as a div
 			echo $worker->makeTraysTable($row['usr_id'], $row['asgn_id']);
 			
 			
