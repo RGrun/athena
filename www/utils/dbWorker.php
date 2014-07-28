@@ -344,7 +344,7 @@
 					"<tr><td><a href='landing.php?complete=1&aid=$asgn_id'>Mark as completed</a></td></tr>" .
 					"</table>";
 					
-					return "<div class='assignment'>$traytable</div>";
+					return "<div class='assignment'>$trayTable</div>";
 					
 					}
 				}
