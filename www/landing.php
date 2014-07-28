@@ -22,9 +22,7 @@
 		//get assoc array and print table data
 		while($row = mysqli_fetch_assoc($result)) {
 			
-			extract($row);
-			
-			$worker->makeTraysTable($usr_id, $asgn_id);
+			$worker->makeTraysTable($row['$usr_id'], $row['$asgn_id']);
 			
 			
 		}
