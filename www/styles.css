@@ -3,6 +3,19 @@
 			
 			li { display: inline; }
 			
+			body {
+				font-family: arial, sans-serif;
+			}
+			
+			.header a {
+				text-decoration: none;
+			}
+			
+			.footer a {
+				text-decoration: none;
+			}
+			
+			
 			table, th, td {
 				border: 1px solid black;
 				padding: 3px;
@@ -15,7 +28,7 @@
 			.header {
 				margin-bottom: 10px;
 				background: #33CC33;
-				text-decoration: none;
+				
 			}
 			
 			.headernav {
