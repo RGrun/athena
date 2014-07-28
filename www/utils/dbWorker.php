@@ -351,6 +351,40 @@
 					
 				}
 			}
+			
+			public function makeCompletedTraysTable($usr_id, $asgn_id) {
+			
+				$sql = "SELECT * from assigns WHERE usr_id='$usr_id' AND asgn_id='$asgn_id'";
+			
+				if($result = $this->query($sql)) {
+				
+					//get assoc array and print table data
+					$row = mysqli_fetch_assoc($result);
+					
+					if($row['status'] == "Complete") {					
+						
+						extract($row);
+						
+						$tray = $this->findTray($row['tray_id'], "name");
+						$client = $this->findClient($row['cli_id'], "uname");
+						$kind = ($row['kind'] == 1) ? "Drop" : "Pickup";
+							
+						$trayTable = "<table>" .
+						"<tr><td><em>Assignment ID</em></td><td>$asgn_id</td></tr>" .
+						"<tr><td><em>Tray</em></td><td>$tray</td></tr>" .
+						"<tr><td><em>Client</em></td><td>$client</td></tr>" .
+						"<tr><td><em>Date</em></td><td>$dttm</td></tr>" .
+						"<tr><td><em>Status</em></td><td>$status</td></tr>" .
+						"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
+						"<tr><td><em>Type</em></td><td>$kind</td></tr>" .
+						"<tr><td><a href='landing.php?complete=1&aid=$asgn_id'>Mark as completed</a></td></tr>" .
+						"</table>";
+						
+						return "<div class='completed'>$trayTable</div>";
+					}
+					
+				}
+			}
 		}
 				
 ?>

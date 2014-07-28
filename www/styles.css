@@ -33,6 +33,12 @@
 				margin-bottom:10px;
 			}
 			
+			.completed {
+				margin-top: 10px;
+				margin-bottom: 10px;
+				background: lightgray;
+			}
+			
 			.header {
 				margin-bottom: 10px;
 				background: #33CC33;
