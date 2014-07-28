@@ -320,7 +320,7 @@
 		
 			public function makeTraysTable($usr_id, $asgn_id) {
 			
-				$sql = "SELECT * from assigns WHERE usr_id='$userId' AND asgn_id='$asgn_id'";
+				$sql = "SELECT * from assigns WHERE usr_id='$usr_id' AND asgn_id='$asgn_id'";
 			
 				if($result = $this->query($sql)) {
 				
