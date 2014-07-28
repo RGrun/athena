@@ -2,9 +2,11 @@
 
 	//login.php
 	
+	require_once $_SERVER['DOCUMENT_ROOT'] . "/athena/www/utils/htmlUtils.php";
 	require_once $_SERVER['DOCUMENT_ROOT'] . "/athena/www/utils/dbWorker.php";
 	
 	$worker = new dbWorker();
+	$htmlUtils = new htmlUtils();
 	
 	session_start();
 	
@@ -42,9 +44,17 @@
 				$_SESSION['user'] = $user;
 				$_SESSION['userId'] = $row[0];
 				$_SESSION['pass'] = $pass;
+				header("Location: landing.php");
 				die("You are now logged in. Please <a href='landing.php'>Click here</a> to continue.<br/><br/>");
 			}
-		}
+		}	
+	} else {
+		
+		$htmlUtils->makeHeader();
+		
+		echo "Invalid Username/Password combination.";
+		
+		$htmlUtils->makeFooter();
+		
 	}
-	
 ?>

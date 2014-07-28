@@ -52,6 +52,9 @@
 			<li><a href='/athena/www/cases/cases.php'>Cases Table</a></li>
 			<li><a href='/athena/www/assignments/assignments.php'>Assignments Table</a></li>
 		</ul>
+		<a href='logout.php'>Logout</a>
+		<div class='main'>
+	
 _END;
 
 		$loginForm = "<form method='post' action='login.php'>" .
@@ -59,7 +62,7 @@ _END;
 		"<span class='fieldname'>Password</span><input type='password' name='pass' /><br/>" .
 		"<input type='submit' value='Login' /> </form>";
 	
-			$notLoggedInHeader = <<<_END
+		$notLoggedInHeader = <<<_END
 			
 			<!DOCTYPE html>
 <html>
@@ -96,6 +99,7 @@ _END;
 		public function makeFooter() {
 		
 			$footer = <<<_END
+			</div>
 			<br/><a href='/athena/www/index.php'>Home</a>
 	</body>
 </html>
