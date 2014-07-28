@@ -33,6 +33,7 @@
 	<body>
 	<div class='header'>
 		<h1>Welcome to Athena</h1>
+		<div class='headerlist'>
 		<ul>
 			<li><a href='/athena/www/companies/companies.php'>Companies Table</a></li>
 			<li><a href='/athena/www/users/users.php'>Users Table</a></li>
@@ -47,6 +48,7 @@
 			<li><a href='/athena/www/cases/cases.php'>Cases Table</a></li>
 			<li><a href='/athena/www/assignments/assignments.php'>Assignments Table</a></li>
 		</ul>
+		</div>
 		</div>
 		<div class='main'>
 	

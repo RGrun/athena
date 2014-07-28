@@ -15,13 +15,20 @@
 			.header {
 				margin-bottom: 10px;
 				background: #33CC33;
-				
+				text-decoration: none;
 			}
+			
+			.headernav {
+				background: #666633;
+				color: white;
+			}
+
 			
 			.footer  {
 				margin-top: 10px;
-				background: #006600;
+				background: #666633;
 				color: white;
+				text-decoration: none;
 			}
 			
 		
