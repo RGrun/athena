@@ -327,11 +327,11 @@
 				//get assoc array and print table data
 				$row = mysqli_fetch_assoc($result) 
 					
-				extract($row);
 				
-				$tray = $this->findTray($tray_id, "name");
-				$client = $worker->findClient($cli_id, "uname");
-				$kind = ($kind == 1) ? "Drop" : "Pickup";
+				
+				$tray = $this->findTray($row['tray_id'], "name");
+				$client = $worker->findClient($row['cli_id'], "uname");
+				$kind = ($row['kind'] == 1) ? "Drop" : "Pickup";
 					
 				$trayTable = 
 				"<tr><td><em>Assignment ID</em></td><td>$asgn_id</td></tr>" .
