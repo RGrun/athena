@@ -108,6 +108,13 @@ _END;
 			echo $footer;
 		}
 		
+		public function sanitizeString($string) {
+			$string = strip_tags($string);
+			$string = htmlentities($string);
+			$string = stripslashes($string);
+			return mysqli_real_escape_string($string);
+		}
+		
 	}
 	
 	
