@@ -22,6 +22,9 @@
 			$userStr = "Guest";
 		}
 		
+		if(isset($_GET['a'])) {
+			$error = "<span class='error'>Login error, please try again</span>";
+		}
 			
 			$header = <<<_END
 <!DOCTYPE html>
@@ -54,9 +57,9 @@
 	
 _END;
 
-		$loginForm = "<form method='post' action='login.php'>" .
-		"<span class='fieldname'>Username</span><input type='text' name='user' /><br/>".
-		"<span class='fieldname'>Password</span><input type='password' name='pass' /><br/>" .
+		$loginForm = "<form method='post' action='login.php'>$error" .
+		"<span class='fieldname'>Username: </span><input type='text' name='user' /><br/>".
+		"<span class='fieldname'>Password: </span><input type='password' name='pass' /><br/>" .
 		"<input type='submit' value='Login' /> </form>";
 	
 		$notLoggedInHeader = <<<_END
