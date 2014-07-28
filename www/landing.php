@@ -21,7 +21,7 @@
 		
 		$sql = "UPDATE assigns SET status='Complte' WHERE asgn_id='$aid'";
 		//echo $sql;
-		if($this->query($sql)) header( "Location: assignmentDetail.php?aid=$id" );
+		if($worker->query($sql)) header( "Location: landing.php" );
 		
 	}
 	
