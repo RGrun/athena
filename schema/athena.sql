@@ -7,6 +7,18 @@
 -- --------------------------------------------------------
 
 -- --------------------------------------------------------
+-- Sessions
+-- --------------------------------------------------------
+drop table if exists sessions;
+create table if not exists sessions
+( sess_id   int(10)      not null auto_increment,
+  created   datetime     not null default '0/0/0',   -- date/time of session creation
+  touched   datetime     not null default '0/0/0',   -- date/time of last touch
+  sid       varchar(40)  not null default '',        -- some obscure hash of the sess_id for the cookie
+  primary key (sess_id)
+);
+
+-- --------------------------------------------------------
 -- Owners of trays and/or teams.
 -- --------------------------------------------------------
 drop table if exists company;
