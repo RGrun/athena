@@ -41,6 +41,7 @@
 		<div class='headernav'>
 		<ul>
 			<li><a href='/athena/www/landing.php'>Return to Landing</a> | </li> 
+			<li><a href='/athena/www/userAssignments.php'>View Assignments</a> | </li>
 			<li><a href='/athena/www/admin.php'>Admin Panel</a></li>				
 		</ul>
 		</div>

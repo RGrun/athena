@@ -31,13 +31,20 @@
 	$doctorSelector = $worker->createSelector("doctors", "name", "doc_id");
 	$procedureSelector = $worker->createSelector("procs", "name", "proc_id");
 	$siteSelector = $worker->createSelector("sites", "name", "site_id");
+	
+	$statusSelector = "<select name='newStatus' size='1'>" .
+		"<option value='Pending'>Pending</option>" .
+		"<option value='Complete'>Complete</option>" .
+		"</select>";
+		
+	
 	//time field not currently hooked up
 	$form = "<form action='addNewCase.php' method='post'>" .
 	"New Case&#39;s Team: $teamSelector <br/>" .
 	"New Case&#39;s Doctor: $doctorSelector <br/>" .
 	"New Case&#39;s Procedure: $procedureSelector <br />" .
 	"New Case&#39;s Site: $siteSelector <br />" .
-	"New Case&#39;s Status: <input type='text' name='newStatus' /> <br />" .
+	"New Case&#39;s Status: $statusSelector <br />" .
 	"Time of new case: <input type='text' name='newTime' /> <br />" .
 	"Comment: <input type='text' name='newComment' /> <br/>" . 
 	"<input type='submit' value='Commit Changes' /> </form>";

@@ -35,6 +35,9 @@
 	} else if(isset($_POST['newsites'])) {
 		$worker->editCaseDatabase("site_id", $currentCase, $_POST['newsites']);
 		$worker->closeConnection();
+	} else if (isset($_POST['newStatus'])) {
+		$worker->editCaseDatabase("status", $currentCase, $_POST['newStatus']);
+		$worker->closeConnection();
 	} else {
 
 
@@ -59,6 +62,15 @@
 		$siteForm = "<form method='post' action='editCaseInfo.php'>" .
 		"$siteSelector<br />" .
 		"<input type='submit' value='Commit Changes' /></form> <br/>";
+		
+		$statusSelector = "<select name='newStatus' size='1'>" .
+		"<option value='Pending'>Pending</option>" .
+		"<option value='Complete'>Complete</option>" .
+		"</select>";
+		
+		$statusForm = "<form method='post' action='editCaseInfo.php'>" .
+		"$statusSelector<br/>" .
+		"<input type='submit' value='Commit Changes' /> </form><br/>";
 		
 		if($selectedMethod == "team") $selectedMethod = "team_id";
 		if($selectedMethod == "doctor") $selectedMethod = "doc_id";
@@ -93,6 +105,9 @@
 				$currentData = $worker->findSite($currentData, "name");
 				echo "<p>$currentData</p>";
 				echo $siteForm;
+			} else if ($selectedMethod == "status") {
+				echo "<p>$currentData</p>";
+				echo $statusForm;
 			} else {
 				echo $form;
 			}

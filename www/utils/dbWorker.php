@@ -21,9 +21,7 @@
 		//query wrapper
 		public function query($sql) {
 
-			$result = mysqli_query($this->connection, $sql);
-			
-			return $result;
+			return mysqli_query($this->connection, $sql);
 		}
 		
 		//Database editing functions
@@ -183,6 +181,12 @@
 				//echo $sql;
 				if($this->query($sql)) header( "Location: assignmentDetail.php?aid=$id" );
 		}
+		
+		public function editCaseDatabase($column, $id, $newData = null) {
+				$sql = "UPDATE cases SET $column='$newData' WHERE case_id='$id'";
+				//echo $sql;
+				if($this->query($sql)) header( "Location: caseDetail.php?cid=$id" );
+		}
 				
 		//creative functions
 		
@@ -202,6 +206,295 @@
 			
 			return $selector;
 		}
+		
+		public function createLandingDropdown($userId) {
+			
+			$selector = "<select id='filterselect' size='1'>" . 
+			"<option>All</option>" .
+			"<option disabled>--Sites--</option>";
+			
+			//display trays from the selected site
+			$sql = "SELECT name, site_id FROM sites";
+			
+			$result = $this->query($sql);
+			
+			while($row = mysqli_fetch_array($result)) {
+				$selector .= "<option value='$row[1]'>$row[0]</option>";
+			}
+			
+			$selector .= "<option disabled>--Status--</option>";
+			
+			//display trays by status
+			$sql = "SELECT status, name FROM trays";
+			
+			$result = $this->query($sql);
+			
+			$selector .= "<option>Open Trays</option><option>Pending Trays</option><option>Completed Trays</option>";
+
+			
+			$selector .= "<option disabled>--Your team's cases--</option>";
+			
+			//display cases assigned to user's team
+			
+			//first, find the users teamid
+			$sql = "SELECT team_id from users WHERE usr_id='$userId'";
+			$result = $this->query($sql);
+			$row = mysqli_fetch_array($result);
+			$usersTeamId = $row[0];
+			
+			
+			//next, find and list cases assigned to the users team, show procedure names
+			$sql = "SELECT proc_id FROM cases WHERE team_id='$usersTeamId'";
+			
+			$result = $this->query($sql);
+			while($row = mysqli_fetch_array($result)) {
+				$proc = $this->findProcedure($row[0], "name");
+				
+				$selector .= "<option>$proc</option>";
+			}
+			
+			$selector .= "</select>";
+			
+			return $selector;
+			
+		}
+		
+		public function makeSitesTrayTables($userId, $siteId) {
+			
+			//first, find the users teamid
+			$sql = "SELECT team_id from users WHERE usr_id='$userId'";
+			$result = $this->query($sql);
+			$row = mysqli_fetch_array($result);
+			$usersTeamId = $row[0];
+			
+			$sql = "SELECT * from trays WHERE team_id='$usersTeamId' AND site_id='$siteId'";
+			
+			if($result = $this->query($sql)) {
+			
+				$siteName = $this->findSite($siteId, "name");
+			
+				echo "<div class='siteselement'>";
+				echo "<h2>Trays at $siteName</h2>";
+				
+				while($row = mysqli_fetch_assoc($result)) {
+				
+					//get assoc array and print table data
+					
+					extract($row);
+						
+					$company = $this->findCompany($cmp_id, "name");
+					$team = $this->findTeam($team_id, "name");
+					$loanTeam = $this->findTeam($loan_team, "name");
+							
+					$trayTable = "<table>" .
+					"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
+					"<tr><td><em>Name</em></td><td>$name</td></tr>" .
+					"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
+					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
+					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
+					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
+					"<tr><td><a href='viewTrayDetail.php?tid='$tray_id'>View Details</a></td></tr>" .
+					"</table>";
+						
+					echo "<div class='trayView'>$trayTable</div>";
+				}
+				
+				echo "</div>";
+					
+			} else {
+			
+				echo "No trays at that location.";
+			}
+				
+		}
+		
+		public function makeOpenTables($userId) {
+			$sql = "SELECT * FROM trays WHERE team_id='$userId' AND status='Open'";
+			
+			$result = $this->query($sql);
+			
+			if($result->num_rows != 0) {
+			
+				echo "<div class='openelement'>";
+				echo "<h2>Open Trays:</h2>";
+				
+				while($row = mysqli_fetch_assoc($result)) {
+				
+					if($row['status'] != "Open") return "There are no open trays.";
+					
+					//get assoc array and print table data
+					
+					extract($row);
+						
+					$company = $this->findCompany($cmp_id, "name");
+					$team = $this->findTeam($team_id, "name");
+					$loanTeam = $this->findTeam($loan_team, "name");
+					$siteName = $this->findSite($site_id, "name");
+							
+					$trayTable = "<table>" .
+					"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
+					"<tr><td><em>Name</em></td><td>$name</td></tr>" .
+					"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
+					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
+					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
+					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
+					"<tr><td><a href='viewTrayDetail.php?tid='$tray_id'>View Details</a></td></tr>" .
+					"</table>";
+						
+					echo "<div class='trayView'>$trayTable</div>";
+				}
+				
+				echo "</div>";
+					
+			} else {
+			
+				//echo "No trays at that location.";
+			}
+				
+		}
+		
+		public function makeLoanedTables($userId) {
+			$sql = "SELECT * FROM trays WHERE team_id='$userId' AND status='Loaned'";
+			
+			$result = $this->query($sql);
+			
+			if($result->num_rows != 0) {
+			
+				echo "<div class='loanedelement'>";
+				echo "<h2>Loaned Trays:</h2>";
+				
+				while($row = mysqli_fetch_assoc($result)) {
+				
+					//get assoc array and print table data
+					if($row['status'] != "Loaned") continue;
+					extract($row);
+						
+					$company = $this->findCompany($cmp_id, "name");
+					$team = $this->findTeam($team_id, "name");
+					$loanTeam = $this->findTeam($loan_team, "name");
+					$siteName = $this->findSite($site_id, "name");
+							
+					$trayTable = "<table>" .
+					"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
+					"<tr><td><em>Name</em></td><td>$name</td></tr>" .
+					"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
+					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
+					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
+					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
+					"<tr><td><a href='viewTrayDetail.php?tid='$tray_id'>View Details</a></td></tr>" .
+					"</table>";
+						
+					echo "<div class='trayView'>$trayTable</div>";
+				}
+				
+				echo "</div>";
+					
+			} else {
+			
+				//echo "No currently loaned trays.";
+			}
+				
+		}
+		
+		public function makeScheduledTables($userId) {
+			$sql = "SELECT * FROM trays WHERE team_id='$userId' AND status='Scheduled'";
+			
+			$result = $this->query($sql);
+			
+			if($result->num_rows != 0) {
+			
+				echo "<div class='scheduledelement'>";
+				echo "<h2>Scheduled Trays:</h2>";
+				
+				while($row = mysqli_fetch_assoc($result)) {
+				
+					//get assoc array and print table data
+					
+					if($row['status'] != "Scheduled") continue;
+
+					extract($row);
+						
+					$company = $this->findCompany($cmp_id, "name");
+					$team = $this->findTeam($team_id, "name");
+					$loanTeam = $this->findTeam($loan_team, "name");
+					$siteName = $this->findSite($site_id, "name");
+							
+					$trayTable = "<table>" .
+					"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
+					"<tr><td><em>Name</em></td><td>$name</td></tr>" .
+					"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
+					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
+					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
+					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
+					"<tr><td><a href='viewTrayDetail.php?tid='$tray_id'>View Details</a></td></tr>" .
+					"</table>";
+						
+					echo "<div class='trayView'>$trayTable</div>";
+				}
+				
+				echo "</div>";
+					
+			} else {
+			
+				//echo "No trays at that location.";
+			}
+				
+		}
+		
+		public function makeCasesTable($userId, $caseId) {
+				
+			//first, find the users teamid
+			$sql = "SELECT team_id from users WHERE usr_id='$userId'";
+			$result = $this->query($sql);
+			$row = mysqli_fetch_array($result);
+			$usersTeamId = $row[0];
+			
+			//now, find cases assigned to that team, but only pending cases
+			$sql = "SELECT * FROM cases WHERE team_id='$usersTeamId' AND status='Pending'";
+			
+			$result = $this->query($sql);
+			
+			
+			if($result->num_rows != 0) {
+				echo "<div class='caseelement'>";
+				echo "<h2>Cases assigned to your team:</h2>";
+				
+				while($row = mysqli_fetch_assoc($result)) {
+				
+					//get assoc array and print table data
+
+					extract($row);
+						
+					$team = $this->findTeam($team_id, "name");
+					$doc = $this->findDoctor($doc_id, "name");
+					$procedure = $this->findProcedure($proc_id, "name");
+					$siteName = $this->findSite($site_id, "name");
+							
+					$caseTable = "<table>" .
+					"<tr><td><em>Case ID</em></td><td>$case_id</td></tr>" .
+					"<tr><td><em>Assigned Team</em></td><td>$team</td></tr>" .
+					"<tr><td><em>Doctor</em></td><td>$doc</td></tr>" .
+					"<tr><td><em>Procedure</em></td><td>$procedure</td></tr>" .
+					"<tr><td><em>Site</em></td><td>$siteName</td></tr>" .
+					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
+					"<tr><td><em>Time</em></td><td>$dttm</td></tr>" .
+					"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
+					"<tr><td><a href='caseDetail.php?cid='$case_id'>View Details</a></td></tr>" .
+					"</table>";
+						
+					echo "<div class='trayView'>$caseTable</div>";
+				}
+				
+				echo "</div>";
+					
+			} else {
+			
+				//echo "No trays at that location.";
+			}
+			
+			
+		}
+		
 				
 		//lookup functions
 		
@@ -385,6 +678,11 @@
 					
 				}
 			}
-		}
+			
+			public function showAllRelevantTrays($usrId, $siteId = null) {
+				
+				$this->makeSitesTrayTables($usrId, $siteId);
+			}
+	}
 				
 ?>

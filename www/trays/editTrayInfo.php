@@ -34,6 +34,12 @@
 	} else if (isset($_POST['newteams'])) {
 		$worker->editTrayDatabase($selectedMethod, $currentTray, $_POST['newteams']);
 		$worker->closeConnection();
+	} else if (isset($_POST['newsites'])) {
+		$worker->editTrayDatabase($selectedMethod, $currentTray, $_POST['newsites']);
+		$worker->closeConnection();
+	} else if(isset($_POST['newStatus'])) {
+		$worker->editTrayDatabase($selectedMethod, $currentTray, $_POST['newStatus']);
+		$worker->closeConnection();
 	} else {
 
 		$companySelector = $worker->createSelector("company", "name", "cmp_id");
@@ -44,9 +50,19 @@
 		"<input type='submit' value='Commit Changes' /> </form>";
 		$teamForm = "<form method='post' action='editTrayInfo.php'>$teamSelector <br/> <br/>" .
 		"<input type='submit' value='Commit Changes' /> </form>";
-		$siteForm = "<form method='post action='editTrayInfo.php'>$siteSelector <br/> <br/> " .
+		$siteForm = "<form method='post' action='editTrayInfo.php'>$siteSelector <br/> <br/> " .
 		"<input type='submit' value='Commit Changes' /> </form>";
+		
+		$statusSelector = "<select name='newStatus' size='1'>" .
+		"<option value='Open'>Open</option>" .
+		"<option value='Scheduled'>Scheduled</option>" .
+		"<option value='Loaned'>Loaned</option>" .
+		"</select>";
 			
+		$statusForm = "<form method='post' action='editTrayInfo.php'>" .
+		"$statusSelector<br />" .
+		"<input type='submit' value='Commit Changes' /></form> <br/>";
+		
 
 
 		
@@ -76,6 +92,9 @@
 				$site = $worker->findSite($currentData, "name");
 				echo "$site <br/>";
 				echo "<p>$siteForm</p>";
+			} elseif($selectedMethod == "status") {
+				echo $currentData;
+				echo "<p>$statusForm</p>";
 			} else {
 				echo $form;
 			}

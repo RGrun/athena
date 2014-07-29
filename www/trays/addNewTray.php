@@ -31,12 +31,18 @@
 	$teamSelector = $worker->createSelector("teams", "name", "team_id");
 	$siteSelector = $worker->createSelector("sites", "name", "site_id");
 	
+	$statusSelector = "<select name='newStatus' size='1'>" .
+		"<option value='Open'>Open</option>" .
+		"<option value='Scheduled'>Scheduled</option>" .
+		"<option value='Loaned'>Loaned</option>" .
+		"</select>";
+	
 	$form = "<form action='addNewTray.php?added=true' method='post'>" .
 	"New Tray&#39;s Name: <input type='text' name='newName' /> <br/>" .
 	"New Tray&#39;s Company: $companySelector <br />" .
 	"Team Responsible for Tray: $teamSelector <br />" .
 	"New Tray&#39;s Location: $siteSelector <br />" .
-	"New Tray&#39;s Status: <input type='text' name='newStatus' /> <br/>" .
+	"New Tray&#39;s Status: $statusSelector <br/>" .
 	"<input type='submit' value='Commit Changes' /> </form>";
 	
 	echo "<p>$form</p>";

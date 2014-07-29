@@ -28,10 +28,13 @@
 		
 		if($user == "" || $pass == "") {
 			header("Location: index.php?a=loginError");
+			die();
 		} else  {
 		
-			$pass = "!@#$pass!@#";
-			$pass = md5($pass);
+			//REENABLE PASSWORD ENCODING IN FINAL PRODUCT
+			
+			//$pass = "!@#$pass!@#";
+			//$pass = md5($pass);
 			
 			//first, look to see if person logging in is a user
 			$sql = "SELECT uname, pwd FROM users WHERE uname='$user' AND pwd='$pass'";
@@ -49,7 +52,7 @@
 				$_SESSION['userId'] = $row[0];
 				$_SESSION['pass'] = $pass;
 				header("Location: landing.php");
-				
+				die();
 			} else {
 				//...or a client
 				//THIS CURRENTLY DOES NOT WORK
@@ -65,8 +68,10 @@
 					$_SESSION['user'] = $user;
 					$_SESSION['userId'] = $row[0];
 					header("Location: landing.php");
+					die();
 				} else {
 					header("Location: index.php?a=loginError");
+					die();
 				}
 			}
 		}	
