@@ -31,19 +31,23 @@
 	} else if (isset($_POST['newusers'])) {
 		$worker->editTeamDatabase($selectedMethod, $currentTeam, $_POST['newusers']);
 		$worker->closeConnection();
+	} else if (isset($_POST['newregions'])) {
+		$region = $worker->findRegion($_POST['newregions'], "name");
+		$worker->editTeamDatabase($selectedMethod, $currentTeam, $region);
+		$worker->closeConnection();
 	} else {
 		$companySelector = $worker->createSelector("company", "name", "cmp_id");
 		$leaderSelector = $worker->createSelector("users", "uname", "usr_id");
+		$regionSelector = $worker->createSelector("regions", "name", "reg_id");
 		
 		$companyForm = "<form method='post' action='editTeamInfo.php'>$companySelector <br /> <br/>" .
 		"<input type='submit' value='Commit Changes' /> </form>";
 		$leaderForm = "<form method='post' action='editTeamInfo.php'>$leaderSelector <br/> <br/>" .
 		"<input type='submit' value='Commit Changes' /> </form>";
 			
-		$form = "<form method='post' action='editTeamInfo.php'>" .
-		"<textarea name='newData' cols='20' rows='5'>Enter New Data Here</textarea><br />" .
-		"<input type='submit' value='Commit Changes' /></form> <br/>";
-		
+		$regionForm = "<form method='post' action='editTeamInfo.php'>$regionSelector <br/> <br/>" .
+		"<input type='submit' value='Commit Changes' /> </form>";
+			
 
 		
 		$sql = "SELECT $selectedMethod FROM teams WHERE team_id='$currentTeam'";
@@ -55,18 +59,20 @@
 			
 			$currentData = $row[0];
 			
-			echo "Current Value: ";
+			$form = "<form method='post' action='editTeamInfo.php'>" .
+			"<textarea name='newData' cols='20' rows='5'>$currentData</textarea><br />" .
+			"<input type='submit' value='Commit Changes' /></form> <br/>";
+		
 			
 			if($selectedMethod == "cmp_id") {
 				$company = $worker->findCompany($currentData, "name");
-				echo "$company <br/>";
 				echo "<p>$companyForm</p>";
 			} else if($selectedMethod == "head_id") {
 				$leader = $worker->findUser($currentData, "uname");
-				echo "$leader <br />";
 				echo "<p>$leaderForm</p>";
+			} else if($selectedMethod== "region") {
+				echo "<p>$regionForm</p>";
 			} else {
-				echo "<p>$currentData</p>";
 				echo $form;
 			}
 			

@@ -12,23 +12,23 @@
 	
 	$htmlUtils->makeHeader();
 	
-?>
+   
 	
-<h2>Companies</h2>
+	echo" <h2>Companies</h2>";
 
-<em><a href='addNewCompany.php'>Add New Company</a></em><br/><br/>
+	echo "<em><a href='addNewCompany.php'>Add New Company</a></em><br/><br/>";
 
-<table>
-	<tr>
-		<th>Company ID</th>
-		<th>Active?</th>
-		<th>Name</th>
-		<th>Address</th>
-		<th>City</th>
-		<th>State</th>
-		<th>Zip Code</th>
-	</tr>
-<?php
+	echo "<table>" .
+			"<tr>" .
+			"	<th>Company ID</th>" .
+			"	<th>Active?</th>" .
+			"	<th>Name</th>" .
+			"	<th>Address</th> ".
+			"	<th>City</th>" .
+			"	<th>State</th>" .
+			"	<th>Zip Code</th>" .
+			"</tr>";
+
 
 	$sql = "SELECT * FROM company";
 	
@@ -52,16 +52,15 @@
 			"<td>$city</td>" .
 			"<td>$state</td>" .
 			"<td>$zip</td>" .
-			"<td><a href='detail.php?cid=$cmp_id'>Detail</a></td>" .
+			"<td><a href='companyDetail.php?cid=$cmp_id'>Detail</a></td>" .
 			"<td><a href='deleteCompany.php?cid=$cmp_id'>Delete</a></td></tr>";
 		}
+		
+		echo "</table>";
+	} else {
+		echo "Connection to database failed.";
 	}
 
-?>	
-
-</table>
-
-<?php
 	$htmlUtils->makeFooter();
 	mysqli_close($connection);
 ?>

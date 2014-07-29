@@ -13,8 +13,10 @@
 	
 		extract($_POST);
 		
+		$region = $worker->findRegion($newregions, "name");
+		
 		$sql = "INSERT INTO teams (name, region, state, cmp_id, head_id)" .
-		"VALUES ('$newName', '$newRegion', '$newState', '$newcompany', '$newusers')";
+		"VALUES ('$newName', '$region', '$newState', '$newcompany', '$newusers')";
 		
 		$worker->query($sql);
 		$worker->closeConnection();
@@ -28,10 +30,11 @@
 	
 	$companySelector = $worker->createSelector("company", "name", "cmp_id");
 	$leaderSelector = $worker->createSelector("users", "uname", "usr_id");
+	$regionSelector = $worker->createSelector("regions", "name", "reg_id");
 	
 	$form = "<form action='addNewTeam.php?added=true' method='post'>" .
 	"New Team&#39;s Name: <input type='text' name='newName' /> <br/>" .
-	"New Team&#39;s Region: <input type='text' name='newRegion' /> <br />" .
+	"New Team&#39;s Region: $regionSelector <br />" .
 	"New Team&#39;s State: <input type='text' name='newState' maxLength='2' /> <br />" .
 	"New Team&#39;s Company: $companySelector <br />" .
 	"New Team&#39;s Leader: $leaderSelector <br />" .

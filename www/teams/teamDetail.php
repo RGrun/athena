@@ -25,6 +25,7 @@
 		$company = $worker->findCompany($cmp_id, "name");
 		$leader = $worker->findUser($head_id, "uname");
 		
+		
 		$table = "<table>" .
 		"<tr><td><em>Team ID</em></td><td>$team_id</td></tr>" .
 		"<tr><td><em>Team Name</em></td><td>$name</td><td><a href='editTeamInfo.php?mtd=name'>Edit</a></td></tr>" .

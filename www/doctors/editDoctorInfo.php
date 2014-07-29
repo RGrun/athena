@@ -30,9 +30,7 @@
 			"<input type='hidden' name='changeActivity' />" .
 			"<input type='submit' value='Change Activity' /> </form> <br />";
 			
-		$form = "<form method='post' action='editDoctorInfo.php'>" .
-		"<textarea name='newData' cols='20' rows='5'>Enter New Data Here</textarea><br />" .
-		"<input type='submit' value='Commit Changes' /></form> <br/>";
+
 		
 		$sql = "SELECT $selectedMethod FROM doctors WHERE doc_id='$currentDoctor'";
 		
@@ -42,7 +40,9 @@
 			
 			$currentData = $row[0];
 			
-			echo "Current Value: <br />";
+			$form = "<form method='post' action='editDoctorInfo.php'>" .
+			"<textarea name='newData' cols='20' rows='5'>$currentData</textarea><br />" .
+			"<input type='submit' value='Commit Changes' /></form> <br/>";
 			
 			if($selectedMethod == "active" && $currentData == 1) {
 				echo "Doctor is active. <br />";
@@ -51,7 +51,6 @@
 				echo "Doctor is inactive. <br />";
 				echo $activityForm;
 			} else {
-				echo "<p>$currentData</p>";
 				echo $form;
 			}
 			

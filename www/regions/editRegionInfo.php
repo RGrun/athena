@@ -1,11 +1,12 @@
 <?php
 
-	//editInstrumentInfo.php
+	//editRegionInfo.php
 	
 	require_once "includes.php";
 	
-	$htmlUtils = new htmlUtils();
 	$worker = new dbWorker();
+	
+	$htmlUtils = new htmlUtils();
 	
 	$htmlUtils->makeHeader();
 	
@@ -15,18 +16,23 @@
 	} else {
 		$selectedMethod = $_SESSION['selectedMethod'];
 	}
-	$currentInstrument = $_SESSION['currentInstrumentId'];
+	$currentRegion = $_SESSION['currentRegionId'];
 	
-	echo "<h2>Edit Instrument Info: </h2>";
+	echo "<h2>Edit Region Info: </h2>";
 	
 
 	if(isset($_POST['newData'])) {
-		$worker->editInstrumentDatabase($selectedMethod, $currentInstrument, $_POST['newData']);
+		$worker->editRegionDatabase($selectedMethod, $currentRegion, $_POST['newData']);
 		$worker->closeConnection();
 	} else {
 
+
 		
-		$sql = "SELECT $selectedMethod FROM instruments WHERE inst_id='$currentInstrument'";
+		$stateChangeForm = "<form method='post' action='editRegionInfo.php'>" .
+		"<input type='text' name='newData' maxLength='2' /><br />" .
+		"<input type='submit' value='Commit Changes' /></form> <br/>";
+		
+		$sql = "SELECT $selectedMethod FROM regions WHERE reg_id='$currentRegion'";
 		
 		if($result = $worker->query($sql)) {
 			
@@ -34,11 +40,14 @@
 			
 			$currentData = $row[0];
 			
-			$form = "<form method='post' action='editInstrumentInfo.php'>" .
+			$form = "<form method='post' action='editRegionInfo.php'>" .
 			"<textarea name='newData' cols='20' rows='5'>$currentData</textarea><br />" .
 			"<input type='submit' value='Commit Changes' /></form> <br/>";
 			
-			
+			if($selectedMethod == "state") {
+				echo "<p>$currentData</p>";
+				echo $stateChangeForm;
+			} else {
 				echo $form;
 			}
 			
@@ -46,5 +55,5 @@
 		
 		$htmlUtils->makeFooter();
 		$worker->closeConnection();
-
+	}
 ?>

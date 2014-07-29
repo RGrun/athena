@@ -1,0 +1,65 @@
+			
+			
+			
+			
+			
+			body {
+				font-family: arial, sans-serif;
+			}
+			
+			.header a {
+				text-decoration: none;
+				color: white;
+			}
+			
+			.header h1 {
+				position: relative;
+				top: 12px;
+				margin-top: 0;
+			}
+			
+			.footer a {
+				text-decoration: none;
+				color: white;
+			}
+			
+			
+			table, th, td {
+				border: 1px solid black;
+				padding: 3px;
+			}
+			.assignment {
+				margin-top:10px;
+				margin-bottom:10px;
+			}
+			
+			.completed  table {
+				margin-top: 10px;
+				margin-bottom: 10px;
+				background: lightgray;
+			}
+			
+			.header {
+				margin-bottom: 10px;
+				background: #33CC33;
+				
+			}
+			
+			.headernav {
+				background: #666633;
+				color: white;
+			}
+
+			.headernav li { display: inline; }
+			
+			.footer  {
+				margin-top: 10px;
+				background: #666633;
+				color: white;
+			}
+			
+			.error {
+				color: red;
+			}
+			
+		

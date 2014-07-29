@@ -12,9 +12,10 @@
 	if(isset($_GET['added'])) {
 	
 		extract($_POST);
+		
 
 		$sql = "INSERT INTO trays (name, cmp_id, team_id, site_id, loan_team, status)" .
-		"VALUES ('$newName', '$newcompany', '$newteams', '$newsites', '$newcompany', '$newStatus')";
+		"VALUES ('$newName', '$newcompany', '$newteams', '$newsites', '$newteams', '$newStatus')";
 		
 		$worker->query($sql);
 		$worker->closeConnection();

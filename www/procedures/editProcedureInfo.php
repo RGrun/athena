@@ -1,6 +1,6 @@
 <?php
 
-	//editInstrumentInfo.php
+	//editProcedureInfo.php
 	
 	require_once "includes.php";
 	
@@ -15,30 +15,30 @@
 	} else {
 		$selectedMethod = $_SESSION['selectedMethod'];
 	}
-	$currentInstrument = $_SESSION['currentInstrumentId'];
+	$currentProcedure = $_SESSION['currentProcedureId'];
 	
-	echo "<h2>Edit Instrument Info: </h2>";
+	echo "<h2>Edit Procedure Info: </h2>";
 	
 
 	if(isset($_POST['newData'])) {
-		$worker->editInstrumentDatabase($selectedMethod, $currentInstrument, $_POST['newData']);
+		$worker->editProcedureDatabase($selectedMethod, $currentProcedure, $_POST['newData']);
 		$worker->closeConnection();
 	} else {
 
 		
-		$sql = "SELECT $selectedMethod FROM instruments WHERE inst_id='$currentInstrument'";
+		$sql = "SELECT $selectedMethod FROM procs WHERE proc_id='$currentProcedure'";
 		
+		if($result = $worker->query($sql)) {
 		if($result = $worker->query($sql)) {
 			
 			$row = mysqli_fetch_array($result);
 			
 			$currentData = $row[0];
 			
-			$form = "<form method='post' action='editInstrumentInfo.php'>" .
+			$form = "<form method='post' action='editProcedureInfo.php'>" .
 			"<textarea name='newData' cols='20' rows='5'>$currentData</textarea><br />" .
 			"<input type='submit' value='Commit Changes' /></form> <br/>";
-			
-			
+
 				echo $form;
 			}
 			
@@ -46,5 +46,5 @@
 		
 		$htmlUtils->makeFooter();
 		$worker->closeConnection();
-
+	}
 ?>
