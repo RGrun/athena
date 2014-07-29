@@ -34,6 +34,7 @@
 	<head>
 		<title>Athena System</title>
 		<link rel="stylesheet" type="text/css" href="/athena/www/styles.css">
+		<script src='helperFunctions.js'></script>
 	</head>	
 	<body>
 	<div class='header'>
