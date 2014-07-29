@@ -243,8 +243,8 @@
 			$usersTeamId = $row[0];
 			
 			
-			//next, find and list cases assigned to the users team, show procedure names
-			$sql = "SELECT proc_id FROM cases WHERE team_id='$usersTeamId'";
+			//next, find and list pending cases assigned to the users team, show procedure names
+			$sql = "SELECT proc_id FROM cases WHERE team_id='$usersTeamId' AND status='Pending'";
 			
 			$result = $this->query($sql);
 			while($row = mysqli_fetch_array($result)) {
