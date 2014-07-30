@@ -33,8 +33,8 @@
 		
 			//REENABLE PASSWORD ENCODING IN FINAL PRODUCT
 			
-			$pass = "!@#$pass!@#";
-			$pass = md5($pass);
+			//$pass = "!@#$pass!@#";
+			//$pass = md5($pass);
 			
 			//first, look to see if person logging in is a user
 			$sql = "SELECT uname, pwd FROM users WHERE uname='$user' AND pwd='$pass'";

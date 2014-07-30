@@ -19,10 +19,18 @@
 	
 	$landingDropdown = $worker->createLandingDropdown($userId);
 	
-	$filterForm = "<div id='filterform'>Filter table: <br/>$landingDropdown" .
-	"<button type='button'>Filter Results</button></div>";
+	$filterForm = "<div class='filterform'>Filter table: <br/>$landingDropdown" .
+	"<input id='filterbutton' value='Filter Results' onclick='trayFilter()' type='button'/></div>";
+	
+
 	
 	echo $filterForm;
+	
+	
+	//these are for debugging javascript
+	//echo "<p id='js'></p>";
+	//echo "<p id='js2'></p>";
+	//echo "<p id='js3'></p>";
 	
 	echo "<div class='landingview'>";
 	
@@ -61,7 +69,13 @@
 	
 	
 	echo "</div>";
+	/*
+	$scriptHookup = "<script>" .
+	"document.getElementById('filterbutton').onclick = showOpenElements" .
+	"</script>";
 	
+	echo $scriptHookup;
+	*/
 	
 	$htmlUtils->makeFooter();
 

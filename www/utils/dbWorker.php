@@ -210,7 +210,7 @@
 		public function createLandingDropdown($userId) {
 			
 			$selector = "<select id='filterselect' size='1'>" . 
-			"<option>All</option>" .
+			"<option value='all'>All</option>" .
 			"<option disabled>--Sites--</option>";
 			
 			//display trays from the selected site
@@ -219,7 +219,7 @@
 			$result = $this->query($sql);
 			
 			while($row = mysqli_fetch_array($result)) {
-				$selector .= "<option value='$row[1]'>$row[0]</option>";
+				$selector .= "<option value='$row[0]'>$row[0]</option>";
 			}
 			
 			$selector .= "<option disabled>--Status--</option>";
@@ -229,13 +229,15 @@
 			
 			$result = $this->query($sql);
 			
-			$selector .= "<option>Open Trays</option><option>Pending Trays</option><option>Completed Trays</option>";
+			$selector .= "<option value='open'>Open Trays</option><option value='loaned'>Loaned Trays</option><option value='scheduled'>Scheduled Trays</option>";
 
 			
 			$selector .= "<option disabled>--Your team's cases--</option>";
 			
-			//display cases assigned to user's team
+			$selector .= "<option value='cases'>View Cases</option>";
 			
+			/*
+			//display cases assigned to user's team (shows procedure name)
 			//first, find the users teamid
 			$sql = "SELECT team_id from users WHERE usr_id='$userId'";
 			$result = $this->query($sql);
@@ -250,8 +252,8 @@
 			while($row = mysqli_fetch_array($result)) {
 				$proc = $this->findProcedure($row[0], "name");
 				
-				$selector .= "<option>$proc</option>";
-			}
+				$selector .= "<option value='$proc'>$proc</option>";
+			} */
 			
 			$selector .= "</select>";
 			
@@ -272,8 +274,9 @@
 			if($result = $this->query($sql)) {
 			
 				$siteName = $this->findSite($siteId, "name");
+				$siteNameClass = "$siteName" . "_class";
 			
-				echo "<div class='siteselement'>";
+				echo "<div class='$siteNameClass'>";
 				echo "<h2>Trays at $siteName</h2>";
 				
 				while($row = mysqli_fetch_assoc($result)) {
@@ -293,10 +296,10 @@
 					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
 					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
 					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
-					"<tr><td><a href='viewTrayDetail.php?tid='$tray_id'>View Details</a></td></tr>" .
+					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details</a></td></tr>" .
 					"</table>";
 						
-					echo "<div class='trayView'>$trayTable</div>";
+					echo "<div class='sitesTray'>$trayTable</div>";
 				}
 				
 				echo "</div>";
@@ -338,10 +341,10 @@
 					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
 					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
 					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
-					"<tr><td><a href='viewTrayDetail.php?tid='$tray_id'>View Details</a></td></tr>" .
+					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details</a></td></tr>" .
 					"</table>";
 						
-					echo "<div class='trayView'>$trayTable</div>";
+					echo "<div class='openTray'>$trayTable</div>";
 				}
 				
 				echo "</div>";
@@ -381,10 +384,10 @@
 					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
 					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
 					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
-					"<tr><td><a href='viewTrayDetail.php?tid='$tray_id'>View Details</a></td></tr>" .
+					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details</a></td></tr>" .
 					"</table>";
 						
-					echo "<div class='trayView'>$trayTable</div>";
+					echo "<div class='loanedTray'>$trayTable</div>";
 				}
 				
 				echo "</div>";
@@ -426,10 +429,10 @@
 					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
 					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
 					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
-					"<tr><td><a href='viewTrayDetail.php?tid='$tray_id'>View Details</a></td></tr>" .
+					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details</a></td></tr>" .
 					"</table>";
 						
-					echo "<div class='trayView'>$trayTable</div>";
+					echo "<div class='scheduledTray'>$trayTable</div>";
 				}
 				
 				echo "</div>";
@@ -456,6 +459,7 @@
 			
 			
 			if($result->num_rows != 0) {
+			
 				echo "<div class='caseelement'>";
 				echo "<h2>Cases assigned to your team:</h2>";
 				
@@ -479,10 +483,10 @@
 					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
 					"<tr><td><em>Time</em></td><td>$dttm</td></tr>" .
 					"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
-					"<tr><td><a href='caseDetail.php?cid='$case_id'>View Details</a></td></tr>" .
+					"<tr><td><a href='caseDetail.php?cid=$case_id'>View Details</a></td></tr>" .
 					"</table>";
 						
-					echo "<div class='trayView'>$caseTable</div>";
+					echo "<div class='caseTray'>$caseTable</div>";
 				}
 				
 				echo "</div>";
