@@ -39,7 +39,7 @@
 		var selector = O('filterselect');
 		var currentValue = selector.value;
 		var label = O('filterselect')[O('filterselect').selectedIndex].innerHTML;
-		O('js').innerHTML = label; // for testing
+		//O('js').innerHTML = label; // for testing
 		var selections = [];
 		
 		//create array of all values in filter select
@@ -48,7 +48,7 @@
 		selections.push(totalValues.options[i].value);
 		}
 		
-		O('js2').innerHTML = selections.toString();
+	//	O('js2').innerHTML = selections.toString();
 		
 		
 		//filter all/open/loaned/scheduled trays
