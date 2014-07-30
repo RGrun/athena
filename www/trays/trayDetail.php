@@ -33,7 +33,7 @@
 		$inst = $_POST['newinstruments'];
 		$quant = $_POST['newQuant'];
 		$state = $_POST['newState'];
-		$cmt = $_POST['newComment'];
+		$cmt = addslashes($_POST['newComment']);
 
 		
 		//check to see if the instrument is already in this tray
