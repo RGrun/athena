@@ -46,7 +46,7 @@
 	$form = "<form action='addNewAssignment.php' method='post'>" .
 	"New Assignment&#39;s Case: $caseSelector <br/>" .
 	"New Assignment&#39;s Tray: $traySelector <br/>" .
-	"New Assignment&#39;s User: $userSelector <br />" .
+	"New Assignment&#39;s Creator: $userSelector <br />" .
 	"New Assignment&#39;s Client: $clientSelector <br />" .
 	"Time of new case: <input type='text' name='newTime' /> <br />" .
 	"Comment: <input type='text' name='newComment' /> <br/>" . 

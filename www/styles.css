@@ -1,7 +1,10 @@
 			
 			
 			
-			
+			table {
+				
+				box-shadow: 5px 2px 5px #888;
+				}
 			
 			body {
 				font-family: arial, sans-serif;
@@ -39,6 +42,12 @@
 				margin-top: 10px;
 				margin-bottom: 10px;
 				background: lightgray;
+				box-shadow: 5px 2px 5px #888;
+			}
+			
+			.completed div{
+			box-shadow: 5px 2px 5px #888;
+			
 			}
 			
 			.header {

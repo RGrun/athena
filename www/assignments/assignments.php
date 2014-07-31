@@ -14,7 +14,7 @@
 	echo "<em><a href='addNewAssignment.php'>Add New Assignment</a></em> <br/> <br/>";
 	
 	echo "<table>" .
-	"<tr><th>Assignment ID</th><th>Case</th><th>Tray</th><th>Assigned To</th><th>Client</th><th>Time</th><th>Status</th><th>Comment</th><th>Type</th></tr>";
+	"<tr><th>Assignment ID</th><th>Case</th><th>Tray</th><th>Assignment Creator</th><th>For Client</th><th>Time</th><th>Status</th><th>Comment</th><th>Type</th></tr>";
 	
 	$sql = "SELECT * FROM assigns";
 	

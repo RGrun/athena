@@ -2,6 +2,8 @@
 
 	//userAssignments.php
 	
+	//THIS PAGE SHOULD BE FOR ADMINS ONLY
+	
 	require_once $_SERVER['DOCUMENT_ROOT'] . "/athena/www/utils/htmlUtils.php";
 	require_once $_SERVER['DOCUMENT_ROOT'] . "/athena/www/utils/dbWorker.php";
 	
@@ -21,7 +23,7 @@
 		
 		$sql = "UPDATE assigns SET status='Complete' WHERE asgn_id='$aid'";
 		//echo $sql;
-		if($worker->query($sql)) header( "Location: landing.php" );
+		if($worker->query($sql)) header( "Location: userAssignments.php" );
 		
 	}
 	
@@ -32,23 +34,23 @@
 		
 		$sql = "UPDATE assigns SET status='Pending' Where asgn_id='$aid'";
 		
-		if($worker->query($sql)) header("Location: landing.php");
+		if($worker->query($sql)) header("Location: userAssignments.php");
 	}
 	
 	
-	$sql = "SELECT * from assigns WHERE usr_id='$userId'";
+	$sql = "SELECT * from assigns";
 	
 	if($result = $worker->query($sql)) {
 	
 		echo "<h2>Pending Assignments:</h2>";
 		
 		//get assoc array and print table data
-		while($row = mysqli_fetch_assoc($result)) {
+		$row = mysqli_fetch_assoc($result);
 			
 			//loop through assignments and print each one as a div
-			echo $worker->makeTraysTable($row['usr_id'], $row['asgn_id']);
+			echo $worker->makeAssignmentTables();
 			
-		}
+		
 		
 	}
 	else {
@@ -57,17 +59,17 @@
 	}
 	
 	//make completed assignments table
-	$sql = "SELECT * FROM assigns WHERE usr_id='$userId'";
+	$sql = "SELECT * FROM assigns";
 	
 	if($result = $worker->query($sql)) {
 		
 		echo "<h2>Completed Assignments: </h2>";
 		
-		while($row = mysqli_fetch_assoc($result)) {
+		$row = mysqli_fetch_assoc($result);
 			
-			echo $worker->makeCompletedTraysTable($row['usr_id'], $row['asgn_id']);
+		echo $worker->makeCompletedAssignments();
 			
-		}
+		
 		
 	} else {
 		echo "Database Connection Error";

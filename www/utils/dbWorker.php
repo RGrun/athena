@@ -237,30 +237,6 @@
 			
 			$selector .= "<option value='open'>Open Trays</option><option value='loaned'>Loaned Trays</option><option value='scheduled'>Scheduled Trays</option>";
 
-			
-			$selector .= "<option disabled>--Your team's cases--</option>";
-			
-			$selector .= "<option value='cases'>View Cases</option>";
-			
-			/*
-			//display cases assigned to user's team (shows procedure name)
-			//first, find the users teamid
-			$sql = "SELECT team_id from users WHERE usr_id='$userId'";
-			$result = $this->query($sql);
-			$row = mysqli_fetch_array($result);
-			$usersTeamId = $row[0];
-			
-			
-			//next, find and list pending cases assigned to the users team, show procedure names
-			$sql = "SELECT proc_id FROM cases WHERE team_id='$usersTeamId' AND status='Pending'";
-			
-			$result = $this->query($sql);
-			while($row = mysqli_fetch_array($result)) {
-				$proc = $this->findProcedure($row[0], "name");
-				
-				$selector .= "<option value='$proc'>$proc</option>";
-			} */
-			
 			$selector .= "</select>";
 			
 			return $selector;
@@ -489,7 +465,7 @@
 					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
 					"<tr><td><em>Time</em></td><td>$dttm</td></tr>" .
 					"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
-					"<tr><td><a href='caseDetail.php?cid=$case_id'>View Details/Check-in</a></td></tr>" .
+					"<tr><td><a href='trayInspector.php?cid=$case_id'>View Trays</a></td></tr>" .
 					"</table>";
 						
 					echo "<div class='caseTray'>$caseTable</div>";
@@ -621,71 +597,92 @@
 		
 		//Other functions
 		
-			public function makeTraysTable($usr_id, $asgn_id) {
+			public function makeAssignmentTables() {
 			
-				$sql = "SELECT * from assigns WHERE usr_id='$usr_id' AND asgn_id='$asgn_id'";
+				$sql = "SELECT * from assigns";
 			
 				if($result = $this->query($sql)) {
 				
 					//get assoc array and print table data
-					$row = mysqli_fetch_assoc($result);
+					while ($row = mysqli_fetch_assoc($result)){
 					
-					if($row['status'] != "Complete") {					
-						
-						extract($row);
-						
-						$tray = $this->findTray($row['tray_id'], "name");
-						$client = $this->findClient($row['cli_id'], "uname");
-						$kind = ($row['kind'] == 1) ? "Drop" : "Pickup";
+						if($row['status'] != "Complete") {					
 							
-						$trayTable = "<table>" .
-						"<tr><td><em>Assignment ID</em></td><td>$asgn_id</td></tr>" .
-						"<tr><td><em>Tray</em></td><td>$tray</td></tr>" .
-						"<tr><td><em>Client</em></td><td>$client</td></tr>" .
-						"<tr><td><em>Date</em></td><td>$dttm</td></tr>" .
-						"<tr><td><em>Status</em></td><td>$status</td></tr>" .
-						"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
-						"<tr><td><em>Type</em></td><td>$kind</td></tr>" .
-						"<tr><td><a href='landing.php?complete=1&aid=$asgn_id'>Mark as completed</a></td></tr>" .
-						"</table>";
-						
-						return "<div class='assignment'>$trayTable</div>";
+							extract($row);
+							
+							$tray = $this->findTray($row['tray_id'], "name");
+							$client = $this->findClient($row['cli_id'], "uname");
+							$kind = ($row['kind'] == 1) ? "Drop" : "Pickup";
+							
+							$team = $this->findTeamByCase($case_id);
+								
+							$trayTable = "<table>" .
+							"<tr><td><em>Assignment ID</em></td><td>$asgn_id</td></tr>" .
+							"<tr><td><em>Case ID</em></td><td>$case_id</td></tr>" .
+							"<tr><td><em>Team</em></td><td>$team</td></tr>" .
+							"<tr><td><em>Tray</em></td><td>$tray</td></tr>" .
+							"<tr><td><em>Client</em></td><td>$client</td></tr>" .
+							"<tr><td><em>Date</em></td><td>$dttm</td></tr>" .
+							"<tr><td><em>Status</em></td><td>$status</td></tr>" .
+							"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
+							"<tr><td><em>Type</em></td><td>$kind</td></tr>" .
+							"<tr><td><a href='userAssignments.php?complete=1&aid=$asgn_id'>Mark as completed</a></td></tr>" .
+							"</table>";
+							
+							echo "<div class='assignment'>$trayTable</div>";
+						}
 					}
-					
 				}
 			}
 			
-			public function makeCompletedTraysTable($usr_id, $asgn_id) {
+			public function findTeamByCase($caseId) {
 			
-				$sql = "SELECT * from assigns WHERE usr_id='$usr_id' AND asgn_id='$asgn_id'";
+				$sql  = "SELECT team_id FROM cases WHERE case_id='$caseId'";
+				
+				$result = $this->query($sql);
+				
+				$row = mysqli_fetch_array($result);
+				
+				$team = $this->findTeam($row[0], "name");
+				
+				return $team;
+			}
+			
+			public function makeCompletedAssignments() {
+			
+				$sql = "SELECT * from assigns";
 			
 				if($result = $this->query($sql)) {
 				
 					//get assoc array and print table data
-					$row = mysqli_fetch_assoc($result);
+					while ($row = mysqli_fetch_assoc($result)){
 					
-					if($row['status'] == "Complete") {					
-						
-						extract($row);
-						
-						$tray = $this->findTray($row['tray_id'], "name");
-						$client = $this->findClient($row['cli_id'], "uname");
-						$kind = ($row['kind'] == 1) ? "Drop" : "Pickup";
+						if($row['status'] == "Complete") {					
 							
-						$trayTable = "<table>" .
-						"<tr><td><em>Assignment ID</em></td><td>$asgn_id</td></tr>" .
-						"<tr><td><em>Tray</em></td><td>$tray</td></tr>" .
-						"<tr><td><em>Client</em></td><td>$client</td></tr>" .
-						"<tr><td><em>Date</em></td><td>$dttm</td></tr>" .
-						"<tr><td><em>Status</em></td><td>$status</td></tr>" .
-						"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
-						"<tr><td><em>Type</em></td><td>$kind</td></tr>" .
-						"<tr><td><a href='landing.php?pending=1&aid=$asgn_id'>Mark as pending</a></td></tr>" .
-						"</table>";
-						
-						return "<div class='completed'>$trayTable</div>";
+							extract($row);
+							
+							$tray = $this->findTray($row['tray_id'], "name");
+							$client = $this->findClient($row['cli_id'], "uname");
+							$kind = ($row['kind'] == 1) ? "Drop" : "Pickup";
+							
+							$team = $this->findTeamByCase($case_id);
+								
+							$trayTable = "<table>" .
+							"<tr><td><em>Assignment ID</em></td><td>$asgn_id</td></tr>" .
+							"<tr><td><em>Case ID</em></td><td>$case_id</td></tr>" .
+							"<tr><td><em>Team</em></td><td>$team</td></tr>" .
+							"<tr><td><em>Tray</em></td><td>$tray</td></tr>" .
+							"<tr><td><em>Client</em></td><td>$client</td></tr>" .
+							"<tr><td><em>Date</em></td><td>$dttm</td></tr>" .
+							"<tr><td><em>Status</em></td><td>$status</td></tr>" .
+							"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
+							"<tr><td><em>Type</em></td><td>$kind</td></tr>" .
+							"<tr><td><a href='userAssignments.php?pending=1&aid=$asgn_id'>Mark as pending</a></td></tr>" .
+							"</table>";
+							
+							echo "<div class='completed'>$trayTable</div>";
+						}
 					}
-					
 				}
 			}
 			

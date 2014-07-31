@@ -29,6 +29,9 @@
 	} else if(isset($_POST['newclients'])) {
 		$worker->editAssignmentDatabase("cli_id", $currentAssignment, $_POST['newclients']);
 		$worker->closeConnection();
+	} else if(isset($_POST['newcases'])) {
+		$worker->editAssignmentDatabase("case_id", $currentAssignment, $_POST['newcases']);
+		$worker->closeConnection();
 	} else if(isset($_POST['newusers'])) {
 		$worker->editAssignmentDatabase("usr_id", $currentAssignment, $_POST['newusers']);
 		$worker->closeConnection();
