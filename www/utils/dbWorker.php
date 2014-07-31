@@ -188,6 +188,12 @@
 				if($this->query($sql)) header( "Location: caseDetail.php?cid=$id" );
 		}
 				
+		public function editTrayContents($column, $id, $newData = null, $tray_id) {
+				$sql = "UPDATE traycont SET $column='$newData' WHERE inst_id='$id' AND tray_id='$tray_id'";
+				//echo $sql;
+				if($this->query($sql)) header( "Location: editTrayContents.php?iid=$id" );
+		}		
+				
 		//creative functions
 		
 		public function createSelector($requestTable, $field, $nameOfId) {
@@ -209,7 +215,7 @@
 		
 		public function createLandingDropdown($userId) {
 			
-			$selector = "<select id='filterselect' size='1'>" . 
+			$selector = "<select id='filterselect' size='1' onchange='trayFilter()'>" . 
 			"<option value='all'>All</option>" .
 			"<option disabled>--Sites--</option>";
 			
@@ -296,7 +302,7 @@
 					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
 					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
 					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
-					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details</a></td></tr>" .
+					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Check-in</a></td></tr>" .
 					"</table>";
 						
 					echo "<div class='sitesTray'>$trayTable</div>";
@@ -341,7 +347,7 @@
 					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
 					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
 					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
-					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details</a></td></tr>" .
+					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Check-in</a></td></tr>" .
 					"</table>";
 						
 					echo "<div class='openTray'>$trayTable</div>";
@@ -384,7 +390,7 @@
 					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
 					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
 					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
-					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details</a></td></tr>" .
+					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Check-in</a></td></tr>" .
 					"</table>";
 						
 					echo "<div class='loanedTray'>$trayTable</div>";
@@ -429,7 +435,7 @@
 					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
 					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
 					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
-					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details</a></td></tr>" .
+					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Check-in</a></td></tr>" .
 					"</table>";
 						
 					echo "<div class='scheduledTray'>$trayTable</div>";
@@ -483,7 +489,7 @@
 					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
 					"<tr><td><em>Time</em></td><td>$dttm</td></tr>" .
 					"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
-					"<tr><td><a href='caseDetail.php?cid=$case_id'>View Details</a></td></tr>" .
+					"<tr><td><a href='caseDetail.php?cid=$case_id'>View Details/Check-in</a></td></tr>" .
 					"</table>";
 						
 					echo "<div class='caseTray'>$caseTable</div>";

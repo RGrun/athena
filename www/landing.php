@@ -20,7 +20,7 @@
 	$landingDropdown = $worker->createLandingDropdown($userId);
 	
 	$filterForm = "<div class='filterform'>Filter table: <br/>$landingDropdown" .
-	"<input id='filterbutton' value='Filter Results' onclick='trayFilter()' type='button'/></div>";
+	"</div>";
 	
 
 	

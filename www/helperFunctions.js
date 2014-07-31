@@ -179,7 +179,39 @@
 		}
 	}		
 			
-			
+	//used in viewTrayDetail page
+	function showHide() {
+	
+		var tds = document.getElementsByTagName("TD");
+		
+		var currentValue = O('confirm').value;
+		
+		var button = O('proceedButton');
+		
+		if (currentValue == 'show') {
+			for(x=0; x < tds.length; x++) {
+				if(tds[x].className == 'mod') S(tds[x]).visibility = 'hidden';
+				button.disabled = false;
+			}
+		}
+		
+		if (currentValue == 'hide') {
+			for(x=0; x < tds.length; x++) {
+				if(tds[x].className == 'mod') S(tds[x]).visibility = 'visible';
+				button.disabled = true;
+			}
+		}
+	}
+	
+	//used in signature page
+	function signature() {
+	
+		var button = O('proceed');
+		
+		if(button.disabled == true) button.disabled = false;
+		else button.disabled = true;
+	
+	}
 			
 			
 			

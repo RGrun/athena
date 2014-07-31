@@ -1,25 +1,19 @@
 <?php
 
-	//viewTrayDetail.php
+	//signature.php
 	
 	require_once $_SERVER['DOCUMENT_ROOT'] . "/athena/www/utils/htmlUtils.php";
 	require_once $_SERVER['DOCUMENT_ROOT'] . "/athena/www/utils/dbWorker.php";
 	
 	
-	$worker = new dbWorker();
 	$htmlUtils = new htmlUtils();
+	$worker = new dbWorker();
 	
 	$htmlUtils->makeHeader();
 	
 	$currentTrayId = $_GET['tid'];
 	
 	$_SESSION['currentTrayId'] = $currentTrayId;
-	
-	$confirmSelector = "<select id='confirm' size='1' onchange='showHide()'>" .
-	"<option value='show'>Yes</option>" .
-	"<option value='hide'>No, modify contents</option>" .
-	"</select>";
-	
 	
 	$sql = "SELECT * FROM trays WHERE tray_id='$currentTrayId'";
 	
@@ -28,7 +22,10 @@
 		
 		extract($row);
 		
-		echo "<h2>Tray Detail</h2>";
+		echo "<h5>Please ensure this information is correct, then input your name in the box below.</h5>";
+
+		
+		echo "<h2>Tray Pickup</h2>";
 		
 		
 		$company = $worker->findCompany($cmp_id, "name");
@@ -64,7 +61,7 @@
 				$instrument = $worker->findInstrument($inst_id, "name");
 				
 				$traycont .= "<tr><td>$instrument</td>" .
-				"<td>$quant</td><td>$state</td><td>$cmt</td><td class='mod'><a href='/athena/www/trays/editTrayContents.php?iid=$inst_id'>Modify</a></td></tr>";
+				"<td>$quant</td><td>$state</td><td>$cmt</td></tr>";
 				
 			}
 			
@@ -72,22 +69,20 @@
 			
 			echo "$traycont";
 			
-			echo "Are the contents of the tray consistent with what is displayed here? $confirmSelector<br/>";
+			$confirmForm = "<form id='confirmform' action='signature.php' method='post'>" .
+			"Enter your full name here: <br/> <input type='text' name='newName' /><br/>" .
+			"Accept: <input type='checkbox' name='accept'  onchange='signature()'/> <br/>" .
+			"<input id='proceed' type='submit' value='Proceed' disabled /> </form>";
 			
-			$proceedButton = "<form action='signature.php?tid=$tray_id' method='post'>" .
-			"<input id='proceedButton' type='submit' value='Proceed' /> </form>";
+			echo $confirmForm;
 			
-			echo $proceedButton;
 			
+		} else {
+			echo "Database connection error.";
 		}
-
-
-		
-	} else {
-		echo "Error connecting to database";
 	}
-	
-	$htmlUtils->makeFooter();
-	$worker->closeConnection();
-	
+		
+		$htmlUtils->makeFooter();
+		$worker->closeConnection();
 ?>
+		

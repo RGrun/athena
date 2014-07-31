@@ -15,7 +15,6 @@
 	
 	$_SESSION['currentTrayId'] = $currentTrayId;
 	
-	
 	//delete relationship
 	if(isset($_GET['del'])) {
 	
@@ -101,7 +100,7 @@
 				
 				$traycont .= "<tr><td>$instrument</td>" .
 				"<td>$quant</td><td>$state</td><td>$cmt</td>" .
-				"<td><a href='editTrayContents.php?iid=$inst_id'>Modify</a></td>" .
+				"<td><a href='editTrayContents.php?su=1&iid=$inst_id'>Modify</a></td>" .
 				"<td><a href='trayDetail.php?del=$inst_id&tid=$currentTrayId'>Remove</a></td></tr>";
 				
 			}
