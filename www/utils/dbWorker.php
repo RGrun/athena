@@ -214,19 +214,26 @@
 		}
 		
 		public function createLandingDropdown($userId) {
+		
+			$usersTeam = $this->findUser($userId, "team_id");
 			
 			$selector = "<select id='filterselect' size='1' onchange='trayFilter()'>" . 
 			"<option value='all'>All</option>" .
 			"<option disabled>--Sites--</option>";
 			
 			//display trays from the selected site
-			$sql = "SELECT name, site_id FROM sites";
-			//$sql = "SELECT * from trays WHERE team_id='$usersTeamId' AND site_id='$siteId'";
+			$sql = "SELECT site_id FROM sites";
 			
 			$result = $this->query($sql);
 			
 			while($row = mysqli_fetch_array($result)) {
-				$selector .= "<option value='$row[0]'>$row[0]</option>";
+			
+				$name = $this->findSite($row[0], "name");
+				//check to see if there are any active trays assigned to that users team at the location
+				$sql = "SELECT * from trays WHERE team_id='$usersTeam' AND site_id='$row[0]'";
+
+				$result2 = $this->query($sql);
+				if(mysqli_num_rows($result2) != 0) $selector .= "<option value='$row[0]'>$name</option>";
 			}
 			
 			$selector .= "<option disabled>--Status--</option>";
@@ -244,7 +251,7 @@
 			
 		}
 		
-		public function makeSitesTrayTables($userId, $siteId) {
+		public function makeDropoffSitesTrayTables($userId, $siteId) {
 			
 			//first, find the users teamid
 			$sql = "SELECT team_id from users WHERE usr_id='$userId'";
@@ -252,9 +259,11 @@
 			$row = mysqli_fetch_array($result);
 			$usersTeamId = $row[0];
 			
-			$sql = "SELECT * from trays WHERE team_id='$usersTeamId' AND site_id='$siteId'";
+			$sql = "SELECT * from trays WHERE team_id='$usersTeamId' AND site_id='$siteId' AND status='Scheduled'";
 			
-			if($result = $this->query($sql)) {
+			$result = $this->query($sql);
+			
+			if(mysqli_num_rows($result) != 0) {
 			
 				$siteName = $this->findSite($siteId, "name");
 				$siteNameClass = "$siteName" . "_class";
@@ -272,7 +281,7 @@
 					$team = $this->findTeam($team_id, "name");
 					$loanTeam = $this->findTeam($loan_team, "name");
 					
-					if($status == "Returned") continue;
+					if($status == "Returned" || $status == "Loaned") continue;
 					
 					$trayTable = "<table>" .
 					"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
@@ -291,7 +300,61 @@
 					
 			} else {
 			
-				echo "No trays at that location.";
+				//echo "No trays at that location.";
+			}
+				
+		}
+		
+		public function makePickupSitesTrayTables($userId, $siteId) {
+			
+			//first, find the users teamid
+			$sql = "SELECT team_id from users WHERE usr_id='$userId'";
+			$result = $this->query($sql);
+			$row = mysqli_fetch_array($result);
+			$usersTeamId = $row[0];
+			
+			$sql = "SELECT * from trays WHERE team_id='$usersTeamId' AND site_id='$siteId' AND status='Loaned'";
+			
+			$result = $this->query($sql);
+			
+			if(mysqli_num_rows($result) != 0) {
+			
+				$siteName = $this->findSite($siteId, "name");
+				$siteNameClass = "$siteName" . "_class";
+			
+				echo "<div class='$siteNameClass'>";
+				echo "<h2>Trays at $siteName</h2>";
+				
+				while($row = mysqli_fetch_assoc($result)) {
+				
+					//get assoc array and print table data
+					
+					extract($row);
+						
+					$company = $this->findCompany($cmp_id, "name");
+					$team = $this->findTeam($team_id, "name");
+					$loanTeam = $this->findTeam($loan_team, "name");
+					
+					if($status == "Scheduled" || $status == "Returned") continue;
+					
+					$trayTable = "<table>" .
+					"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
+					"<tr><td><em>Name</em></td><td>$name</td></tr>" .
+					"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
+					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
+					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
+					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
+					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Check-in</a></td></tr>" .
+					"</table>";
+						
+					echo "<div class='sitesTray'>$trayTable</div>";
+				}
+				
+				echo "</div>";
+					
+			} else {
+			
+				//echo "No trays at that location.";
 			}
 				
 		}

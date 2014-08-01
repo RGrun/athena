@@ -14,7 +14,7 @@
 	$userStr = $_SESSION['user'];
 	$userId = $_SESSION['userId'];
 	
-	//$caseId = $_GET['cid'];
+	$method = $_GET['mtd'];
 	
 	$usersTeamId = $worker->findUser($userId, "team_id");
 	
@@ -44,13 +44,27 @@
 	
 	$result = $worker->query($sql);
 	$alreadyPrinted = array(); 		//mechanism to prevent multiple printings of the same site_id
-	while($row = mysqli_fetch_array($result)) {
+	
+	if($method == "dropoff") {
+		while($row = mysqli_fetch_array($result)) {
 		
-		if(in_array($row[0], $alreadyPrinted)) continue;
+			if(in_array($row[0], $alreadyPrinted)) continue;
+			
+			$worker->makeDropoffSitesTrayTables($userId, $row[0]);
+			array_push($alreadyPrinted, $row[0]);
+		}
+	} else {
+		while($row = mysqli_fetch_array($result)) {
 		
-		$worker->makeSitesTrayTables($userId, $row[0]);
-		array_push($alreadyPrinted, $row[0]);
+			if(in_array($row[0], $alreadyPrinted)) continue;
+			
+			$worker->makePickupSitesTrayTables($userId, $row[0]);
+			array_push($alreadyPrinted, $row[0]);
+		}
+	
+	
 	}
+	
 	$alreadyPrinted = array();
 	
 	//print status tables

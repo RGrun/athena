@@ -54,10 +54,9 @@
 		"<input type='submit' value='Commit Changes' /> </form>";
 		
 		$statusSelector = "<select name='newStatus' size='1'>" .
-		"<option value='Open'>Open</option>" .
 		"<option value='Scheduled'>Scheduled</option>" .
 		"<option value='Loaned'>Loaned</option>" .
-		"<option value='Returned'>Returned</option>"
+		"<option value='Returned'>Returned</option>" .
 		"</select>";
 			
 		$statusForm = "<form method='post' action='editTrayInfo.php'>" .

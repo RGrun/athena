@@ -32,10 +32,9 @@
 	$siteSelector = $worker->createSelector("sites", "name", "site_id");
 	
 	$statusSelector = "<select name='newStatus' size='1'>" .
-		"<option value='Open'>Open</option>" .
 		"<option value='Scheduled'>Scheduled</option>" .
 		"<option value='Loaned'>Loaned</option>" .
-		"<option value='Returned'>Returned</option>"
+		"<option value='Returned'>Returned</option>" .
 		"</select>";
 	
 	$form = "<form action='addNewTray.php?added=true' method='post'>" .

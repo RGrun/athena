@@ -43,7 +43,8 @@
 		<h1>Welcome to Athena</h1>
 		<div class='headernav'>
 		<ul>
-			<li><a href='/athena/www/landing.php'>Your Cases</a> | </li> 
+			<li><a href='/athena/www/landing.php'>Return to Landing</a> | </li>
+			<li><a href='/athena/www/caseInspector.php'>Your Cases</a> | </li> 
 			<li><a href='/athena/www/trayInspector.php'>View Trays</a> | </li>
 			<li><a href='/athena/www/userAssignments.php'>View Assignments</a> | </li>
 			<li><a href='/athena/www/admin.php'>Admin Panel</a></li>				
@@ -91,7 +92,7 @@ _END;
 			
 			</div>
 			<div class='footer'>
-			<a href='/athena/www/index.php'>Home</a> |
+			<a href='/athena/www/landing.php'>Home</a> |
 			<a href='/athena/www/logout.php'>Logout</a>
 			</div>
 	</body>
