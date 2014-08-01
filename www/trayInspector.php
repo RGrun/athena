@@ -14,7 +14,7 @@
 	$userStr = $_SESSION['user'];
 	$userId = $_SESSION['userId'];
 	
-	$caseId = $_GET['cid'];
+	//$caseId = $_GET['cid'];
 	
 	$usersTeamId = $worker->findUser($userId, "team_id");
 	

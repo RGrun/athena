@@ -35,6 +35,7 @@
 		"<option value='Open'>Open</option>" .
 		"<option value='Scheduled'>Scheduled</option>" .
 		"<option value='Loaned'>Loaned</option>" .
+		"<option value='Returned'>Returned</option>"
 		"</select>";
 	
 	$form = "<form action='addNewTray.php?added=true' method='post'>" .

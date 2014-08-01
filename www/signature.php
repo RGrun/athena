@@ -11,9 +11,30 @@
 	
 	$htmlUtils->makeHeader();
 	
+	$pickupDropoff = "";
+	
 	$currentTrayId = $_GET['tid'];
+	if(isset($_POST['mtd'])) $pickupDropoff = $_POST['mtd'];
+	else $pickupDropoff = $_GET['mtd'];
 	
 	$_SESSION['currentTrayId'] = $currentTrayId;
+	
+	//mechanisim for setting the tray's new status
+	if(isset($_POST['confirm'])) {
+	
+		if($pickupDropoff == "Pickup") {
+			$sql = "UPDATE trays SET status='Returned' WHERE tray_id='$currentTrayId'";
+			$worker->query($sql);
+			//echo $sql;
+			header("Location: trayInspector.php");
+		} else if($pickupDropoff == "Dropoff") {
+			$sql = "UPDATE trays SET status='Loaned' WHERE tray_id='$currentTrayId'";
+			$worker->query($sql);
+			//echo $sql;
+			header("location: trayInspector.php");
+		}
+	
+	}
 	
 	$sql = "SELECT * FROM trays WHERE tray_id='$currentTrayId'";
 	
@@ -25,7 +46,7 @@
 		echo "<h5>Please ensure this information is correct, then input your name in the box below.</h5>";
 
 		
-		echo "<h2>Tray Pickup</h2>";
+		echo "<h2>Tray $pickupDropoff</h2>";
 		
 		
 		$company = $worker->findCompany($cmp_id, "name");
@@ -69,9 +90,10 @@
 			
 			echo "$traycont";
 			
-			$confirmForm = "<form id='confirmform' action='signature.php' method='post'>" .
+			$confirmForm = "<form action='signature.php?tid=$currentTrayId&mtd=$pickupDropoff' method='post'>" .
 			"Enter your full name here: <br/> <input type='text' name='newName' /><br/>" .
 			"Accept: <input type='checkbox' name='accept'  onchange='signature()'/> <br/>" .
+			"<input type='hidden' name='confirm' value='1' />" .
 			"<input id='proceed' type='submit' value='Proceed' disabled /> </form>";
 			
 			echo $confirmForm;

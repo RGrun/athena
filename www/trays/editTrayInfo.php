@@ -57,6 +57,7 @@
 		"<option value='Open'>Open</option>" .
 		"<option value='Scheduled'>Scheduled</option>" .
 		"<option value='Loaned'>Loaned</option>" .
+		"<option value='Returned'>Returned</option>"
 		"</select>";
 			
 		$statusForm = "<form method='post' action='editTrayInfo.php'>" .

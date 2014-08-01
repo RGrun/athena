@@ -221,6 +221,7 @@
 			
 			//display trays from the selected site
 			$sql = "SELECT name, site_id FROM sites";
+			//$sql = "SELECT * from trays WHERE team_id='$usersTeamId' AND site_id='$siteId'";
 			
 			$result = $this->query($sql);
 			
@@ -270,7 +271,9 @@
 					$company = $this->findCompany($cmp_id, "name");
 					$team = $this->findTeam($team_id, "name");
 					$loanTeam = $this->findTeam($loan_team, "name");
-							
+					
+					if($status == "Returned") continue;
+					
 					$trayTable = "<table>" .
 					"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
 					"<tr><td><em>Name</em></td><td>$name</td></tr>" .
@@ -443,14 +446,14 @@
 			if($result->num_rows != 0) {
 			
 				echo "<div class='caseelement'>";
-				echo "<h2>Cases assigned to your team:</h2>";
+				echo "<h2>Pending Cases:</h2>";
 				
 				while($row = mysqli_fetch_assoc($result)) {
 				
 					//get assoc array and print table data
 
 					extract($row);
-						
+					
 					$team = $this->findTeam($team_id, "name");
 					$doc = $this->findDoctor($doc_id, "name");
 					$procedure = $this->findProcedure($proc_id, "name");
@@ -465,7 +468,7 @@
 					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
 					"<tr><td><em>Time</em></td><td>$dttm</td></tr>" .
 					"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
-					"<tr><td><a href='trayInspector.php?cid=$case_id'>View Trays</a></td></tr>" .
+					"<tr><td><a href='landing.php?complete=1&cid=$case_id'>Mark as Complete</a></td></tr>" .
 					"</table>";
 						
 					echo "<div class='caseTray'>$caseTable</div>";
@@ -480,6 +483,60 @@
 			
 			
 		}
+		
+		public function makeCompletedCasesTable($userId, $caseId) {
+				
+			//first, find the users teamid
+			$sql = "SELECT team_id from users WHERE usr_id='$userId'";
+			$result = $this->query($sql);
+			$row = mysqli_fetch_array($result);
+			$usersTeamId = $row[0];
+			
+			//now, find cases assigned to that team, but only pending cases
+			$sql = "SELECT * FROM cases WHERE team_id='$usersTeamId' AND status='Complete'";
+			
+			$result = $this->query($sql);
+			
+			
+			if($result->num_rows != 0) {
+			
+				echo "<div class='caseelement'>";
+				echo "<h2>Completed Cases:</h2>";
+				
+				while($row = mysqli_fetch_assoc($result)) {
+				
+					//get assoc array and print table data
+
+					extract($row);
+					
+					$team = $this->findTeam($team_id, "name");
+					$doc = $this->findDoctor($doc_id, "name");
+					$procedure = $this->findProcedure($proc_id, "name");
+					$siteName = $this->findSite($site_id, "name");
+							
+					$caseTable = "<table>" .
+					"<tr><td><em>Case ID</em></td><td>$case_id</td></tr>" .
+					"<tr><td><em>Assigned Team</em></td><td>$team</td></tr>" .
+					"<tr><td><em>Doctor</em></td><td>$doc</td></tr>" .
+					"<tr><td><em>Procedure</em></td><td>$procedure</td></tr>" .
+					"<tr><td><em>Site</em></td><td>$siteName</td></tr>" .
+					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
+					"<tr><td><em>Time</em></td><td>$dttm</td></tr>" .
+					"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
+					"<tr><td><a href='landing.php?pending=1&cid=$case_id'>Mark as Pending</a></td></tr>" .
+					"</table>";
+						
+					echo "<div class='completed'>$caseTable</div>";
+				}
+				
+				echo "</div>";
+					
+			} else {
+			
+				//echo "No trays at that location.";
+			}
+		}
+			
 		
 				
 		//lookup functions
@@ -692,4 +749,4 @@
 			}
 	}
 				
-?>
+?>>

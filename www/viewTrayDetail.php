@@ -20,6 +20,10 @@
 	"<option value='hide'>No, modify contents</option>" .
 	"</select>";
 	
+	$pickupSelector = "<select name='mtd' size='1'>" .
+	"<option value='Pickup'>Pickup</option>" .
+	"<option value='Dropoff'>Dropoff</option></select>";
+	
 	
 	$sql = "SELECT * FROM trays WHERE tray_id='$currentTrayId'";
 	
@@ -75,6 +79,7 @@
 			echo "Are the contents of the tray consistent with what is displayed here? $confirmSelector<br/>";
 			
 			$proceedButton = "<form action='signature.php?tid=$tray_id' method='post'>" .
+			"Are you picking up, or dropping off the tray? $pickupSelector <br/>".
 			"<input id='proceedButton' type='submit' value='Proceed' /> </form>";
 			
 			echo $proceedButton;

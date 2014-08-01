@@ -16,6 +16,26 @@
 	
 	$usersTeamId = $worker->findUser($userId, "team_id");
 	
+	//mark case as completed
+	if(isset($_GET['complete']) && isset($_GET['cid'])) {
+		
+		$cid = $_GET['cid'];
+		
+		$sql = "UPDATE cases SET status='Complete' WHERE case_id='$cid'";
+		//echo $sql;
+		if($worker->query($sql)) header( "Location: landing.php" );
+		
+	}
+	
+	//mark assignment as pending
+	if(isset($_GET['pending']) && isset($_GET['cid'])) {
+		
+		$cid = $_GET['cid'];
+		
+		$sql = "UPDATE cases SET status='Pending' Where case_id='$cid'";
+		
+		if($worker->query($sql)) header("Location: l.php");
+	}
 	
 	echo "<div class='landingview'>";
 	
@@ -28,6 +48,8 @@
 	$row = mysqli_fetch_array($result);
 		
 	$worker->makeCasesTable($userId, $row[0]);
+	
+	$worker->makeCompletedCasesTable($userId, $row[0]);
 	
 	
 	echo "</div>";
