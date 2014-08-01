@@ -231,9 +231,12 @@
 				$name = $this->findSite($row[0], "name");
 				//check to see if there are any active trays assigned to that users team at the location
 				$sql = "SELECT * from trays WHERE team_id='$usersTeam' AND site_id='$row[0]'";
-
+				
 				$result2 = $this->query($sql);
-				if(mysqli_num_rows($result2) != 0) $selector .= "<option value='$row[0]'>$name</option>";
+				if(mysqli_num_rows($result2) != 0) {
+					$row2 = mysqli_fetch_assoc($result2);
+					if($row2['status'] != "Returned") $selector .= "<option value='$row[0]'>$name</option>";
+				}
 			}
 			
 			$selector .= "<option disabled>--Status--</option>";
