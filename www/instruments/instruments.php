@@ -18,7 +18,7 @@
 	if($result = $worker->query($sql)) {
 	
 		$table = "<table>" .
-		"<tr><th>Instrument ID</th><th>Name</th><th>Quantity</th></tr>"; 
+		"<tr><th>Instrument ID</th><th>Name</th><th>Part No</th></tr>"; 
 		
 		while($row = mysqli_fetch_assoc($result)) {			
 			
