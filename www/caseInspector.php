@@ -23,7 +23,7 @@
 		
 		$sql = "UPDATE cases SET status='Complete' WHERE case_id='$cid'";
 		//echo $sql;
-		if($worker->query($sql)) header( "Location: landing.php" );
+		if($worker->query($sql)) header( "Location: caseInspector.php" );
 		
 	}
 	
@@ -34,7 +34,7 @@
 		
 		$sql = "UPDATE cases SET status='Pending' Where case_id='$cid'";
 		
-		if($worker->query($sql)) header("Location: l.php");
+		if($worker->query($sql)) header("Location: caseInspector.php");
 	}
 	
 	echo "<div class='landingview'>";

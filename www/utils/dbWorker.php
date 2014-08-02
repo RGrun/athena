@@ -581,7 +581,7 @@
 					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
 					"<tr><td><em>Time</em></td><td>$dttm</td></tr>" .
 					"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
-					"<tr><td><a href='landing.php?complete=1&cid=$case_id'>Mark as Complete</a></td></tr>" .
+					"<tr><td><a href='caseInspector.php?complete=1&cid=$case_id'>Mark as Complete</a></td></tr>" .
 					"</table>";
 						
 					echo "<div class='caseTray'>$caseTable</div>";
@@ -636,7 +636,7 @@
 					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
 					"<tr><td><em>Time</em></td><td>$dttm</td></tr>" .
 					"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
-					"<tr><td><a href='landing.php?pending=1&cid=$case_id'>Mark as Pending</a></td></tr>" .
+					"<tr><td><a href='caseInspector.php?pending=1&cid=$case_id'>Mark as Pending</a></td></tr>" .
 					"</table>";
 						
 					echo "<div class='completed'>$caseTable</div>";
