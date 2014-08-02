@@ -68,11 +68,13 @@
 	$alreadyPrinted = array();
 	
 	//print status tables
-	$worker->makeOpenTables($usersTeamId);
+	//$worker->makeOpenTables($usersTeamId);
 	
 	$worker->makeLoanedTables($usersTeamId);
 	
 	$worker->makeScheduledTables($usersTeamId);
+	
+	$worker->makeReturnedTables($usersTeamId);
 	
 	
 	

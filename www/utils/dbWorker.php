@@ -246,7 +246,7 @@
 			
 			$result = $this->query($sql);
 			
-			$selector .= "<option value='open'>Open Trays</option><option value='loaned'>Loaned Trays</option><option value='scheduled'>Scheduled Trays</option>";
+			$selector .= "<option value='loaned'>Loaned Trays</option><option value='scheduled'>Scheduled Trays</option><option value='returned'>Returned Trays</option>";
 
 			$selector .= "</select>";
 			
@@ -362,6 +362,7 @@
 				
 		}
 		
+		//no longer used because open is no longer a valid status for trays
 		public function makeOpenTables($userId) {
 			$sql = "SELECT * FROM trays WHERE team_id='$userId' AND status='Open'";
 			
@@ -494,6 +495,52 @@
 			}
 				
 		}
+		
+		public function makeReturnedTables($userId) {
+			$sql = "SELECT * FROM trays WHERE team_id='$userId' AND status='Returned'";
+			
+			$result = $this->query($sql);
+			
+			if($result->num_rows != 0) {
+			
+				echo "<div class='returnedelement'>";
+				echo "<h2>Returned Trays:</h2>";
+				
+				while($row = mysqli_fetch_assoc($result)) {
+				
+					//get assoc array and print table data
+					
+					if($row['status'] != "Returned") continue;
+
+					extract($row);
+						
+					$company = $this->findCompany($cmp_id, "name");
+					$team = $this->findTeam($team_id, "name");
+					$loanTeam = $this->findTeam($loan_team, "name");
+					$siteName = $this->findSite($site_id, "name");
+							
+					$trayTable = "<table>" .
+					"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
+					"<tr><td><em>Name</em></td><td>$name</td></tr>" .
+					"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
+					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
+					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
+					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
+					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Check-in</a></td></tr>" .
+					"</table>";
+						
+					echo "<div class='returnedTray'>$trayTable</div>";
+				}
+				
+				echo "</div>";
+					
+			} else {
+			
+				//echo "No trays at that location.";
+			}
+				
+		}
+
 		
 		public function makeCasesTable($userId, $caseId) {
 				

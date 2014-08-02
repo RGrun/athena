@@ -26,12 +26,12 @@
 			$sql = "UPDATE trays SET status='Returned' WHERE tray_id='$currentTrayId'";
 			$worker->query($sql);
 			//echo $sql;
-			header("Location: trayInspector.php?mtd=pickup");
+			header("Location: landing.php");
 		} else if($pickupDropoff == "Dropoff") {
 			$sql = "UPDATE trays SET status='Loaned' WHERE tray_id='$currentTrayId'";
 			$worker->query($sql);
 			//echo $sql;
-			header("location: trayInspector.php?mtd=dropoff");
+			header("location: landing.php");
 		}
 	
 	}

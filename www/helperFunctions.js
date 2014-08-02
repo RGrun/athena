@@ -53,7 +53,7 @@
 		
 		//filter all/open/loaned/scheduled trays
 		if(currentValue == 'all') showAllElements();
-		else if(currentValue == 'open') showOpenElements();
+		else if(currentValue == 'returned') showReturnedElements();
 		else if(currentValue == 'loaned') showLoanedElements();
 		else if(currentValue == 'scheduled') showScheduledElements();	
 		else if(currentValue == 'cases') showCaseElements();
@@ -115,7 +115,7 @@
 		}
 	}
 	
-	function showOpenElements() {
+	function showReturnedElements() {
 		
 		showAllElements();
 		
@@ -123,8 +123,8 @@
 		var divs = document.getElementsByTagName("DIV");
 		
 		for(x = 0; x < divs.length; x++) {
-			if(divs[x].className == 'openelement') continue;
-			if(divs[x].className == 'openTray') continue;
+			if(divs[x].className == 'returnedelement') continue;
+			if(divs[x].className == 'returnedTray') continue;
 			if((divs[x].className == 'header') 
 			|| (divs[x].className == 'main') 
 			|| (divs[x].className == 'headernav')
