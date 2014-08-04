@@ -49,6 +49,7 @@ create table if not exists users
   email     varchar(255) not null default '',
   phone     varchar(25)  not null default '',
   sms       varchar(25)  not null default '',
+  perm      varchar(80)  not null default '',
   primary key (usr_id)
 );
 
@@ -131,6 +132,7 @@ create table if not exists clients
   email     varchar(255) not null default '',
   phone     varchar(25)  not null default '',
   sms       varchar(25)  not null default '',
+  perm      varchar(80)  not null default '',
   primary key (cli_id)
 );
 
@@ -286,17 +288,14 @@ create table if not exists assigns
   case_id   int(10)      not null,
   tray_id   int(10)      not null,
   
-  usr_id    int(10)      not null default 0,     -- 0 if pending (any team member can drop or pickup)
-  cli_id    int(10)      not null default 0,     -- 0 if pending (any client at site can receive or return)
-  cli_nm    text not null
-  
-  
+  do_usr    int(10)      not null default 0,     -- 0 if pending (any team member can drop or pickup)
+  pu_usr    int(10)      not null default 0,     -- 0 if pending (any team member can drop or pickup)
+  cli_nm    varchar(64)  not null default '',    -- the name entered in the drop off signature field
   
   do_dttm   datetime     not null,               -- scheduled or actual
   pu_dttm   datetime     not null,               -- scheduled or actual
   status    varchar(25)  not null default '',    -- pending, overdue or complete
   cmt       varchar(255) not null default '',
-  kind      int(1)       not null default 1,     -- 1=drop, 2=pickup 
   primary key (asgn_id)
 );
 
