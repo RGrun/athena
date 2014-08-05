@@ -7,7 +7,7 @@
 	$htmlUtils = new htmlUtils();
 	$worker = new dbWorker();
 	
-	$htmlUtils->makeHeader();
+	$htmlUtils->makeScriptHeader();
 	
 	if(isset($_GET['mtd'])){
 		$selectedMethod = $_GET['mtd'];
@@ -21,22 +21,38 @@
 	
 
 	if(isset($_POST['newData'])) {
+		//echo "data";
 		$worker->editCaseDatabase($selectedMethod, $currentCase, $_POST['newData']);
 		$worker->closeConnection();
 	} else if(isset($_POST['newteams'])) {
+		//echo "teams";
 		$worker->editCaseDatabase("team_id", $currentCase, $_POST['newteams']);
 		$worker->closeConnection();
 	} else if(isset($_POST['newdoctors'])) {
+		//echo "docs";
 		$worker->editCaseDatabase("doc_id", $currentCase, $_POST['newdoctors']);
 		$worker->closeConnection();
 	} else if(isset($_POST['newprocs'])) {
+		//echo "procs";
 		$worker->editCaseDatabase("proc_id", $currentCase, $_POST['newprocs']);
 		$worker->closeConnection();
 	} else if(isset($_POST['newsites'])) {
+		//echo "sites";
 		$worker->editCaseDatabase("site_id", $currentCase, $_POST['newsites']);
 		$worker->closeConnection();
 	} else if (isset($_POST['newStatus'])) {
+		
+		//echo "status";
 		$worker->editCaseDatabase("status", $currentCase, $_POST['newStatus']);
+		$worker->closeConnection();
+	} else if(isset($_POST['newMonth'])) {
+		//format dttm string
+		extract($_POST);
+		$unixTime = mktime($newHour, $newMin, 0, $newMonth, $newDay, $newYear);
+		$date = date("Y-m-d H:i:s", $unixTime);
+		
+		//echo $sql;
+		$worker->editCaseDatabase("dttm", $currentCase, $date);
 		$worker->closeConnection();
 	} else {
 
@@ -108,6 +124,12 @@
 			} else if ($selectedMethod == "status") {
 				echo "<p>$currentData</p>";
 				echo $statusForm;
+			} else if($selectedMethod == "dttm") {
+				echo "<p>$currentData</p>";
+				//echo "<span id='js'></span><br/>";
+				//echo "<span id='js2'></span>";
+				$dttm = $worker->makeDateTimeForm("editCaseInfo.php?cid=$currentCase");
+				echo $dttm;
 			} else {
 				echo $form;
 			}

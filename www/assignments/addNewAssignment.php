@@ -7,18 +7,26 @@
 	$htmlUtils = new htmlUtils();
 	$worker = new dbWorker();
 	
-	$htmlUtils->makeHeader();
+	$htmlUtils->makeScriptHeader();
 
 	if(isset($_POST['newcases'])) {
 	
 		extract($_POST);
 		
-		//datetime value not hooked up
-		$sql = "INSERT INTO assigns (case_id, tray_id, usr_id, cli_id, dttm, status, cmt, kind)" .
-		"VALUES ('$newcases', '$newtrays', '$newusers', '$newclients', '0000-00-00 00:00:00', '$newStatus', '$newComment', '$newKind')";
+		$unixTimeDO = mktime($newHour, $newMin, 0, $newMonth, $newDay, $newYear);
+		$unixTimePU = mktime($newHour2, $newMin2, 0, $newMonth2, $newDay2, $newYear2);
+		
+		$doDate = date("Y-m-d H:i:s", $unixTimeDO);
+		$puDate = date("Y-m-d H:i:s", $unixTimePU);
+		
+		if($puDate == "1999-11-30 00:00:00") $puDate = "0000-00-00 00:00:00";
+		
+		$sql = "INSERT INTO assigns (case_id, tray_id, do_usr, pu_usr, do_dttm, pu_dttm, status, cmt)" .
+		"VALUES ('$newcases', '$newtrays', '$newusers', '$newusers2', '$doDate', '$puDate', '$newStatus', '$newComment')";
 		$worker->query($sql);
 		$worker->closeConnection();
 		
+		//echo $sql;
 		header( "Location: assignments.php" );
 		die();
 	}
@@ -28,7 +36,8 @@
 	
 	$caseSelector = $worker->createSelector("cases", "case_id", "case_id");
 	$traySelector = $worker->createSelector("trays", "name", "tray_id");
-	$userSelector = $worker->createSelector("users", "uname", "usr_id");
+	$doUserSelector = $worker->createSelector("users", "uname", "usr_id", true);
+	$puUserSelector = $worker->createSelector("users", "uname", "usr_id", true, true);
 	$clientSelector = $worker->createSelector("clients", "uname", "cli_id");
 	
 	$statusSelector = "<select name='newStatus' size='1'>" .
@@ -42,16 +51,19 @@
 	"<option value='2'>Pickup</option>" .
 	"</select>";
 	
-	//time field not currently hooked up
+			
+	$dateTime = $worker->makeDateTimeSelect();
+	$dateTime2 = $worker->makeDateTimeSelect(true);
+
 	$form = "<form action='addNewAssignment.php' method='post'>" .
 	"New Assignment&#39;s Case: $caseSelector <br/>" .
 	"New Assignment&#39;s Tray: $traySelector <br/>" .
-	"New Assignment&#39;s Creator: $userSelector <br />" .
-	"New Assignment&#39;s Client: $clientSelector <br />" .
-	"Time of new case: <input type='text' name='newTime' /> <br />" .
+	"User to do Dropoff: $doUserSelector <br />" .
+	"User to do Pickup: $puUserSelector <br />" .
+	"<br/>Time of Dropoff: $dateTime <br />" .
+	"<br/>Time of Pickup: $dateTime2 <br/>" .
 	"Comment: <input type='text' name='newComment' /> <br/>" . 
 	"New Assignment&#39;s Status: $statusSelector <br />" .
-	"Kind of assignment: $kindSelector <br />" .
 	"<input type='submit' value='Commit Changes' /> </form>";
 	
 	echo "<p>$form</p>";

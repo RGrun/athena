@@ -73,6 +73,11 @@
 				color: red;
 			}
 			
+			.warning {
+			
+				color: #CC7A00;
+			}
+			
 			.mod {
 				visibility: hidden;
 				

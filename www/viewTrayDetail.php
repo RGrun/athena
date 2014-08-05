@@ -12,6 +12,7 @@
 	$htmlUtils->makeHeader();
 	
 	$currentTrayId = $_GET['tid'];
+	$currentUserId = $_SESSION['userId'];
 	
 	$_SESSION['currentTrayId'] = $currentTrayId;
 	
@@ -23,6 +24,26 @@
 	$pickupSelector = "<select name='mtd' size='1'>" .
 	"<option value='Pickup'>Pickup</option>" .
 	"<option value='Dropoff'>Dropoff</option></select>";
+	
+	//make assignment filter dropdown
+	echo "Assignments this tray is part of: ";
+	echo $worker->makeAssignmentDropdown($currentTrayId, $currentUserId);
+	
+	//echo "<span id='js'></span>"; //for debugging
+
+	//make related assignment table in trayView
+	$sql = "SELECT * FROM assigns WHERE tray_id='$currentTrayId' AND (do_usr='$currentUserId' OR pu_usr='$currentUserId') OR status='Pending'";
+	//echo $sql;
+	$result = $worker->query($sql);
+	while($row = mysqli_fetch_assoc($result)) {
+	
+		$newTable = $worker->makeTrayAssignments($row);
+		$assignment = $row['asgn_id'];
+	
+		echo "<div style='display: none;' class='assignment$assignment'>$newTable</div>";
+	
+	}
+	
 	
 	
 	$sql = "SELECT * FROM trays WHERE tray_id='$currentTrayId'";

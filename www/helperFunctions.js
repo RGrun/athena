@@ -63,6 +63,44 @@
 		
 	}
 	
+	function assignmentFilter() {
+		//get current value of selected item in dropdown
+		var selector = O('assignment');
+		var currentValue = selector.value;
+
+		var selections = [];
+		
+		//create array of all values in filter select
+		var totalValues = O('assignment');
+		for (var i = 0; i < totalValues.length; i++) {
+		selections.push(totalValues.options[i].value);
+		}
+		
+		//filter assignments
+		if(currentValue.search("asgn")) showAssignment(currentValue);
+		
+		
+	}
+	
+	function hideAllAssignments() {
+		var divs = document.getElementsByTagName("DIV");
+			for(y=0; y < divs.length; y++) {
+				var CN = divs[y].className;
+				if(CN.indexOf("assignment") > -1) S(divs[y]).display = 'none';
+			}
+	
+	}
+	
+	function showAssignment(asgnId) {
+		hideAllAssignments();
+		var divs = document.getElementsByTagName("DIV");
+		var target = asgnId;
+		
+		for(x=0; x < divs.length; x++) {
+			if (divs[x].className == target) S(divs[x]).display = 'block';
+		}
+	}
+	
 	function showCaseElements() {
 		
 		showAllElements();
@@ -211,6 +249,47 @@
 		if(button.disabled == true) button.disabled = false;
 		else button.disabled = true;
 	
+	}
+	
+	function formatTimeSelect() {
+	
+		//used on pages with dateTime selectors
+		var d = new Date();
+		var currentMonth = d.getMonth() + 1; 
+		var currentYear = d.getFullYear();
+		var currentDay = d.getDate();
+		var currentHour = d.getHours();
+		var currentMin = d.getMinutes();
+		
+		//check month
+		for(x = 1; x <= 12; x++) {
+			var thisValue = "mo" + x.toString();
+			if(O(thisValue).value == currentMonth) O(thisValue).selected = true;
+		}
+		
+		//check year
+		for(x = 14; x <= 31; x++) {
+			var thisValue = "y" + x.toString();
+			if(O(thisValue).value == currentYear) O(thisValue).selected = true;
+		}
+		
+		//check day
+		for(x = 1; x <=31; x++) {
+			var thisValue = "d" + x.toString();
+			if(O(thisValue).value == currentDay) O(thisValue).selected = true;
+		}
+		
+		//check hour
+		for(x = 0; x <=23; x++) {
+			var thisValue = "h" + x.toString();
+			if(O(thisValue).value == currentHour) O(thisValue).selected = true;
+		}
+	
+		//check minute
+		for(x = 1; x <=59; x++) {
+			var thisValue = "m" + x.toString();
+			if(O(thisValue).value == currentMin) O(thisValue).selected = true;
+		}
 	}
 			
 			

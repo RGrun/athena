@@ -1,15 +1,23 @@
 <?php
 
-	//addNewCase.php
+	//createNewCase.php
+	//this script is to allow users to add new cases to the database. It's nearly identical to the admin version, though options are stripped down a bit
+	//this script only allows users to add new cases to thier own team
 	
-	require_once "includes.php";
+	require_once $_SERVER['DOCUMENT_ROOT'] . "/athena/www/utils/htmlUtils.php";
+	require_once $_SERVER['DOCUMENT_ROOT'] . "/athena/www/utils/dbWorker.php";
 	
 	$htmlUtils = new htmlUtils();
 	$worker = new dbWorker();
 	
 	$htmlUtils->makeScriptHeader();
-
-	if(isset($_POST['newteams'])) {
+	
+	$currentUserId = $_SESSION['userId'];
+	
+	$usersTeam = $worker->findUser($currentUserId, "team_id");
+	$usersTeamName = $worker->findTeam($usersTeam, "name");
+	
+	if(isset($_POST['newHour'])) {
 	
 		extract($_POST);
 		
@@ -19,12 +27,12 @@
 		
 		
 		$sql = "INSERT INTO cases (team_id, doc_id, proc_id, site_id, status, dttm, cmt)" .
-		"VALUES ('$newteams', '$newdoctors', '$newprocs', '$newsites', '$newStatus', '$date', '$newComment')";
+		"VALUES ('$usersTeam', '$newdoctors', '$newprocs', '$newsites', '$newStatus', '$date', '$newComment')";
 
 		$worker->query($sql);
 		$worker->closeConnection();
 		
-		header( "Location: cases.php" );
+		header( "Location: caseInspector.php" );
 		die();
 	}
 	
@@ -43,9 +51,8 @@
 		
 	$dateTime = $worker->makeDateTimeSelect();
 	
-	//time field not currently hooked up
-	$form = "<form action='addNewCase.php' method='post'>" .
-	"New Case&#39;s Team: $teamSelector <br/>" .
+	$form = "<form action='createNewCase.php' method='post'>" .
+	"New Case&#39;s Team: $usersTeamName <br/>" .
 	"New Case&#39;s Doctor: $doctorSelector <br/>" .
 	"New Case&#39;s Procedure: $procedureSelector <br />" .
 	"New Case&#39;s Site: $siteSelector <br />" .

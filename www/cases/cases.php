@@ -25,6 +25,8 @@
 			
 			extract($row);
 			
+			$dttm = $worker->checkTime($dttm);
+			
 			echo "<tr>";
 			
 			echo "<td>$case_id</td>";
@@ -51,6 +53,7 @@
 		$worker->closeConnection();
 	}
 	
+	$htmlUtils->timestampLegend();
 	$htmlUtils->makeFooter();
 	$worker->closeConnection();
 	

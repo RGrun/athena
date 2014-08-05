@@ -2,7 +2,6 @@
 
 	//userAssignments.php
 	
-	//THIS PAGE SHOULD BE FOR ADMINS ONLY
 	
 	require_once $_SERVER['DOCUMENT_ROOT'] . "/athena/www/utils/htmlUtils.php";
 	require_once $_SERVER['DOCUMENT_ROOT'] . "/athena/www/utils/dbWorker.php";
@@ -11,6 +10,7 @@
 	$worker = new dbWorker();
 	
 	$htmlUtils->makeHeader();
+	$htmlUtils->timestampLegend();
 	
 	
 	$userStr = $_SESSION['user'];
@@ -48,7 +48,7 @@
 		$row = mysqli_fetch_assoc($result);
 			
 			//loop through assignments and print each one as a div
-			echo $worker->makeAssignmentTables();
+			echo $worker->makeAssignmentTables($userId);
 			
 		
 		
@@ -67,7 +67,7 @@
 		
 		$row = mysqli_fetch_assoc($result);
 			
-		echo $worker->makeCompletedAssignments();
+		echo $worker->makeCompletedAssignments($userId);
 			
 		
 		

@@ -9,7 +9,7 @@
 	$worker = new dbWorker();
 	
 	$htmlUtils->makeHeader();
-	
+	$htmlUtils->timestampLegend();
 	
 	$userStr = $_SESSION['user'];
 	$userId = $_SESSION['userId'];
@@ -38,6 +38,8 @@
 	}
 	
 	echo "<div class='landingview'>";
+	
+	echo "<br/><em><a href='createNewCase.php'>Create New Case</a></em>";
 	
 	//display all cases
 	

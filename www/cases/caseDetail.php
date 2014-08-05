@@ -27,6 +27,8 @@
 		$doctor = $worker->findDoctor($doc_id, "name");
 		$procedure = $worker->findProcedure($proc_id, "name");
 		$site = $worker->findSite($site_id, "name");
+		
+		$dttm = $worker->checkTime($dttm);
 	
 		$table = "<table>" .
 		"<tr><td><em>Current Team</em></td><td>$team</td><td><a href='editCaseInfo.php?mtd=team'>Edit</a></td></tr>" .
@@ -45,6 +47,7 @@
 	}
 	
 	$worker->closeConnection();
+	$htmlUtils->timestampLegend();
 	$htmlUtils->makeFooter();
 ?>
 		

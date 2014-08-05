@@ -176,10 +176,11 @@
 				if($this->query($sql)) header( "Location: regionDetail.php?rid=$id" );
 		}
 		
-		public function editAssignmentDatabase($column, $id, $newData = null) {
+		public function editAssignmentDatabase($column, $id, $newData = null, $link = true) {
 				$sql = "UPDATE assigns SET $column='$newData' WHERE asgn_id='$id'";
 				//echo $sql;
-				if($this->query($sql)) header( "Location: assignmentDetail.php?aid=$id" );
+				if($this->query($sql) && $link == true) header( "Location: assignmentDetail.php?aid=$id" );
+				else $this->query($sql);
 		}
 		
 		public function editCaseDatabase($column, $id, $newData = null) {
@@ -196,17 +197,23 @@
 				
 		//creative functions
 		
-		public function createSelector($requestTable, $field, $nameOfId) {
+		public function createSelector($requestTable, $field, $nameOfId, $pending = false, $alt = false) {
+		
+			$salt = "";
+			if($alt == true) $salt = "2";
 		
 			$sql = "SELECT $field, $nameOfId FROM $requestTable";
 
 			$result = $this->query($sql);
 			
-			$selector = "<select name='new$requestTable' size='1'>";
+			$selector = "<select name='new$requestTable" . $salt . "' size='1'>";
+			
+			if($pending == true) $selector .= "<option value='Pending'>Pending</option>";
 			
 			while($row = mysqli_fetch_array($result)) {
 				$selector .= "<option value='$row[1]'>$row[0]</option>";
 			}
+			
 	
 			$selector .= "</select>";
 			
@@ -247,6 +254,30 @@
 			$result = $this->query($sql);
 			
 			$selector .= "<option value='loaned'>Loaned Trays</option><option value='scheduled'>Scheduled Trays</option><option value='returned'>Returned Trays</option>";
+
+			$selector .= "</select>";
+			
+			return $selector;
+			
+		}
+		
+		public function makeAssignmentDropdown($trayId, $userId) {
+		
+			$usersTeam = $this->findUser($userId, "team_id");
+			
+			$selector = "<select id='assignment' size='1' onchange='assignmentFilter()'>" . 
+			"<option>--Select Assignment--</option>" .
+			"<option disabled>-------------</option>";
+			
+			//display trays from the selected site
+			$sql = "SELECT asgn_id FROM assigns WHERE tray_id='$trayId' AND (do_usr='$userId' OR pu_usr='$userId') OR status='Pending'";
+			
+			$result = $this->query($sql);
+			
+			while($row = mysqli_fetch_array($result)) {
+			
+				$selector .= "<option value='assignment$row[0]'>Assignment #$row[0]</option>";
+			}
 
 			$selector .= "</select>";
 			
@@ -518,6 +549,7 @@
 					$team = $this->findTeam($team_id, "name");
 					$loanTeam = $this->findTeam($loan_team, "name");
 					$siteName = $this->findSite($site_id, "name");
+					
 							
 					$trayTable = "<table>" .
 					"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
@@ -571,6 +603,8 @@
 					$doc = $this->findDoctor($doc_id, "name");
 					$procedure = $this->findProcedure($proc_id, "name");
 					$siteName = $this->findSite($site_id, "name");
+					
+					$dttm = $this->checkTime($dttm);
 							
 					$caseTable = "<table>" .
 					"<tr><td><em>Case ID</em></td><td>$case_id</td></tr>" .
@@ -626,6 +660,8 @@
 					$doc = $this->findDoctor($doc_id, "name");
 					$procedure = $this->findProcedure($proc_id, "name");
 					$siteName = $this->findSite($site_id, "name");
+					
+					//$dttm = $this->checkTime($dttm);
 							
 					$caseTable = "<table>" .
 					"<tr><td><em>Case ID</em></td><td>$case_id</td></tr>" .
@@ -767,9 +803,9 @@
 		
 		//Other functions
 		
-			public function makeAssignmentTables() {
+			public function makeAssignmentTables($currentUser) {
 			
-				$sql = "SELECT * from assigns";
+				$sql = "SELECT * from assigns WHERE do_usr='$currentUser' OR pu_usr='$currentUser'";
 			
 				if($result = $this->query($sql)) {
 				
@@ -780,26 +816,28 @@
 							
 							extract($row);
 							
-							$tray = $this->findTray($row['tray_id'], "name");
-							$client = $this->findClient($row['cli_id'], "uname");
-							$kind = ($row['kind'] == 1) ? "Drop" : "Pickup";
+							$tray = $this->findTray($tray_id, "name");
+							$dropoffUser = $this->findUser($do_usr, "uname");
+							$pickupUser = $this->findUser($pu_usr, "uname");
+							if($dropoffUser == null) $dropoffUser = "Pending";
+							if($pickupUser == null) $pickupUser = "Pending";
 							
-							$team = $this->findTeamByCase($case_id);
-								
-							$trayTable = "<table>" .
+							$doTime = $this->checkTime($do_dttm);
+							$puTime = $this->checkTime($pu_dttm);
+													
+							$asgnTable = "<table>" .
 							"<tr><td><em>Assignment ID</em></td><td>$asgn_id</td></tr>" .
-							"<tr><td><em>Case ID</em></td><td>$case_id</td></tr>" .
-							"<tr><td><em>Team</em></td><td>$team</td></tr>" .
-							"<tr><td><em>Tray</em></td><td>$tray</td></tr>" .
-							"<tr><td><em>Client</em></td><td>$client</td></tr>" .
-							"<tr><td><em>Date</em></td><td>$dttm</td></tr>" .
+							"<tr><td><em>Case No</em></td><td>$case_id</td></tr>" .
+							"<tr><td><em>Dropped off By</em></td><td>$dropoffUser</td></tr>" .
+							"<tr><td><em>Picked up By</em></td><td>$pickupUser</td></tr>" .
+							"<tr><td><em>Dropoff Time</em></td><td>$doTime</td></tr>" .
+							"<tr><td><em>Pickup Time</em></td><td>$puTime</td></tr>" .
 							"<tr><td><em>Status</em></td><td>$status</td></tr>" .
 							"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
-							"<tr><td><em>Type</em></td><td>$kind</td></tr>" .
 							"<tr><td><a href='userAssignments.php?complete=1&aid=$asgn_id'>Mark as completed</a></td></tr>" .
 							"</table>";
 							
-							echo "<div class='assignment'>$trayTable</div>";
+							echo "<div class='assignment'>$asgnTable</div>";
 						}
 					}
 				}
@@ -818,9 +856,9 @@
 				return $team;
 			}
 			
-			public function makeCompletedAssignments() {
+			public function makeCompletedAssignments($currentUser) {
 			
-				$sql = "SELECT * from assigns";
+				$sql = "SELECT * from assigns WHERE do_usr='$currentUser' OR pu_usr='$currentUser'";
 			
 				if($result = $this->query($sql)) {
 				
@@ -831,35 +869,180 @@
 							
 							extract($row);
 							
-							$tray = $this->findTray($row['tray_id'], "name");
-							$client = $this->findClient($row['cli_id'], "uname");
-							$kind = ($row['kind'] == 1) ? "Drop" : "Pickup";
+							$tray = $this->findTray($tray_id, "name");
+							$dropoffUser = $this->findUser($do_usr, "uname");
+							$pickupUser = $this->findUser($pu_usr, "uname");
+							if($dropoffUser == null) $dropoffUser = "Pending";
+							if($pickupUser == null) $pickupUser = "Pending";
 							
-							$team = $this->findTeamByCase($case_id);
-								
-							$trayTable = "<table>" .
+							//uncomment these for red highlighting on overdue dates
+							//$doTime = $this->checkTime($do_dttm);
+							//$puTime = $thi->checkTime($pu_dttm);
+													
+							$asgnTable = "<table>" .
 							"<tr><td><em>Assignment ID</em></td><td>$asgn_id</td></tr>" .
-							"<tr><td><em>Case ID</em></td><td>$case_id</td></tr>" .
-							"<tr><td><em>Team</em></td><td>$team</td></tr>" .
-							"<tr><td><em>Tray</em></td><td>$tray</td></tr>" .
-							"<tr><td><em>Client</em></td><td>$client</td></tr>" .
-							"<tr><td><em>Date</em></td><td>$dttm</td></tr>" .
+							"<tr><td><em>Case No</em></td><td>$case_id</td></tr>" .
+							"<tr><td><em>Dropped off By</em></td><td>$dropoffUser</td></tr>" .
+							"<tr><td><em>Picked up By</em></td><td>$pickupUser</td></tr>" .
+							"<tr><td><em>Dropoff Time</em></td><td>$do_dttm</td></tr>" .
+							"<tr><td><em>Pickup Time</em></td><td>$pu_dttm</td></tr>" .
 							"<tr><td><em>Status</em></td><td>$status</td></tr>" .
 							"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
-							"<tr><td><em>Type</em></td><td>$kind</td></tr>" .
 							"<tr><td><a href='userAssignments.php?pending=1&aid=$asgn_id'>Mark as pending</a></td></tr>" .
 							"</table>";
 							
-							echo "<div class='completed'>$trayTable</div>";
+							
+							echo "<div class='completed'>$asgnTable</div>";
 						}
 					}
 				}
+			}
+			
+			public function makeTrayAssignments($row) {
+				extract($row);
+				
+				//$newDiv = "<div id='assignment$asgn_id' class='assignmentTable'>";
+				$doDTTM = $this->checkTime($do_dttm);
+				$puDTTM = $this->checkTime($pu_dttm);
+				$dropoffUser = $this->findUser($do_usr, "uname");
+				$pickupUser = $this->findUser($pu_usr, "uname");
+				if($pickupUser == null) $pickupUser = "Pending";
+				if($dropoffUser == null) $dropoffUser = "Pending";
+				
+				$newDiv = "<table>" .
+							"<tr><td><em>Assignment ID</em></td><td>$asgn_id</td></tr>" .
+							"<tr><td><em>Case No</em></td><td>$case_id</td></tr>" .
+							"<tr><td><em>Dropped off By</em></td><td>$dropoffUser</td></tr>" .
+							"<tr><td><em>Picked up By</em></td><td>$pickupUser</td></tr>" .
+							"<tr><td><em>Dropoff Time</em></td><td>$doDTTM</td></tr>" .
+							"<tr><td><em>Pickup Time</em></td><td>$puDTTM</td></tr>" .
+							"<tr><td><em>Status</em></td><td>$status</td></tr>" .
+							"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
+							"<tr><td><a href='/athena/www/assignments/editAssignmentDetails.php?aid=$asgn_id'>Modify Details</a></td></tr>" .
+							"</table>";
+				
+				//$newDiv .= "</div>";
+				return $newDiv;
 			}
 			
 			public function showAllRelevantTrays($usrId, $siteId = null) {
 				
 				$this->makeSitesTrayTables($usrId, $siteId);
 			}
+			
+		public function makeDateTimeForm($targetPage) {
+		
+			$form = "<form method='post' action='$targetPage'>";
+			
+			$yearSelect = "<select id='dateTime' name='newYear'>";
+			
+			for($y = 14; $y <= 32; $y++) {
+				$yearSelect .= "<option id='y$y' value='20$y'>20$y</option>";
+			}
+		
+			$yearSelect .= "</select>";
+			
+			$monthSelect = "<select name='newMonth'>";
+			
+			for($mo = 1; $mo <=12; $mo++) {
+				$monthSelect .= "<option id='mo$mo' value='$mo'>$mo</option>";
+			}
+			
+			$monthSelect .= "</select>";
+			
+			$daySelect = "<select name='newDay'>";
+			
+			for($day = 1; $day <=31; $day++) {
+				$daySelect .="<option id='d$day' value='$day'>$day</option>";
+			}
+			
+			$daySelect .= "</select>";
+			
+			$hourSelect = "<select name='newHour'>";
+			
+			for($h = 0; $h <=23; $h++) {
+				$hourSelect .= "<option id='h$h' value='$h'>$h</option>";
+			}
+			
+			$hourSelect .= "</select>";
+			
+			$minSelect = "<select name='newMin'>";
+			
+			for($m = 0; $m <= 59; $m++) {
+				$minSelect .= "<option id='m$m' value='$m'>$m</option>";
+			}
+			
+			$minSelect .= "</select>";
+			
+			$form .= "Month: $monthSelect Day: $daySelect Year: $yearSelect <br/>" .
+			"Hour: $hourSelect Minute: $minSelect <br/>" .
+			"<input type='submit' value='Modify Time' /> </form>";
+			
+			return $form;
+		}
+		
+		public function makeDateTimeSelect($alt = false) {
+		
+			$salt = "";
+			
+			if ($alt == true) $salt = "2";
+			
+			$yearSelect = "<select id='dateTime' name='newYear$salt'>";
+			
+			for($y = 14; $y <= 31; $y++) {
+				$yearSelect .= "<option id='y$y' value='20$y'>20$y</option>";
+			}
+		
+			$yearSelect .= "</select>";
+			
+			$monthSelect = "<select name='newMonth$salt'>";
+			
+			for($mo = 1; $mo <=12; $mo++) {
+				$monthSelect .= "<option id='mo$mo' value='$mo'>$mo</option>";
+			}
+			
+			$monthSelect .= "</select>";
+			
+			$daySelect = "<select name='newDay$salt'>";
+			
+			for($day = 1; $day <=31; $day++) {
+				$daySelect .="<option id='d$day' value='$day'>$day</option>";
+			}
+			
+			$daySelect .= "</select>";
+			
+			$hourSelect = "<select name='newHour$salt'>";
+			
+			for($h = 0; $h <=23; $h++) {
+				$hourSelect .= "<option id='h$h' value='$h'>$h</option>";
+			}
+			
+			$hourSelect .= "</select>";
+			
+			$minSelect = "<select name='newMin$salt'>";
+			
+			for($m = 0; $m <= 59; $m++) {
+				$minSelect .= "<option id='m$m' value='$m'>$m</option>";
+			}
+			
+			$minSelect .= "</select>";
+			
+			$form = "<br/>Month: $monthSelect Day: $daySelect Year: $yearSelect <br/>" .
+			"Hour: $hourSelect Minute: $minSelect <br/>";
+			
+			return $form;
+		}
+		
+		//time-checking functions
+		public function checkTime($timeStamp) {
+			$date = strtotime($timeStamp);
+			$oneDayFromNow = time() + 86400;
+
+			if(time() > strtotime($timeStamp)) return "<span class='error'>$timeStamp</span>"; // < 24 hours from now
+			else if($date <= $oneDayFromNow && time() < $date) return "<span class='warning'>$timeStamp</span>";
+			else return $timeStamp;
+		}
+		
 	}
 				
 ?>
