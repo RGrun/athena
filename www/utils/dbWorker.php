@@ -1035,6 +1035,8 @@
 		
 		//time-checking functions
 		public function checkTime($timeStamp) {
+			date_default_timezone_set('America/Los_Angeles');
+		
 			$date = strtotime($timeStamp);
 			$oneDayFromNow = time() + 86400;
 
