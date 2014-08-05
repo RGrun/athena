@@ -35,11 +35,11 @@
 					if($row['active'] == 1) {
 						$sql = "UPDATE company SET active='0' WHERE cmp_id='$id'";
 						
-						if($this->query($sql)) header( "Location: detail.php?cid=$id" );
+						if($this->query($sql)) header( "Location: companyDetail.php?cid=$id" );
 					} else {
 						$sql = "UPDATE company SET active='1' WHERE cmp_id='$id'";
 						
-						if($this->query($sql)) header( "Location: detail.php?cid=$id" );
+						if($this->query($sql)) header( "Location: companyDetail.php?cid=$id" );
 					}
 					
 				}
@@ -47,7 +47,7 @@
 			
 				$sql = "UPDATE company SET $column='$newData' WHERE cmp_id='$id'";
 				
-				if($this->query($sql)) header( "Location: detail.php?cid=$id" );
+				if($this->query($sql)) header( "Location: companyDetail.php?cid=$id" );
 				
 			}
 		}
