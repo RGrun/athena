@@ -14,8 +14,8 @@
 		extract($_POST);
 		
 
-		$sql = "INSERT INTO trays (name, cmp_id, team_id, site_id, loan_team, status)" .
-		"VALUES ('$newName', '$newcompany', '$newteams', '$newsites', '$newteams', '$newStatus')";
+		$sql = "INSERT INTO trays (name, cmp_id, team_id, site_id, status)" .
+		"VALUES ('$newName', '$newcompany', '$newteams', '$newsites', '$newStatus')";
 		
 		$worker->query($sql);
 		$worker->closeConnection();

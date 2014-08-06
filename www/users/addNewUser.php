@@ -17,8 +17,8 @@
 		if(isset($_POST['newPassword'])) {
 			
 			$pass= $_POST['newPassword'];
-			$pass = "!@#$pass!@#";
-			$pass = md5($pass);
+			//$pass = "!@#$pass!@#";
+			//$pass = md5($pass);
 		} else {
 			$pass = "";
 		}

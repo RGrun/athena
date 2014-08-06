@@ -39,7 +39,7 @@
 	//default display is "all" view
 	
 	//print sites tables
-	$sql = "SELECT site_id FROM trays WHERE team_id='$usersTeamId'";
+	$sql = "SELECT site_id FROM trays WHERE team_id='$usersTeamId' OR loan_team='$usersTeamId'";
 	
 	
 	$result = $worker->query($sql);
@@ -50,7 +50,7 @@
 		
 			if(in_array($row[0], $alreadyPrinted)) continue;
 			
-			$worker->makeDropoffSitesTrayTables($userId, $row[0]);
+			$worker->makeDropoffSitesTrayTables($usersTeamId, $row[0], $method);
 			array_push($alreadyPrinted, $row[0]);
 		}
 	} else {
@@ -58,7 +58,7 @@
 		
 			if(in_array($row[0], $alreadyPrinted)) continue;
 			
-			$worker->makePickupSitesTrayTables($userId, $row[0]);
+			$worker->makePickupSitesTrayTables($usersTeamId, $row[0], $method);
 			array_push($alreadyPrinted, $row[0]);
 		}
 	
@@ -70,11 +70,11 @@
 	//print status tables
 	//$worker->makeOpenTables($usersTeamId);
 	
-	$worker->makeLoanedTables($usersTeamId);
+	$worker->makeLoanedTables($usersTeamId, $method);
 	
-	$worker->makeScheduledTables($usersTeamId);
+	$worker->makeScheduledTables($usersTeamId, $method);
 	
-	$worker->makeReturnedTables($usersTeamId);
+	$worker->makeReturnedTables($usersTeamId, $method);
 	
 	
 	

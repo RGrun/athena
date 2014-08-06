@@ -22,6 +22,8 @@
 	//mechanisim for setting the tray's new status
 	if(isset($_POST['confirm'])) {
 	
+		$clientName = $_POST['newName'];
+	
 		if($pickupDropoff == "Pickup") {
 			$sql = "UPDATE trays SET status='Returned' WHERE tray_id='$currentTrayId'";
 			$worker->query($sql);
@@ -29,6 +31,8 @@
 			header("Location: landing.php");
 		} else if($pickupDropoff == "Dropoff") {
 			$sql = "UPDATE trays SET status='Loaned' WHERE tray_id='$currentTrayId'";
+			$worker->query($sql);
+			$sql = "UPDATE assigns SET cli_nm='$clientName' WHERE tray_id='$currentTrayId'";
 			$worker->query($sql);
 			//echo $sql;
 			header("location: landing.php");
@@ -90,13 +94,19 @@
 			
 			echo "$traycont";
 			
-			$confirmForm = "<form action='signature.php?tid=$currentTrayId&mtd=$pickupDropoff' method='post'>" .
+			$dropoffForm = "<form action='signature.php?tid=$currentTrayId&mtd=$pickupDropoff' method='post'>" .
 			"Enter your full name here: <br/> <input type='text' name='newName' /><br/>" .
 			"Accept: <input type='checkbox' name='accept'  onchange='signature()'/> <br/>" .
 			"<input type='hidden' name='confirm' value='1' />" .
 			"<input id='proceed' type='submit' value='Proceed' disabled /> </form>";
 			
-			echo $confirmForm;
+			$pickupForm = "<form action='signature.php?tid=$currentTrayId&mtd=$pickupDropoff' method='post'>" .
+			"Accept: <input type='checkbox' name='accept'  onchange='signature()'/> <br/>" .
+			"<input type='hidden' name='confirm' value='1' />" .
+			"<input id='proceed' type='submit' value='Proceed' disabled /> </form>";
+			
+			if ($pickupDropoff == "Pickup") echo $pickupForm;
+			else if($pickupDropoff== "Dropoff") echo $dropoffForm;
 			
 			
 		} else {

@@ -209,6 +209,7 @@
 			$selector = "<select name='new$requestTable" . $salt . "' size='1'>";
 			
 			if($pending == true) $selector .= "<option value='Pending'>Pending</option>";
+			if($requestTable == "teams") $selector .= "<option value='0'>None</option>";
 			
 			while($row = mysqli_fetch_array($result)) {
 				$selector .= "<option value='$row[1]'>$row[0]</option>";
@@ -237,7 +238,7 @@
 			
 				$name = $this->findSite($row[0], "name");
 				//check to see if there are any active trays assigned to that users team at the location
-				$sql = "SELECT * from trays WHERE team_id='$usersTeam' AND site_id='$row[0]'";
+				$sql = "SELECT * from trays WHERE (team_id='$usersTeam' OR loan_team='$usersTeam') AND site_id='$row[0]'";
 				
 				$result2 = $this->query($sql);
 				if(mysqli_num_rows($result2) != 0) {
@@ -285,15 +286,16 @@
 			
 		}
 		
-		public function makeDropoffSitesTrayTables($userId, $siteId) {
+		public function makeDropoffSitesTrayTables($usersTeamId, $siteId, $method) {
 			
 			//first, find the users teamid
-			$sql = "SELECT team_id from users WHERE usr_id='$userId'";
-			$result = $this->query($sql);
-			$row = mysqli_fetch_array($result);
-			$usersTeamId = $row[0];
+			//$sql = "SELECT team_id from users WHERE usr_id='$userId'";
+			//$result = $this->query($sql);
+			//$row = mysqli_fetch_array($result);
+			//$usersTeamId = $row[0];
 			
-			$sql = "SELECT * from trays WHERE team_id='$usersTeamId' AND site_id='$siteId' AND status='Scheduled'";
+			$sql = "SELECT * from trays WHERE status='Scheduled' AND site_id='$siteId' and (team_id='$usersTeamId' or loan_team='$usersTeamId')";
+			//echo $sql;
 			
 			$result = $this->query($sql);
 			
@@ -310,21 +312,35 @@
 					//get assoc array and print table data
 					
 					extract($row);
-						
+					
 					$company = $this->findCompany($cmp_id, "name");
 					$team = $this->findTeam($team_id, "name");
 					$loanTeam = $this->findTeam($loan_team, "name");
 					
+					$fromAnotherTeam = "";
+					//echo $loan_team; echo $team_id;
+					if($loan_team == 0) $loan = "<a href='loanTray.php?tid=$tray_id&mtd=$method&action=loan'> Loan tray to another team</a>";
+					elseif($loan_team != 0 && $loan_team == $usersTeamId) {
+						$loan = "<a href='loanTray.php?tid=$tray_id&mtd=$method&action=return'>Return borrowed tray</a>";
+						$fromAnotherTeam = "<tr><td><span class='loan'>Borrowed from another team</span></td></tr>";
+					}
+					elseif($team_id == $usersTeamId && $loan_team != 0) $loan = "<span class='loan'>Loaned</span>";
+
+					
+					
 					if($status == "Returned" || $status == "Loaned") continue;
 					
+					
 					$trayTable = "<table>" .
+					"$fromAnotherTeam" .
 					"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
 					"<tr><td><em>Name</em></td><td>$name</td></tr>" .
 					"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
 					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
 					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
 					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
-					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Check-in</a></td></tr>" .
+					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Check-in</a></td>" .
+					"<td>$loan</td></tr>" .
 					"</table>";
 						
 					echo "<div class='sitesTray'>$trayTable</div>";
@@ -339,16 +355,17 @@
 				
 		}
 		
-		public function makePickupSitesTrayTables($userId, $siteId) {
+		public function makePickupSitesTrayTables($usersTeamId, $siteId, $method) {
 			
+			/*
 			//first, find the users teamid
 			$sql = "SELECT team_id from users WHERE usr_id='$userId'";
 			$result = $this->query($sql);
 			$row = mysqli_fetch_array($result);
 			$usersTeamId = $row[0];
+			*/
 			
-			$sql = "SELECT * from trays WHERE team_id='$usersTeamId' AND site_id='$siteId' AND status='Loaned'";
-			
+			$sql = "SELECT * from trays WHERE status='Loaned' AND site_id='$siteId' and (team_id='$usersTeamId' or loan_team='$usersTeamId')";			
 			$result = $this->query($sql);
 			
 			if(mysqli_num_rows($result) != 0) {
@@ -364,21 +381,32 @@
 					//get assoc array and print table data
 					
 					extract($row);
-						
+					
 					$company = $this->findCompany($cmp_id, "name");
 					$team = $this->findTeam($team_id, "name");
 					$loanTeam = $this->findTeam($loan_team, "name");
 					
+					$fromAnotherTeam = "";
+					//echo $loan_team; echo $team_id;
+					if($loan_team == 0) $loan = "<a href='loanTray.php?tid=$tray_id&mtd=$method&action=loan'> Loan tray to another team</a>";
+					elseif($loan_team != 0 && $loan_team == $usersTeamId) {
+						$loan = "<a href='loanTray.php?tid=$tray_id&mtd=$method&action=return'>Return borrowed tray</a>";
+						$fromAnotherTeam = "<tr><td><span class='loan'>Borrowed from another team</span></td></tr>";
+					}
+					elseif($team_id == $usersTeamId && $loan_team != 0) $loan = "<span class='loan'>Loaned</span>";
+
 					if($status == "Scheduled" || $status == "Returned") continue;
 					
 					$trayTable = "<table>" .
+					"$fromAnotherTeam" .
 					"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
 					"<tr><td><em>Name</em></td><td>$name</td></tr>" .
 					"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
 					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
 					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
 					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
-					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Check-in</a></td></tr>" .
+					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Check-in</a></td>" .
+					"<td>$loan</td></tr>" .
 					"</table>";
 						
 					echo "<div class='sitesTray'>$trayTable</div>";
@@ -394,6 +422,7 @@
 		}
 		
 		//no longer used because open is no longer a valid status for trays
+		/*
 		public function makeOpenTables($userId) {
 			$sql = "SELECT * FROM trays WHERE team_id='$userId' AND status='Open'";
 			
@@ -437,10 +466,10 @@
 				//echo "No trays at that location.";
 			}
 				
-		}
+		} */
 		
-		public function makeLoanedTables($userId) {
-			$sql = "SELECT * FROM trays WHERE team_id='$userId' AND status='Loaned'";
+		public function makeLoanedTables($usersTeamId, $method) {			
+			$sql = "SELECT * from trays WHERE status='Loaned' and (team_id='$usersTeamId' or loan_team='$usersTeamId')";	
 			
 			$result = $this->query($sql);
 			
@@ -452,23 +481,34 @@
 				while($row = mysqli_fetch_assoc($result)) {
 				
 					//get assoc array and print table data
-					if($row['status'] != "Loaned") continue;
+					
 					extract($row);
-						
+					
 					$company = $this->findCompany($cmp_id, "name");
 					$team = $this->findTeam($team_id, "name");
 					$loanTeam = $this->findTeam($loan_team, "name");
-					$siteName = $this->findSite($site_id, "name");
+					
+					$fromAnotherTeam = "";
+					//echo $loan_team; echo $team_id;
+					if($loan_team == 0) $loan = "<a href='loanTray.php?tid=$tray_id&mtd=$method&action=loan'> Loan tray to another team</a>";
+					elseif($loan_team != 0 && $loan_team == $usersTeamId) {
+						$loan = "<a href='loanTray.php?tid=$tray_id&mtd=$method&action=return'> Return borrowed tray</a>";
+						$fromAnotherTeam = "<tr><td><span class='loan'>Borrowed from another team</span></td></tr>";
+					}
+					elseif($team_id == $usersTeamId && $loan_team != 0) $loan = "<span class='loan'>Loaned</span>";
 							
 					$trayTable = "<table>" .
+					"$fromAnotherTeam" .
 					"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
 					"<tr><td><em>Name</em></td><td>$name</td></tr>" .
 					"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
 					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
 					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
 					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
-					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Check-in</a></td></tr>" .
+					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Check-in</a></td>" .
+					"<td>$loan</td></tr>" .
 					"</table>";
+						
 						
 					echo "<div class='loanedTray'>$trayTable</div>";
 				}
@@ -482,8 +522,8 @@
 				
 		}
 		
-		public function makeScheduledTables($userId) {
-			$sql = "SELECT * FROM trays WHERE team_id='$userId' AND status='Scheduled'";
+		public function makeScheduledTables($usersTeamId, $method) {
+			$sql = "SELECT * from trays WHERE status='Scheduled' and (team_id='$usersTeamId' or loan_team='$usersTeamId')";	
 			
 			$result = $this->query($sql);
 			
@@ -496,39 +536,48 @@
 				
 					//get assoc array and print table data
 					
-					if($row['status'] != "Scheduled") continue;
-
 					extract($row);
-						
+					
 					$company = $this->findCompany($cmp_id, "name");
 					$team = $this->findTeam($team_id, "name");
 					$loanTeam = $this->findTeam($loan_team, "name");
-					$siteName = $this->findSite($site_id, "name");
+					
+					$fromAnotherTeam = "";
+					//echo $loan_team; echo $team_id;
+					if($loan_team == 0) $loan = "<a href='loanTray.php?tid=$tray_id&mtd=$method&action=loan'> Loan tray to another team</a>";
+					elseif($loan_team != 0 && $loan_team == $usersTeamId) {
+						$loan =  "<a href='loanTray.php?tid=$tray_id&mtd=$method&action=return'> Return borrowed tray</a>";
+						$fromAnotherTeam = "<tr><td><span class='loan'>Borrowed from another team</span></td></tr>";
+					}
+					elseif($team_id == $usersTeamId && $loan_team != 0) $loan = "<span class='loan'>Loaned</span>";
 							
 					$trayTable = "<table>" .
+					"$fromAnotherTeam" .
 					"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
 					"<tr><td><em>Name</em></td><td>$name</td></tr>" .
 					"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
 					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
 					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
 					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
-					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Check-in</a></td></tr>" .
+					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Check-in</a></td>" .
+					"<td>$loan</td></tr>" .
 					"</table>";
 						
-					echo "<div class='scheduledTray'>$trayTable</div>";
+						
+					echo "<div class='scheduled'>$trayTable</div>";
 				}
 				
 				echo "</div>";
 					
 			} else {
 			
-				//echo "No trays at that location.";
+				//echo "No currently loaned trays.";
 			}
-				
+					
 		}
 		
-		public function makeReturnedTables($userId) {
-			$sql = "SELECT * FROM trays WHERE team_id='$userId' AND status='Returned'";
+		public function makeReturnedTables($usersTeamId, $method) {
+			$sql = "SELECT * from trays WHERE status='Returned' and (team_id='$usersTeamId' or loan_team='$usersTeamId')";	
 			
 			$result = $this->query($sql);
 			
@@ -541,36 +590,43 @@
 				
 					//get assoc array and print table data
 					
-					if($row['status'] != "Returned") continue;
-
 					extract($row);
-						
+					
 					$company = $this->findCompany($cmp_id, "name");
 					$team = $this->findTeam($team_id, "name");
 					$loanTeam = $this->findTeam($loan_team, "name");
-					$siteName = $this->findSite($site_id, "name");
 					
+					$fromAnotherTeam = "";
+					//echo $loan_team; echo $team_id;
+					if($loan_team == 0) $loan = "<a href='loanTray.php?tid=$tray_id&mtd=$method&action=loan'> Loan tray to another team</a>";
+					elseif($loan_team != 0 && $loan_team == $usersTeamId) {
+						$loan =  "<a href='loanTray.php?tid=$tray_id&mtd=$method&action=return'> Return borrowed tray</a>";
+						$fromAnotherTeam = "<tr><td><span class='loan'>Borrowed from another team</span></td></tr>";
+					}
+					elseif($team_id == $usersTeamId && $loan_team != 0) $loan = "<span class='loan'>Loaned</span>";
 							
 					$trayTable = "<table>" .
+					"$fromAnotherTeam" .
 					"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
 					"<tr><td><em>Name</em></td><td>$name</td></tr>" .
 					"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
 					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
 					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
 					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
-					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Check-in</a></td></tr>" .
+					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Check-in</a></td>" .
+					"<td>$loan</td></tr>" .
 					"</table>";
 						
-					echo "<div class='returnedTray'>$trayTable</div>";
+						
+					echo "<div class='returned'>$trayTable</div>";
 				}
 				
 				echo "</div>";
 					
 			} else {
 			
-				//echo "No trays at that location.";
-			}
-				
+				//echo "No currently loaned trays.";
+			}				
 		}
 
 		
