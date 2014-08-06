@@ -270,8 +270,8 @@
 			"<option>--Select Assignment--</option>" .
 			"<option disabled>-------------</option>";
 			
-			//display trays from the selected site
-			$sql = "SELECT asgn_id FROM assigns WHERE tray_id='$trayId' AND (do_usr='$userId' OR pu_usr='$userId') OR status='Pending'";
+			//display assignments related to the current tray
+			$sql = "SELECT asgn_id FROM assigns WHERE tray_id='$trayId' AND status='Pending'";
 			
 			$result = $this->query($sql);
 			
