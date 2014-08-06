@@ -271,7 +271,7 @@
 			"<option disabled>-------------</option>";
 			
 			//display assignments related to the current tray
-			$sql = "SELECT asgn_id FROM assigns WHERE tray_id='$trayId' AND status='Pending'";
+			$sql = "SELECT asgn_id FROM assigns WHERE tray_id='$trayId' AND (status='Pending' OR status='Overdue')";
 			
 			$result = $this->query($sql);
 			

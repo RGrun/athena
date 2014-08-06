@@ -32,7 +32,7 @@
 	//echo "<span id='js'></span>"; //for debugging
 
 	//make related assignment table in trayView
-	$sql = "SELECT * FROM assigns WHERE tray_id='$currentTrayId' AND (do_usr='$currentUserId' OR pu_usr='$currentUserId') OR status='Pending'";
+	$sql = "SELECT * FROM assigns WHERE tray_id='$currentTrayId' AND (do_usr='$currentUserId' OR pu_usr='$currentUserId' OR status='Pending' OR status='Overdue')";
 	//echo $sql;
 	$result = $worker->query($sql);
 	while($row = mysqli_fetch_assoc($result)) {
