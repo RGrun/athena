@@ -37,7 +37,7 @@
 		
 		//check to see if the instrument is already in this tray
 		$sql = "SELECT tray_id, inst_id FROM traycont WHERE tray_id='$currentTrayId' AND inst_id='$inst'";
-
+		
 
 		//$result = $worker->query($sql);
 			
@@ -45,9 +45,8 @@
 		
 		$sql = "INSERT INTO traycont (tray_id, inst_id, quant, state, cmt)" .
 		"VALUES ('$currentTrayId', '$inst', '$quant', '$state', '$cmt')";
-		
 		$worker->query($sql);
-		
+
 		//echo "Data successfully updated";
 		} else {
 			//$error = "Invalid value entered";
@@ -70,6 +69,14 @@
 		$team = $worker->findTeam($team_id, "name");
 		$site = $worker->findSite($site_id, "name");
 		$loanTeam = $worker->findTeam($loan_team, "name");
+		$storage = $worker->findStorage($stor_id, "name");
+		
+		if($loanTeam == null) $loanTeam = "None";
+		
+		if($atnow == "usr") $status = "With user";
+		if($atnow == "site") $status = "At site";
+		if($atnow == "stor") $status = "In storage";
+		if($atnow == "unk") $status = "Unknown";
 		
 		$table = "<table>" .
 		"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
@@ -78,7 +85,8 @@
 		"<tr><td><em>Responsible Team:</em></td><td>$team</td><td><a href='editTrayInfo.php?mtd=team'>Edit</a></td></tr>" .
 		"<tr><td><em>Current Location</em></td><td>$site</td><td><a href='editTrayInfo.php?mtd=site'>Edit</a></td></tr>" .
 		"<tr><td><em>Loaned To</em></td><td>$loanTeam</td><td><a href='editTrayInfo.php?mtd=loanTeam'>Edit</a></td></tr>" .
-		"<tr><td><em>Status</em></td><td>$status</td><td><a href='editTrayInfo.php?mtd=status'>Edit</a></td></tr>" .
+		"<tr><td><em>Storage Location</em></td><td>$storage</td><td><a href='editTrayInfo.php?mtd=stor_id'>Edit</a></td></tr>" .
+		"<tr><td><em>Status</em></td><td>$status</td><td><a href='editTrayInfo.php?mtd=atnow'>Edit</a></td></tr>" .
 		"</table>";
 		
 		echo "<p>$table</p>";

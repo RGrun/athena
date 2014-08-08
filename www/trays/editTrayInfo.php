@@ -40,12 +40,18 @@
 	} else if(isset($_POST['newStatus'])) {
 		$worker->editTrayDatabase($selectedMethod, $currentTray, $_POST['newStatus']);
 		$worker->closeConnection();
+	} elseif (isset($_POST['newstorage'])) {
+		$worker->editTrayDatabase($selectedMethod, $currentTray, $_POST['newstorage']);
+		$worker->closeConnection();
 	} else {
 
 		$companySelector = $worker->createSelector("company", "name", "cmp_id");
 		$teamSelector = $worker->createSelector("teams", "name", "team_id");
 		$siteSelector = $worker->createSelector("sites", "name", "site_id");
+		$storageSelector = $worker->createSelector("storage", "name", "stor_id");
 		
+		$storageForm = "<form method='post' action='editTrayInfo.php'>$storageSelector <br/> <br/>" .
+		"<input type='submit' value='Commit Changes' /> </form>";
 		$companyForm = "<form method='post' action='editTrayInfo.php'>$companySelector <br /> <br/>" .
 		"<input type='submit' value='Commit Changes' /> </form>";
 		$teamForm = "<form method='post' action='editTrayInfo.php'>$teamSelector <br/> <br/>" .
@@ -54,11 +60,12 @@
 		"<input type='submit' value='Commit Changes' /> </form>";
 		
 		$statusSelector = "<select name='newStatus' size='1'>" .
-		"<option value='Scheduled'>Scheduled</option>" .
-		"<option value='Loaned'>Loaned</option>" .
-		"<option value='Returned'>Returned</option>" .
+		"<option value='stor'>In Storage</option>" .
+		"<option value='usr'>With User</option>" .
+		"<option value='site'>At Site</option>" .
+		"<option value='unk'>Unkown</option>" .
 		"</select>";
-			
+		
 		$statusForm = "<form method='post' action='editTrayInfo.php'>" .
 		"$statusSelector<br />" .
 		"<input type='submit' value='Commit Changes' /></form> <br/>";
@@ -92,9 +99,16 @@
 				$site = $worker->findSite($currentData, "name");
 				echo "$site <br/>";
 				echo "<p>$siteForm</p>";
-			} elseif($selectedMethod == "status") {
+			} elseif($selectedMethod == "atnow") {
+				if($currentData == "usr") $currentData = "With user";
+				if($currentData == "site") $currentData = "At site";
+				if($currentData == "stor") $currentData = "In storage";
+				if($currentData == "unk") $currentData = "Unknown";
 				echo $currentData;
 				echo "<p>$statusForm</p>";
+			} elseif($selectedMethod == "stor_id") {
+				echo $currentData;
+				echo "$storageForm";
 			} else {
 				echo $form;
 			}

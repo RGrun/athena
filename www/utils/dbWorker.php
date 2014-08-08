@@ -77,6 +77,31 @@
 			}
 		}
 		
+		public function editStorageDatabase($column, $id, $newData = null) {
+			if($column == "active") {
+				$sql = "SELECT active FROM storage WHERE stor_id='$id'";
+				if($result = $this->query($sql)) {
+					$row = mysqli_fetch_assoc($result);
+					if($row['active'] == 1) {
+						$sql = "UPDATE storage SET active='0' WHERE stor_id='$id'";
+						
+						if($this->query($sql)) header( "Location: storageDetail.php?sid=$id" );
+					} else {
+						$sql = "UPDATE storage SET active='1' WHERE stor_id='$id'";
+						
+						if($this->query($sql)) header( "Location: storageDetail.php?sid=$id" );
+					}
+					
+				}
+			} else {
+			
+				$sql = "UPDATE storage SET $column='$newData' WHERE stor_id='$id'";
+				
+				if($this->query($sql)) header( "Location: storageDetail.php?sid=$id" );
+				
+			}
+		}
+		
 		public function editSiteDatabase($column, $id, $newData = null) {
 			if($column == "active") {
 				$sql = "SELECT active FROM sites WHERE site_id='$id'";
@@ -220,46 +245,31 @@
 			
 			return $selector;
 		}
+		/* REVISION 8/8/14: 
+		* This function returns a dropdown of trays assigned to the users team 
+		* or loaned to the users team 
+		*/
 		
-		public function createLandingDropdown($userId) {
+		public function createLandingDropdown($userId, $method) {
 		
 			$usersTeam = $this->findUser($userId, "team_id");
 			
 			$selector = "<select id='filterselect' size='1' onchange='trayFilter()'>" . 
 			"<option value='all'>All</option>" .
-			"<option disabled>--Sites--</option>";
+			"<option disabled>--Trays--</option>";
 			
-			//display trays from the selected site
-			$sql = "SELECT site_id FROM sites";
+			$sqlPart = "";
+			if($method == "dropoff") $sqlPart = "(atnow='stor' OR atnow='unk')";
+			elseif($method == "pickup") $sqlPart = "(atnow='usr' OR atnow='site')";
+			
+			$sql = "SELECT tray_id, name FROM trays WHERE (team_id='$usersTeam' OR loan_team='$usersTeam') AND $sqlPart";
 			
 			$result = $this->query($sql);
-			
-			while($row = mysqli_fetch_array($result)) {
-			
-				$name = $this->findSite($row[0], "name");
-				//check to see if there are any active trays assigned to that users team at the location
-				$sql = "SELECT * from trays WHERE (team_id='$usersTeam' OR loan_team='$usersTeam') AND site_id='$row[0]'";
-				
-				$result2 = $this->query($sql);
-				if(mysqli_num_rows($result2) != 0) {
-					$row2 = mysqli_fetch_assoc($result2);
-					if($row2['status'] != "Returned") $selector .= "<option value='$row[0]'>$name</option>";
-				}
+			while ($row = mysqli_fetch_array($result)) {
+				$selector .= "<option value='$row[0]'>$row[1]</option>";
 			}
-			
-			$selector .= "<option disabled>--Status--</option>";
-			
-			//display trays by status
-			$sql = "SELECT status, name FROM trays";
-			
-			$result = $this->query($sql);
-			
-			$selector .= "<option value='loaned'>Loaned Trays</option><option value='scheduled'>Scheduled Trays</option><option value='returned'>Returned Trays</option>";
-
 			$selector .= "</select>";
-			
 			return $selector;
-			
 		}
 		
 		public function makeAssignmentDropdown($trayId, $userId) {
@@ -286,138 +296,116 @@
 			
 		}
 		
-		public function makeDropoffSitesTrayTables($usersTeamId, $siteId, $method) {
+		//USED IN NEWEST REV (8/8/14)
+		public function makeDropoffSitesTrayTables($row, $teamId) {
 			
-			//first, find the users teamid
-			//$sql = "SELECT team_id from users WHERE usr_id='$userId'";
-			//$result = $this->query($sql);
-			//$row = mysqli_fetch_array($result);
-			//$usersTeamId = $row[0];
+			$team = $this->findTeam($teamId, "name");
 			
-			$sql = "SELECT * from trays WHERE status='Scheduled' AND site_id='$siteId' and (team_id='$usersTeamId' or loan_team='$usersTeamId')";
-			//echo $sql;
+			extract($row);
 			
-			$result = $this->query($sql);
+			$company = $this->findCompany($cmp_id, "name");
+			$team = $this->findTeam($team_id, "name");
+			$site = $this->findSite($site_id, "name");
+			$loanTeam = $this->findTeam($loan_team, "name");
+			$storage = $this->findStorage($stor_id, "name");
 			
-			if(mysqli_num_rows($result) != 0) {
+			//in storage or unknown location trays only
+			if($atnow == "usr" || $atnow == "site") return null;
+		
+			if($loanTeam == null) $loanTeam = "None";
+		
+			if($atnow == "usr") $status = "With user";
+			if($atnow == "site") $status = "At site";
+			if($atnow == "stor") $status = "In storage";
+			if($atnow == "unk") $status = "Unknown";
 			
-				$siteName = $this->findSite($siteId, "name");
-				$siteNameClass = "$siteName" . "_class";
+			$trayNameClass = "$name" . "_class";
 			
-				echo "<div class='$siteNameClass'>";
-				echo "<h2>Trays at $siteName</h2>";
-				
-				while($row = mysqli_fetch_assoc($result)) {
-				
-					//get assoc array and print table data
+			echo "<div class='$trayNameClass'>";
+			echo "<h2>$name</h2>";
 					
-					extract($row);
-					
-					$company = $this->findCompany($cmp_id, "name");
-					$team = $this->findTeam($team_id, "name");
-					$loanTeam = $this->findTeam($loan_team, "name");
-					
-					$fromAnotherTeam = "";
-					//echo $loan_team; echo $team_id;
-					if($loan_team == 0) $loan = "<a href='loanTray.php?tid=$tray_id&mtd=$method&action=loan'> Loan tray to another team</a>";
-					elseif($loan_team != 0 && $loan_team == $usersTeamId) {
-						$loan = "<a href='loanTray.php?tid=$tray_id&mtd=$method&action=return'>Return borrowed tray</a>";
-						$fromAnotherTeam = "<tr><td><span class='loan'>Borrowed from another team</span></td></tr>";
-					}
-					elseif($team_id == $usersTeamId && $loan_team != 0) $loan = "<span class='loan'>Loaned</span>";
+			$fromAnotherTeam = "";
+			$method = "dropoff";
 
-					
-					
-					if($status == "Returned" || $status == "Loaned") continue;
-					
-					
-					$trayTable = "<table>" .
-					"$fromAnotherTeam" .
-					"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
-					"<tr><td><em>Name</em></td><td>$name</td></tr>" .
-					"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
-					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
-					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
-					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
-					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Check-in</a></td>" .
-					"<td>$loan</td></tr>" .
-					"</table>";
-						
-					echo "<div class='sitesTray'>$trayTable</div>";
-				}
-				
-				echo "</div>";
-					
-			} else {
-			
-				//echo "No trays at that location.";
+			if($loan_team == 0) $loan = "<a href='loanTray.php?tid=$tray_id&mtd=$method&action=loan'> Loan tray to another team</a>";
+			elseif($loan_team != 0 && $loan_team == $teamId) {
+				$loan = "<a href='loanTray.php?tid=$tray_id&mtd=$method&action=return'>Return borrowed tray</a>";
+				$fromAnotherTeam = "<tr><td><span class='loan'>Borrowed from another team</span></td></tr>";
 			}
+			elseif($team_id == $teamId && $loan_team != 0) $loan = "<span class='loan'>Loaned</span>";
+						
+			$trayTable = "<table>" .
+			"$fromAnotherTeam" .
+			"<tr><td><em>Tray ID: </em></td><td>$tray_id</td></tr>" .
+			//"<tr><td><em>Name: </em></td><td>$name</td></tr>" .
+			"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
+			"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
+			"<tr><td><em>Loaned To: </em></td><td>$loanTeam</td></tr>" .
+			"<tr><td><em>Status: </em></td><td>$status</td></tr>" .
+			"<tr><td><em>Stored At: </em></td><td>$storage</td></tr>" .
+			"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Drop off</a></td>" .
+			"<td>$loan</td></tr>" .
+			"</table>";
+						
+			echo "<div class='sitesTray'>$trayTable</div>";
 				
+			echo "</div>";
 		}
 		
-		public function makePickupSitesTrayTables($usersTeamId, $siteId, $method) {
+		//USED IN NEWEST REV (8/8/14)
+		public function makePickupSitesTrayTables($row, $teamId) {
 			
-			/*
-			//first, find the users teamid
-			$sql = "SELECT team_id from users WHERE usr_id='$userId'";
-			$result = $this->query($sql);
-			$row = mysqli_fetch_array($result);
-			$usersTeamId = $row[0];
-			*/
+			$team = $this->findTeam($teamId, "name");
 			
-			$sql = "SELECT * from trays WHERE status='Loaned' AND site_id='$siteId' and (team_id='$usersTeamId' or loan_team='$usersTeamId')";			
-			$result = $this->query($sql);
+			extract($row);
 			
-			if(mysqli_num_rows($result) != 0) {
+			$company = $this->findCompany($cmp_id, "name");
+			$team = $this->findTeam($team_id, "name");
+			$site = $this->findSite($site_id, "name");
+			$loanTeam = $this->findTeam($loan_team, "name");
+			$storage = $this->findStorage($stor_id, "name");
 			
-				$siteName = $this->findSite($siteId, "name");
-				$siteNameClass = "$siteName" . "_class";
+			//in user-held or site-held location trays only
+			if($atnow == "stor" || $atnow == "unk") return null;
+		
+			if($loanTeam == null) $loanTeam = "None";
+		
+			if($atnow == "usr") $status = "With user";
+			if($atnow == "site") $status = "At site";
+			if($atnow == "stor") $status = "In storage";
+			if($atnow == "unk") $status = "Unknown";
 			
-				echo "<div class='$siteNameClass'>";
-				echo "<h2>Trays at $siteName</h2>";
-				
-				while($row = mysqli_fetch_assoc($result)) {
-				
-					//get assoc array and print table data
+			$trayNameClass = "$name" . "_class";
+			
+			echo "<div class='$trayNameClass'>";
+			echo "<h2>$name</h2>";
 					
-					extract($row);
-					
-					$company = $this->findCompany($cmp_id, "name");
-					$team = $this->findTeam($team_id, "name");
-					$loanTeam = $this->findTeam($loan_team, "name");
-					
-					$fromAnotherTeam = "";
-					//echo $loan_team; echo $team_id;
-					if($loan_team == 0) $loan = "<a href='loanTray.php?tid=$tray_id&mtd=$method&action=loan'> Loan tray to another team</a>";
-					elseif($loan_team != 0 && $loan_team == $usersTeamId) {
-						$loan = "<a href='loanTray.php?tid=$tray_id&mtd=$method&action=return'>Return borrowed tray</a>";
-						$fromAnotherTeam = "<tr><td><span class='loan'>Borrowed from another team</span></td></tr>";
-					}
-					elseif($team_id == $usersTeamId && $loan_team != 0) $loan = "<span class='loan'>Loaned</span>";
+			$fromAnotherTeam = "";
+			$method = "pickup";
 
-					if($status == "Scheduled" || $status == "Returned") continue;
-					
-					$trayTable = "<table>" .
-					"$fromAnotherTeam" .
-					"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
-					"<tr><td><em>Name</em></td><td>$name</td></tr>" .
-					"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
-					"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
-					"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
-					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
-					"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Check-in</a></td>" .
-					"<td>$loan</td></tr>" .
-					"</table>";
-						
-					echo "<div class='sitesTray'>$trayTable</div>";
-				}
-				
-				echo "</div>";
-					
-			} else {
-			
-				//echo "No trays at that location.";
+			if($loan_team == 0) $loan = "<a href='loanTray.php?tid=$tray_id&mtd=$method&action=loan'> Loan tray to another team</a>";
+			elseif($loan_team != 0 && $loan_team == $teamId) {
+				$loan = "<a href='loanTray.php?tid=$tray_id&mtd=$method&action=return'>Return borrowed tray</a>";
+				$fromAnotherTeam = "<tr><td><span class='loan'>Borrowed from another team</span></td></tr>";
 			}
+			elseif($team_id == $teamId && $loan_team != 0) $loan = "<span class='loan'>Loaned</span>";
+						
+			$trayTable = "<table>" .
+			"$fromAnotherTeam" .
+			"<tr><td><em>Tray ID: </em></td><td>$tray_id</td></tr>" .
+			//"<tr><td><em>Name: </em></td><td>$name</td></tr>" .
+			"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
+			"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
+			"<tr><td><em>Loaned To: </em></td><td>$loanTeam</td></tr>" .
+			"<tr><td><em>Status: </em></td><td>$status</td></tr>" .
+			"<tr><td><em>Stored At: </em></td><td>$storage</td></tr>" .
+			"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Drop off</a></td>" .
+			"<td>$loan</td></tr>" .
+			"</table>";
+						
+			echo "<div class='sitesTray'>$trayTable</div>";
+				
+			echo "</div>";
 				
 		}
 		
@@ -811,6 +799,18 @@
 			
 			return $row["$requestedField"];
 		}
+		
+		public function findStorage($sid, $requestedField) {
+					
+			//$requestedField MUST match the name of a database column
+			
+			$sql = "SELECT * FROM storage WHERE stor_id='$sid'";
+			$result = $this->query($sql);
+			$row = mysqli_fetch_assoc($result);
+			
+			return $row["$requestedField"];
+		}
+		
 		
 		public function findDoctor($uid, $requestedField) {
 					

@@ -255,8 +255,9 @@ create table if not exists traycont
 ( tray_id   int(10)      not null,
   inst_id   int(10)      not null,
   quant     int(4)       not null default 1,
-  state     varchar(20)  not null default 'p'     -- Present, Missing, Removed, Broken, Spent
-  cmt       varchar(255) not null default ''      -- special information about this instrument for this tray
+  state     varchar(20)  not null default 'p',     -- Present, Missing, Removed, Broken, Spent
+  cmt       varchar(255) not null default '' ,     -- special information about this instrument for this tray
+  unique index (tray_id, inst_id)
 );
 
 -- --------------------------------------------------------

@@ -12,6 +12,7 @@
 	$menu = 
 	"<ul>
 			<li><a href='/athena/www/companies/companies.php'>Companies</a></li>
+			<li><a href='/athena/www/storage/storage.php'>Storage Locations</a></li>
 			<li><a href='/athena/www/users/users.php'>Users</a></li>
 			<li><a href='/athena/www/sites/sites.php'>Sites</a></li>
 			<li><a href='/athena/www/clients/clients.php'>Clients</a></li>
