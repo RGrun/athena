@@ -1,604 +1,405 @@
--- MySQL dump 10.13  Distrib 5.5.23, for Win32 (x86)
---
--- Host: localhost    Database: athena
--- ------------------------------------------------------
--- Server version	5.5.23
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `assigns`
---
-
-DROP TABLE IF EXISTS `assigns`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `assigns` (
-  `asgn_id` int(10) NOT NULL AUTO_INCREMENT,
-  `case_id` int(10) NOT NULL,
-  `tray_id` int(10) NOT NULL,
-  `status` varchar(25) NOT NULL DEFAULT '',
-  `cmt` varchar(255) NOT NULL DEFAULT '',
-  `do_usr` int(10) NOT NULL DEFAULT '0',
-  `cli_nm` varchar(64) NOT NULL DEFAULT '',
-  `do_dttm` datetime NOT NULL,
-  `pu_dttm` datetime NOT NULL,
-  `pu_usr` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`asgn_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `assigns`
---
-
-LOCK TABLES `assigns` WRITE;
-/*!40000 ALTER TABLE `assigns` DISABLE KEYS */;
-INSERT INTO `assigns` VALUES (2,3,1,'Pending','dsfd',4,'','2014-08-05 16:06:00','2014-01-01 00:00:00',4),(3,3,3,'Pending','Finish this!',4,'','2014-08-05 16:09:00','2014-01-01 00:00:00',4),(4,2,5,'Overdue','Please finish this!',0,'','0000-00-00 00:00:00','0000-00-00 00:00:00',0),(5,3,4,'Complete','This one is finished',0,'','0000-00-00 00:00:00','0000-00-00 00:00:00',0),(6,2,1,'Pending','',0,'','0000-00-00 00:00:00','0000-00-00 00:00:00',0),(7,2,1,'Pending','',0,'','0000-00-00 00:00:00','0000-00-00 00:00:00',0),(8,2,1,'Pending','&&&&',4,'','2014-01-01 00:00:00','1999-11-30 00:00:00',1),(9,2,1,'Pending','&&&&',4,'','2014-01-01 00:00:00','1999-11-30 00:00:00',1),(12,2,6,'Complete','%$%$%$',4,'','2014-08-05 10:03:00','2014-11-05 10:03:00',1),(14,2,1,'Complete','DSSDS',2,'','2014-08-05 10:16:00','2025-11-12 09:11:00',4);
-/*!40000 ALTER TABLE `assigns` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `cases`
---
-
-DROP TABLE IF EXISTS `cases`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `cases` (
-  `case_id` int(10) NOT NULL AUTO_INCREMENT,
-  `team_id` int(10) NOT NULL DEFAULT '0',
-  `doc_id` int(10) NOT NULL DEFAULT '0',
-  `proc_id` int(10) NOT NULL DEFAULT '0',
-  `site_id` int(10) NOT NULL DEFAULT '0',
-  `status` varchar(40) NOT NULL DEFAULT '',
-  `dttm` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `cmt` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`case_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `cases`
---
-
-LOCK TABLES `cases` WRITE;
-/*!40000 ALTER TABLE `cases` DISABLE KEYS */;
-INSERT INTO `cases` VALUES (2,2,2,1,6,'Complete','2014-12-05 13:06:00','Hope This works'),(3,2,1,2,11,'Pending','2014-08-04 13:48:00','sfdsf'),(4,2,1,3,4,'Pending','2014-08-04 13:35:00','Completed Case'),(5,2,1,1,2,'Complete','2014-08-04 13:34:00','This case is new'),(6,2,1,1,6,'Pending','2014-08-04 11:51:00','new datetime!'),(7,2,1,1,4,'Pending','2014-08-04 14:09:00','user-created case'),(8,2,1,1,4,'Pending','2014-08-04 14:09:00','user-created case');
-/*!40000 ALTER TABLE `cases` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `cli_site`
---
-
-DROP TABLE IF EXISTS `cli_site`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `cli_site` (
-  `cli_id` int(10) NOT NULL,
-  `site_id` int(10) NOT NULL,
-  UNIQUE KEY `cli_id` (`cli_id`,`site_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `cli_site`
---
-
-LOCK TABLES `cli_site` WRITE;
-/*!40000 ALTER TABLE `cli_site` DISABLE KEYS */;
-INSERT INTO `cli_site` VALUES (1,2);
-/*!40000 ALTER TABLE `cli_site` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `clients`
---
-
-DROP TABLE IF EXISTS `clients`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `clients` (
-  `cli_id` int(10) NOT NULL AUTO_INCREMENT,
-  `active` int(1) NOT NULL DEFAULT '1',
-  `fname` varchar(255) NOT NULL DEFAULT '',
-  `lname` varchar(255) NOT NULL DEFAULT '',
-  `uname` varchar(36) NOT NULL DEFAULT '',
-  `pwd` varchar(36) NOT NULL DEFAULT '',
-  `email` varchar(255) NOT NULL DEFAULT '',
-  `phone` varchar(25) NOT NULL DEFAULT '',
-  `sms` varchar(25) NOT NULL DEFAULT '',
-  `perm` varchar(80) NOT NULL DEFAULT '',
-  PRIMARY KEY (`cli_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `clients`
---
-
-LOCK TABLES `clients` WRITE;
-/*!40000 ALTER TABLE `clients` DISABLE KEYS */;
-INSERT INTO `clients` VALUES (1,1,'ddd','ddd','dddsss','05878003d02eed82c5171a7c6f2cd460','sds@sds','543545','23432','');
-/*!40000 ALTER TABLE `clients` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `company`
---
-
-DROP TABLE IF EXISTS `company`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `company` (
-  `cmp_id` int(10) NOT NULL AUTO_INCREMENT,
-  `active` int(1) NOT NULL DEFAULT '1',
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `address` varchar(255) NOT NULL DEFAULT '',
-  `city` varchar(255) NOT NULL DEFAULT '',
-  `state` varchar(255) NOT NULL DEFAULT '',
-  `zip` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`cmp_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `company`
---
-
-LOCK TABLES `company` WRITE;
-/*!40000 ALTER TABLE `company` DISABLE KEYS */;
-INSERT INTO `company` VALUES (1,1,'Test Company 1','555 Somewhere Street','Portland','OR','98225'),(2,1,'Company 2','Company 2','sdf','sdf','sdf'),(3,1,'dddddddd','ddddddd','dddd','ddd','ddd');
-/*!40000 ALTER TABLE `company` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `doc_site`
---
-
-DROP TABLE IF EXISTS `doc_site`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `doc_site` (
-  `doc_id` int(10) NOT NULL,
-  `site_id` int(10) NOT NULL,
-  UNIQUE KEY `doc_id` (`doc_id`,`site_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `doc_site`
---
-
-LOCK TABLES `doc_site` WRITE;
-/*!40000 ALTER TABLE `doc_site` DISABLE KEYS */;
-INSERT INTO `doc_site` VALUES (1,1),(1,2),(2,1);
-/*!40000 ALTER TABLE `doc_site` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `doctors`
---
-
-DROP TABLE IF EXISTS `doctors`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `doctors` (
-  `doc_id` int(10) NOT NULL AUTO_INCREMENT,
-  `active` int(1) NOT NULL DEFAULT '1',
-  `name` varchar(255) NOT NULL,
-  PRIMARY KEY (`doc_id`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `doctors`
---
-
-LOCK TABLES `doctors` WRITE;
-/*!40000 ALTER TABLE `doctors` DISABLE KEYS */;
-INSERT INTO `doctors` VALUES (1,1,'Gotta Be Someone\r\n'),(2,1,'Jim Jom Jim');
-/*!40000 ALTER TABLE `doctors` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `dst_cmp`
---
-
-DROP TABLE IF EXISTS `dst_cmp`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `dst_cmp` (
-  `dst_id` int(10) NOT NULL,
-  `cmp_id` int(10) NOT NULL,
-  UNIQUE KEY `dst_id` (`dst_id`,`cmp_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `dst_cmp`
---
-
-LOCK TABLES `dst_cmp` WRITE;
-/*!40000 ALTER TABLE `dst_cmp` DISABLE KEYS */;
-INSERT INTO `dst_cmp` VALUES (1,1),(2,1),(2,2),(3,1);
-/*!40000 ALTER TABLE `dst_cmp` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `instruments`
---
-
-DROP TABLE IF EXISTS `instruments`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `instruments` (
-  `inst_id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `partno` varchar(255) NOT NULL,
-  PRIMARY KEY (`inst_id`),
-  UNIQUE KEY `partno` (`partno`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `instruments`
---
-
-LOCK TABLES `instruments` WRITE;
-/*!40000 ALTER TABLE `instruments` DISABLE KEYS */;
-INSERT INTO `instruments` VALUES (1,'Band-aid','666666'),(2,'Stethiscope','4444'),(3,'Pliers','333');
-/*!40000 ALTER TABLE `instruments` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `procinsts`
---
-
-DROP TABLE IF EXISTS `procinsts`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `procinsts` (
-  `proc_id` int(10) NOT NULL,
-  `inst_id` int(10) NOT NULL,
-  `quant` int(4) NOT NULL DEFAULT '1',
-  UNIQUE KEY `proc_id` (`proc_id`,`inst_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `procinsts`
---
-
-LOCK TABLES `procinsts` WRITE;
-/*!40000 ALTER TABLE `procinsts` DISABLE KEYS */;
-INSERT INTO `procinsts` VALUES (1,1,343),(1,2,2232);
-/*!40000 ALTER TABLE `procinsts` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `procs`
---
-
-DROP TABLE IF EXISTS `procs`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `procs` (
-  `proc_id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  PRIMARY KEY (`proc_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `procs`
---
-
-LOCK TABLES `procs` WRITE;
-/*!40000 ALTER TABLE `procs` DISABLE KEYS */;
-INSERT INTO `procs` VALUES (1,'Procedure 1'),(2,'Procedure 2'),(3,'Procedure 3');
-/*!40000 ALTER TABLE `procs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `pwdresets`
---
-
-DROP TABLE IF EXISTS `pwdresets`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pwdresets` (
-  `rst_id` int(10) NOT NULL AUTO_INCREMENT,
-  `id` int(10) NOT NULL,
-  `typ` int(1) NOT NULL,
-  `status` varchar(20) NOT NULL DEFAULT 'new',
-  `code` varchar(25) NOT NULL,
-  `dttm` datetime NOT NULL,
-  PRIMARY KEY (`rst_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `pwdresets`
---
-
-LOCK TABLES `pwdresets` WRITE;
-/*!40000 ALTER TABLE `pwdresets` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pwdresets` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `regions`
---
-
-DROP TABLE IF EXISTS `regions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `regions` (
-  `reg_id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `city` varchar(255) NOT NULL,
-  `state` varchar(2) NOT NULL,
-  PRIMARY KEY (`reg_id`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `regions`
---
-
-LOCK TABLES `regions` WRITE;
-/*!40000 ALTER TABLE `regions` DISABLE KEYS */;
-INSERT INTO `regions` VALUES (4,'North Jersey','','NJ'),(5,'Central Jersey','','NJ'),(6,'South Jersey','','NJ');
-/*!40000 ALTER TABLE `regions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `site_region`
---
-
-DROP TABLE IF EXISTS `site_region`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `site_region` (
-  `site_id` int(10) NOT NULL,
-  `region` varchar(40) NOT NULL,
-  UNIQUE KEY `site_id` (`site_id`,`region`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `site_region`
---
-
-LOCK TABLES `site_region` WRITE;
-/*!40000 ALTER TABLE `site_region` DISABLE KEYS */;
-INSERT INTO `site_region` VALUES (1,'Region 1'),(1,'Region 2'),(2,'Region 1');
-/*!40000 ALTER TABLE `site_region` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sites`
---
-
-DROP TABLE IF EXISTS `sites`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sites` (
-  `site_id` int(10) NOT NULL AUTO_INCREMENT,
-  `active` int(1) NOT NULL DEFAULT '1',
-  `name` varchar(255) NOT NULL,
-  `address` varchar(255) NOT NULL,
-  `city` varchar(255) NOT NULL,
-  `state` varchar(2) NOT NULL,
-  `zip` varchar(5) NOT NULL,
-  `fax` varchar(10) NOT NULL,
-  PRIMARY KEY (`site_id`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sites`
---
-
-LOCK TABLES `sites` WRITE;
-/*!40000 ALTER TABLE `sites` DISABLE KEYS */;
-INSERT INTO `sites` VALUES (4,1,'BLOOMFIELD SURGERY CTR.     ','1255 Broad Street','Bloomfield','NJ','07003','2014839152'),(5,1,'ENDO SURGICAL','999 Clifton Avenue','Clifton ','NJ','07013','2014839152'),(6,1,'EXCEL SURGERY CENTER','321 Essex Street','Hackensack','NJ','07601','2014839152'),(7,1,'FAIRLAWN AMBULATORY SURG CTR','15-01 Pollitt Drive','Fair Lawn','NJ','07410','2014839152'),(8,1,'GARDEN STATE SURG CTR       ','28-06 Broadway','Fair Lawn','NJ','07410','2014839152'),(9,1,'HACKENSACK UNIV. MED CTR CAS','30 Prospect Street','Hackensack','NJ','07601','2014839152'),(10,1,'JERSEY CITY MEDICAL CENTER','101 Jersey Avenue','Jersey City','NJ','07302','2014839152'),(11,1,'LIBERTY AMBULATORY SURGERY  ','377 Jersey Avenue ','Jersey City','NJ','07302','2014839152'),(12,1,'LUCKOW PAVILLION','223 North Van Dien Ave','Ridgewood','NJ','07450','2014839152');
-/*!40000 ALTER TABLE `sites` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `teams`
---
-
-DROP TABLE IF EXISTS `teams`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `teams` (
-  `team_id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `region` varchar(40) NOT NULL DEFAULT '',
-  `state` varchar(3) NOT NULL,
-  `cmp_id` int(10) NOT NULL DEFAULT '0',
-  `head_id` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`team_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `teams`
---
-
-LOCK TABLES `teams` WRITE;
-/*!40000 ALTER TABLE `teams` DISABLE KEYS */;
-INSERT INTO `teams` VALUES (2,'Super Team','Portland','OR',1,4),(3,'Another Team','Washington','WA',3,2),(5,'sad','asd','as',1,1);
-/*!40000 ALTER TABLE `teams` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `traycont`
---
-
-DROP TABLE IF EXISTS `traycont`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `traycont` (
-  `tray_id` int(10) NOT NULL,
-  `inst_id` int(10) NOT NULL,
-  `quant` int(4) NOT NULL DEFAULT '1',
-  `state` varchar(20) NOT NULL DEFAULT 'Present',
-  `cmt` varchar(255) NOT NULL DEFAULT '',
-  UNIQUE KEY `tray_id` (`tray_id`,`inst_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `traycont`
---
-
-LOCK TABLES `traycont` WRITE;
-/*!40000 ALTER TABLE `traycont` DISABLE KEYS */;
-INSERT INTO `traycont` VALUES (1,1,8888,'Removed','This comment was modified by a driver'),(1,2,2343,'Present','it\'s alive ;;;;'),(1,3,44,'Present',''),(5,1,54,'Present',''),(5,2,3453,'Present',''),(5,3,3453,'Present','');
-/*!40000 ALTER TABLE `traycont` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `trays`
---
-
-DROP TABLE IF EXISTS `trays`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `trays` (
-  `tray_id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `cmp_id` int(10) NOT NULL,
-  `team_id` int(10) NOT NULL,
-  `site_id` int(10) NOT NULL DEFAULT '0',
-  `loan_team` int(10) NOT NULL DEFAULT '0',
-  `status` varchar(25) NOT NULL DEFAULT '',
-  PRIMARY KEY (`tray_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `trays`
---
-
-LOCK TABLES `trays` WRITE;
-/*!40000 ALTER TABLE `trays` DISABLE KEYS */;
-INSERT INTO `trays` VALUES (1,'Tray 1',1,2,4,5,'Loaned'),(3,'dfds',1,2,5,3,'Scheduled'),(5,'Tray 4',1,2,4,2,'Scheduled'),(6,'NewestTray',1,2,10,2,'Scheduled'),(7,'ReturnedTray',1,2,12,2,'Loaned');
-/*!40000 ALTER TABLE `trays` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `traytrans`
---
-
-DROP TABLE IF EXISTS `traytrans`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `traytrans` (
-  `tran_id` int(10) NOT NULL AUTO_INCREMENT,
-  `tray_id` int(10) NOT NULL,
-  `to_team` int(10) NOT NULL,
-  `from_usr` int(10) NOT NULL DEFAULT '0',
-  `to_usr` int(10) NOT NULL DEFAULT '0',
-  `case_id` int(10) NOT NULL,
-  `status` varchar(25) NOT NULL DEFAULT '',
-  `dttm` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `cmt` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`tran_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `traytrans`
---
-
-LOCK TABLES `traytrans` WRITE;
-/*!40000 ALTER TABLE `traytrans` DISABLE KEYS */;
-/*!40000 ALTER TABLE `traytrans` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `users`
---
-
-DROP TABLE IF EXISTS `users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `users` (
-  `usr_id` int(10) NOT NULL AUTO_INCREMENT,
-  `active` int(1) NOT NULL DEFAULT '1',
-  `team_id` int(10) NOT NULL DEFAULT '0',
-  `fname` varchar(255) NOT NULL DEFAULT '',
-  `lname` varchar(255) NOT NULL DEFAULT '',
-  `uname` varchar(36) NOT NULL DEFAULT '',
-  `pwd` varchar(36) NOT NULL DEFAULT '',
-  `email` varchar(255) NOT NULL DEFAULT '',
-  `phone` varchar(25) NOT NULL DEFAULT '',
-  `sms` varchar(25) NOT NULL DEFAULT '',
-  `perm` varchar(80) NOT NULL DEFAULT '',
-  PRIMARY KEY (`usr_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `users`
---
-
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,1,1,'BossMan','Bill','BBilly','15de21c670ae7c3f6f3f1f37029303c9','80299434','342342','3423423',''),(2,1,1,'Johnny','Bill','JBill','9b49d796554287efd41ce49b6e7590c5','Fogerty','343242','324234',''),(3,1,2,'sdf','sdf','sdfdf','177a713ab085b249c7131ffed46528b4','sdf','sdf','sdf',''),(4,1,2,'test','user','testuser','testuser','ddd','4535','34534','');
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `usr_cmp`
---
-
-DROP TABLE IF EXISTS `usr_cmp`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `usr_cmp` (
-  `usr_id` int(10) NOT NULL,
-  `cmp_id` int(10) NOT NULL,
-  `rel` varchar(20) NOT NULL DEFAULT 'emp',
-  UNIQUE KEY `usr_id` (`usr_id`,`cmp_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `usr_cmp`
---
-
-LOCK TABLES `usr_cmp` WRITE;
-/*!40000 ALTER TABLE `usr_cmp` DISABLE KEYS */;
-INSERT INTO `usr_cmp` VALUES (1,3,'Employee'),(2,1,'Employee'),(2,3,'Employee'),(4,1,'Employee'),(4,2,'Distributor');
-/*!40000 ALTER TABLE `usr_cmp` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+-- --------------------------------------------------------
+-- Server-side Schema (MySQL)
+--
+--  Version 0.0
+--  Version 0.1 6/4/14
+--
+-- --------------------------------------------------------
+
+-- --------------------------------------------------------
+-- Sessions
+-- --------------------------------------------------------
+drop table if exists sessions;
+create table if not exists sessions
+( sess_id   int(10)      not null auto_increment,
+  created   datetime     not null default '0/0/0',   -- date/time of session creation
+  touched   datetime     not null default '0/0/0',   -- date/time of last touch
+  sid       varchar(40)  not null default '',        -- some obscure hash of the sess_id for the cookie
+  primary key (sess_id)
+);
+
+-- --------------------------------------------------------
+-- Owners of trays and/or teams.
+-- --------------------------------------------------------
+drop table if exists company;
+create table if not exists company
+( cmp_id    int(10)      not null auto_increment,
+  active    int(1)       not null default 1,
+  name      varchar(255) not null default '',
+  address   varchar(255) not null default '',
+  city      varchar(255) not null default '',
+  state     varchar(255) not null default '',
+  zip       varchar(255) not null default '',
+  primary key (cmp_id)
+);
+
+-- --------------------------------------------------------
+-- Places that companies store trays
+-- --------------------------------------------------------
+drop table if exists storage;
+create table if not exists storage
+( stor_id   int(10)      not null auto_increment,
+  cmp_id    int(10)      not null,
+  active    int(1)       not null default 1,
+  name      varchar(255) not null default '',
+  address   varchar(255) not null default '',
+  city      varchar(255) not null default '',
+  state     varchar(255) not null default '',
+  zip       varchar(255) not null default '',
+  primary key (stor_id)
+);
+
+-- --------------------------------------------------------
+-- lenders of trays: individuals on teams that transport
+-- trays.
+-- --------------------------------------------------------
+drop table if exists users;
+create table if not exists users 
+( usr_id    int(10)      not null auto_increment,
+  active    int(1)       not null default 1,
+  team_id   int(10)      not null default 0,       -- a user can only be on one team
+  fname     varchar(255) not null default '',
+  lname     varchar(255) not null default '',
+  uname     varchar(36)  not null default '',
+  pwd       varchar(36)  not null default '',
+  email     varchar(255) not null default '',
+  phone     varchar(25)  not null default '',
+  sms       varchar(25)  not null default '',
+  perm      varchar(80)  not null default '',
+  primary key (usr_id)
+);
+
+-- --------------------------------------------------------
+-- User <> Company map
+-- Users can work for multiple companies at the same time
+-- --------------------------------------------------------
+drop table if exists usr_cmp;
+create table if not exists usr_cmp 
+( usr_id    int(10)      not null,
+  cmp_id    int(10)      not null,
+  rel       varchar(20)  not null default "emp",    -- "emp", "dst", "ex", ...
+  unique index (usr_id, cmp_id)
+);
+
+-- --------------------------------------------------------
+-- Distributor <> Company map
+-- Companies distribute for other companies
+-- --------------------------------------------------------
+drop table if exists dst_cmp;
+create table if not exists dst_cmp 
+( dst_id    int(10)      not null,  -- cmp_id of the distributor
+  cmp_id    int(10)      not null,  -- cmp_id of the customer
+  unique index (dst_id, cmp_id)
+);
+
+-- --------------------------------------------------------
+-- places where trays are dropped of and picked up
+-- --------------------------------------------------------
+drop table if exists sites;
+create table if not exists sites 
+( site_id   int(10)      not null auto_increment,
+  active    int(1)       not null default '1',
+  name      varchar(255) not null,
+  address   varchar(255) not null,
+  city      varchar(255) not null,
+  state     varchar(2)   not null,
+  zip       varchar(5)   not null,
+  fax       varchar(10)  not null,
+  unique index (name),
+  primary key (site_id)
+);
+
+-- --------------------------------------------------------
+-- Regions - sites belong to regions
+-- --------------------------------------------------------
+drop table if exists regions;
+create table if not exists regions 
+( reg_id    int(10)      not null auto_increment,
+  name      varchar(255) not null,
+  city      varchar(255) not null,
+  state     varchar(2)   not null,
+  unique index (name),
+  primary key (reg_id)
+);
+
+-- --------------------------------------------------------
+-- Site <> Regions map
+-- A site can be in many regions
+-- --------------------------------------------------------
+drop table if exists site_region;
+create table if not exists site_region
+( site_id    int(10)      not null,
+  reg_id     int(10)      not null,
+  unique index (site_id, reg_id)
+);
+
+-- --------------------------------------------------------
+-- borrowers of trays: individuals at sites where trays
+-- are dropped off and picked up.
+-- --------------------------------------------------------
+drop table if exists clients;
+create table if not exists clients 
+( cli_id    int(10)      not null auto_increment,
+  active    int(1)       not null default 1,
+  fname     varchar(255) not null default '',
+  lname     varchar(255) not null default '',
+  uname     varchar(36)  not null default '',
+  pwd       varchar(36)  not null default '',
+  email     varchar(255) not null default '',
+  phone     varchar(25)  not null default '',
+  sms       varchar(25)  not null default '',
+  perm      varchar(80)  not null default '',
+  primary key (cli_id)
+);
+
+-- --------------------------------------------------------
+-- Client <> Sites map
+-- A client might work at multiple sites, we assume that
+-- billing can be resolved by site.
+-- --------------------------------------------------------
+drop table if exists cli_site;
+create table if not exists cli_site 
+( cli_id    int(10)      not null,
+  site_id   int(10)      not null,
+  unique index (cli_id, site_id)
+);
+
+-- --------------------------------------------------------
+-- A group of users that share a set of trays and cases
+-- --------------------------------------------------------
+drop table if exists teams;
+create table if not exists teams 
+( team_id   int(10)      not null auto_increment,
+  name      varchar(255) not null,
+  region    varchar(40)  not null default '',
+  state     varchar(3)   not null,
+  cmp_id    int(10)      not null default 0,    -- teams are owned by ONE company or distributor
+  head_id   int(10)      not null default 0,    -- user responsible for the team
+  primary key (team_id)
+);
+
+-- --------------------------------------------------------
+drop table if exists doctors;
+create table if not exists doctors 
+( doc_id    int(10)      not null auto_increment,
+  active    int(1)       not null default '1',
+  name      varchar(255) not null,
+  unique index (name),
+  primary key (doc_id)
+);
+
+-- --------------------------------------------------------
+-- Doctor <> Sites map
+-- A doctor can work at many sites
+-- --------------------------------------------------------
+drop table if exists doc_site;
+create table if not exists doc_site 
+( doc_id    int(10)      not null,
+  site_id   int(10)      not null,
+  unique index (doc_id, site_id)
+);
+
+-- --------------------------------------------------------
+-- items that trays can contain.
+-- --------------------------------------------------------
+drop table if exists instruments;
+create table if not exists instruments 
+( inst_id   int(10)       not null auto_increment,
+  name      varchar(255)  not null,                          
+  partno    varchar(255)  not null,
+  unique index (partno),
+  primary key (inst_id)
+);
+
+-- --------------------------------------------------------
+-- Trays 
+-- --------------------------------------------------------
+drop table if exists trays;
+create table if not exists trays 
+( tray_id   int(10)      not null auto_increment,
+  name      varchar(255) not null,                   -- tray specific name e.g. T27
+  cmp_id    int(10)      not null,                   -- owner of the tray, ultimate owner (not distributor)
+  team_id   int(10)      not null,                   -- the team responsible for the tray
+
+                                                ---- dynamic attributes (change based on use)
+  atnow     varchar(20)  not null default 'unk',     -- 'usr', 'site', 'stor', unk'       
+  usr_id    int(10)      not null default 0,         -- when a user picks up, they are in possession
+  site_id   int(10)      not null default 0,         -- current site with possession of the tray
+  stor_id   int(10)      not null default 0,         -- company locations that store trays 
+  
+  
+  loan_team int(10)      not null default 0,         -- the team the tray is currently loaned to
+  
+  -- remove status? 
+  -- status    varchar(25)  not null default '',        -- current status of the tray: open, scheduled, loaned, ???
+  
+  primary key (tray_id)
+);
+
+-- --------------------------------------------------------
+-- The history of tray's dropped at storage. 
+-- --------------------------------------------------------
+drop table if exists h_traystor;
+create table if not exists h_traystor 
+( tray_id   int(10)      not null,
+  stor_id   int(10)      not null default 0,         -- 0 means the comany address
+  usr_id    int(10)      not null default 0,         -- logged in user that made the change
+  dttm      datetime     not null default '0/0/0'  -- date/time of change
+);
+
+-- --------------------------------------------------------
+-- The actual contents of a specific tray (current)
+-- --------------------------------------------------------
+drop table if exists traycont;
+create table if not exists traycont 
+( tray_id   int(10)      not null,
+  inst_id   int(10)      not null,
+  quant     int(4)       not null default 1,
+  state     varchar(20)  not null default 'p'     -- Present, Missing, Removed, Broken, Spent
+  cmt       varchar(255) not null default ''      -- special information about this instrument for this tray
+);
+
+-- --------------------------------------------------------
+-- History of tray transfers to another team. Assumes
+-- that the tray is returned when it's picked up
+-- at the end of a case. 
+-- --------------------------------------------------------
+drop table if exists traytrans;
+create table if not exists traytrans 
+( tran_id   int(10)      not null auto_increment,
+  tray_id   int(10)      not null,
+  to_team   int(10)      not null,                   -- the team borrowing the tray
+  from_usr  int(10)      not null default 0,         -- 0 if pending (any team member can drop or pickup)
+  to_usr    int(10)      not null default 0,         -- 0 if pending (any team member can receive or release)
+  case_id   int(10)      not null,                   -- the case that requires the tray
+  status    varchar(25)  not null default '',        -- pending, delivered, overdue, complete, ...
+  dttm      datetime     not null default '0/0/0',   -- date/time of loan
+  cmt       varchar(255) not null default '',
+  primary key (tran_id)
+);
+
+-- --------------------------------------------------------
+-- The history of tray content changes. 
+-- If the change occurs at an assign, then the asgn_id is
+-- non-zero. 
+-- --------------------------------------------------------
+drop table if exists h_traycont;
+create table if not exists h_traycont 
+( asgn_id   int(10)      not null default 0,       -- after the tray returns from an assignment, the contents may have changed
+  tray_id   int(10)      not null,
+  inst_id   int(10)      not null,
+  quant     int(4)       not null default 1,
+  state     varchar(20)  not null default 'p',     -- Missing, Broken, Spent
+  cmt       varchar(255) not null default ''       -- description of change from assignment, or other source.
+);
+
+-- --------------------------------------------------------
+-- Events that require a set of trays, a specific medical
+-- procedure ordered by a specific doctor at a specific location
+-- --------------------------------------------------------
+drop table if exists cases;
+create table if not exists cases 
+( case_id   int(10)      not null auto_increment,
+  team_id   int(10)      not null default 0,         -- team assigned to case (only one team on a case)
+  doc_id    int(10)      not null default 0,         -- doctor performing procedure
+  proc_id   int(10)      not null default 0,         -- procedure
+  site_id   int(10)      not null default 0,         -- site where the trays are dropped
+  status    varchar(40)  not null default '',        -- ???
+  dttm      datetime     not null default '0/0/0',   -- date/time of procedure
+  cmt       varchar(255) not null default '',
+  primary key (case_id)
+);
+
+-- --------------------------------------------------------
+-- A case requires a set of 1 or more of trays
+-- Every instance of a tray being loadned to a client,
+-- actual or pending
+-- on_insert, update current tray owner, reservations, ...
+-- --------------------------------------------------------
+drop table if exists assigns;
+create table if not exists assigns 
+( asgn_id   int(10)      not null auto_increment,
+  case_id   int(10)      not null,
+  tray_id   int(10)      not null,
+  
+  do_usr    int(10)      not null default 0,     -- 0 if pending (any team member can drop or pickup)
+  pu_usr    int(10)      not null default 0,     -- 0 if pending (any team member can drop or pickup)
+  cli_nm    varchar(64)  not null default '',    -- the name entered in the drop off signature field
+  
+  do_dttm   datetime     not null,               -- scheduled or actual
+  pu_dttm   datetime     not null,               -- scheduled or actual
+  status    varchar(25)  not null default '',    -- pending, overdue or complete
+  cmt       varchar(255) not null default '',
+  primary key (asgn_id)
+);
+
+-- --------------------------------------------------------
+-- a medical procedure requiring a set of instruments
+-- a user defines procs based on the instruments and
+-- surgeries needed for their sites and doctors.
+-- the system can then search for the minimum set of trays
+-- needed to satisfy a proc
+-- --------------------------------------------------------
+drop table if exists procs;
+create table if not exists procs 
+( proc_id   int(10)       not null auto_increment,
+  name      varchar(255)  not null,
+  primary key (proc_id)
+);
+
+-- --------------------------------------------------------
+-- maps the instruments required for a proc
+-- --------------------------------------------------------
+drop table if exists procinsts;
+create table if not exists procinsts 
+( proc_id   int(10)      not null,
+  inst_id   int(10)      not null,
+  quant     int(4)       not null default 1,
+  unique index (proc_id, inst_id)
+);
+
+-- --------------------------------------------------------
+-- When a user or a client requests a password change
+-- --------------------------------------------------------
+drop table if exists pwdresets;
+create table if not exists pwdresets
+( rst_id    int(10)      not null auto_increment,
+  id        int(10)      not null,                  -- the primary key of the user typ
+  typ       int(1)       not null,                  -- which kind of user
+  status    varchar(20)  not null default 'new',
+  code      varchar(25)  not null,
+  dttm      datetime     not null,
+  primary key (rst_id)
+);
+
+-- --------------------------------------------------------
+-- System events
+--
+--  u_id = '1234'            // the user id who is logged in when the event happened.
+--  name = 'assign.pu_date'  // each event has it's own name
+--  info = 'from=2014-06-22 to=2014-06-23'
+--
+--  u_id = '0'              
+--  name = 'login.failure'  
+--  info = 'user=testuser'
+-- --------------------------------------------------------
+drop table if exists sevents;
+create table if not exists sevents
+( evt_id    int(10)        not null auto_increment,
+  u_id      int(10)        not null,                  -- the primary key of the user typ
+  name      varchar(20)    not null,                  -- which event happened
+  item      varchar(512)   not null,                  -- information for each event
+  from      varchar(512)   not null,                  -- information for each event
+  to        varchar(512)   not null,                  -- information for each event
+  dttm      datetime       not null,                  -- the dttm that the event happened
+  primary key (evt_id)
+);
+
+-- ----------------------------------------------------------------------------------
+-- Commands to build database
+-- ----------------------------------------------------------------------------------
+-- create database athena;
+-- use athena;
+-- GRANT ALL ON athena.* TO 'athena'@'localhost' identified by 'abcd1234';
+-- ----------------------------------------------------------------------------------
 
--- Dump completed on 2014-08-05 16:48:14
