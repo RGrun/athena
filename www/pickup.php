@@ -35,7 +35,7 @@
 	
 	//print sites tables
 	//for dropoff page: show only trays related to users team and in storage or unknown
-	$sql = "SELECT * FROM trays WHERE (team_id='$usersTeamId' OR loan_team='$usersTeamId') AND (atnow='usr' OR atnow='site')";
+	$sql = "SELECT * FROM trays WHERE (team_id='$usersTeamId' OR loan_team='$usersTeamId')";//" AND (atnow='usr' OR atnow='site')";
 	
 	$result = $worker->query($sql);
 	

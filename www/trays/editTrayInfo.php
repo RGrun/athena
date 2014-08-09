@@ -90,22 +90,22 @@
 			if($selectedMethod == "cmp_id") {
 				$company = $worker->findCompany($currentData, "name");
 				echo "$company <br/>";
-				echo "<p>$companyForm</p>";
+				echo "$companyForm";
 			} elseif(($selectedMethod == "team_id") || $selectedMethod == "loan_team") {
 				$team = $worker->findTeam($currentData, "name");
 				echo "$team <br />";
-				echo "<p>$teamForm</p>";
+				echo "$teamForm";
 			} elseif($selectedMethod == "site_id") {
 				$site = $worker->findSite($currentData, "name");
 				echo "$site <br/>";
-				echo "<p>$siteForm</p>";
+				echo "$siteForm";
 			} elseif($selectedMethod == "atnow") {
 				if($currentData == "usr") $currentData = "With user";
 				if($currentData == "site") $currentData = "At site";
 				if($currentData == "stor") $currentData = "In storage";
 				if($currentData == "unk") $currentData = "Unknown";
 				echo $currentData;
-				echo "<p>$statusForm</p>";
+				echo "$statusForm";
 			} elseif($selectedMethod == "stor_id") {
 				echo $currentData;
 				echo "$storageForm";

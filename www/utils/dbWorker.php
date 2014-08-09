@@ -222,7 +222,7 @@
 				
 		//creative functions
 		
-		public function createSelector($requestTable, $field, $nameOfId, $pending = false, $alt = false) {
+		public function createSelector($requestTable, $field, $nameOfId, $pending = false, $alt = false, $storage = null) {
 		
 			$salt = "";
 			if($alt == true) $salt = "2";
@@ -235,6 +235,13 @@
 			
 			if($pending == true) $selector .= "<option value='Pending'>Pending</option>";
 			if($requestTable == "teams") $selector .= "<option value='0'>None</option>";
+			
+			if($storage != null) {
+			
+				$stor = $this->findStorage($storage, "name");
+				$selector .= "<option value='stor$storage'>$stor</option>";
+			
+			}
 			
 			while($row = mysqli_fetch_array($result)) {
 				$selector .= "<option value='$row[1]'>$row[0]</option>";
@@ -259,8 +266,8 @@
 			"<option disabled>--Trays--</option>";
 			
 			$sqlPart = "";
-			if($method == "dropoff") $sqlPart = "(atnow='stor' OR atnow='unk')";
-			elseif($method == "pickup") $sqlPart = "(atnow='usr' OR atnow='site')";
+			if($method == "dropoff") $sqlPart = "(atnow='usr' OR atnow='unk')";
+			elseif($method == "pickup") $sqlPart = "(atnow='stor' OR atnow='site' OR atnow='unk')";
 			
 			$sql = "SELECT tray_id, name FROM trays WHERE (team_id='$usersTeam' OR loan_team='$usersTeam') AND $sqlPart";
 			
@@ -310,7 +317,8 @@
 			$storage = $this->findStorage($stor_id, "name");
 			
 			//in storage or unknown location trays only
-			if($atnow == "usr" || $atnow == "site") return null;
+			if($atnow == "site" || $atnow == "stor") return null;
+			//$atnow == "usr" || $atnow == "unk"
 		
 			if($loanTeam == null) $loanTeam = "None";
 		
@@ -343,7 +351,7 @@
 			"<tr><td><em>Loaned To: </em></td><td>$loanTeam</td></tr>" .
 			"<tr><td><em>Status: </em></td><td>$status</td></tr>" .
 			"<tr><td><em>Stored At: </em></td><td>$storage</td></tr>" .
-			"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Drop off</a></td>" .
+			"<tr><td><a href='dropoffTray.php?tid=$tray_id'>View Details/Drop off</a></td>" .
 			"<td>$loan</td></tr>" .
 			"</table>";
 						
@@ -366,7 +374,7 @@
 			$storage = $this->findStorage($stor_id, "name");
 			
 			//in user-held or site-held location trays only
-			if($atnow == "stor" || $atnow == "unk") return null;
+			if($atnow == "usr") return null;
 		
 			if($loanTeam == null) $loanTeam = "None";
 		
@@ -399,7 +407,7 @@
 			"<tr><td><em>Loaned To: </em></td><td>$loanTeam</td></tr>" .
 			"<tr><td><em>Status: </em></td><td>$status</td></tr>" .
 			"<tr><td><em>Stored At: </em></td><td>$storage</td></tr>" .
-			"<tr><td><a href='viewTrayDetail.php?tid=$tray_id'>View Details/Drop off</a></td>" .
+			"<tr><td><a href='pickupTray.php?tid=$tray_id'>View Details/Pick up</a></td>" .
 			"<td>$loan</td></tr>" .
 			"</table>";
 						

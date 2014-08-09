@@ -19,26 +19,6 @@
 	
 	$_SESSION['currentTrayId'] = $currentTrayId;
 	
-	//mechanisim for setting the tray's new status
-	if(isset($_POST['confirm'])) {
-	
-		$clientName = $_POST['newName'];
-	
-		if($pickupDropoff == "Pickup") {
-			$sql = "UPDATE trays SET status='Returned' WHERE tray_id='$currentTrayId'";
-			$worker->query($sql);
-			//echo $sql;
-			header("Location: landing.php");
-		} else if($pickupDropoff == "Dropoff") {
-			$sql = "UPDATE trays SET status='Loaned' WHERE tray_id='$currentTrayId'";
-			$worker->query($sql);
-			$sql = "UPDATE assigns SET cli_nm='$clientName' WHERE tray_id='$currentTrayId'";
-			$worker->query($sql);
-			//echo $sql;
-			header("location: landing.php");
-		}
-	
-	}
 	
 	$sql = "SELECT * FROM trays WHERE tray_id='$currentTrayId'";
 	
@@ -46,17 +26,43 @@
 		$row = mysqli_fetch_assoc($result);
 		
 		extract($row);
-		
-		echo "<h5>Please ensure this information is correct, then input your name in the box below.</h5>";
 
+		$siteId = null;
+		
+		if(isset($_SESSION['destIsStorage'])) $destIsStorage = $_SESSION['destIsStorage'];
+		else $destIsStorage = false;
+		
+		if(isset($_POST['newsites'])) $siteId = $_POST['newsites'];
+		if($pickupDropoff == "dropoff" && preg_match('/stor/', $siteId)) {
+			$storId = (int) substr($siteId, 4);
+			$dest = $worker->findStorage($storId, "name");
+			$destIsStorage = true;
+			$_SESSION['destIsStorage'] = $destIsStorage;
+		} else if ($pickupDropoff == "dropoff") {
+			$dest = $worker->findSite($siteId, "name");
+		} else if($pickupDropoff == "pickup") {
+			$dest = "";
+		}
+		
+		if ($destIsStorage) echo "<h5>Please ensure this information is correct.</h5>";
+		else echo "<h5>Please ensure this information is correct, then input your name in the box below.";
 		
 		echo "<h2>Tray $pickupDropoff</h2>";
 		
+		if($pickupDropoff == "dropoff") echo "<h2>Destination: $dest </h2>";
 		
 		$company = $worker->findCompany($cmp_id, "name");
 		$team = $worker->findTeam($team_id, "name");
 		$site = $worker->findSite($site_id, "name");
 		$loanTeam = $worker->findTeam($loan_team, "name");
+		$storage = $worker->findStorage($stor_id, "name");
+		
+		if($loanTeam == null) $loanTeam = "None";
+		
+		if($atnow == "usr") $status = "With user";
+		if($atnow == "site") $status = "At site";
+		if($atnow == "stor") $status = "In storage";
+		if($atnow == "unk") $status = "Unknown";
 		
 		$table = "<table>" .
 		"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
@@ -65,6 +71,7 @@
 		"<tr><td><em>Responsible Team:</em></td><td>$team</td></td></tr>" .
 		"<tr><td><em>Current Location</em></td><td>$site</td></tr>" .
 		"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
+		"<tr><td><em>Stored At: </em></td><td>$storage</td></tr>" .
 		"<tr><td><em>Status</em></td><td>$status</td></tr>" .
 		"</table>";
 		
@@ -105,13 +112,41 @@
 			"<input type='hidden' name='confirm' value='1' />" .
 			"<input id='proceed' type='submit' value='Proceed' disabled /> </form>";
 			
-			if ($pickupDropoff == "Pickup") echo $pickupForm;
-			else if($pickupDropoff== "Dropoff") echo $dropoffForm;
+			if ($pickupDropoff == "pickup" || $destIsStorage == true) echo $pickupForm;
+			else if($pickupDropoff== "dropoff") echo $dropoffForm;
 			
 			
 		} else {
 			echo "Database connection error.";
 		}
+	}
+	//echo $destIsStorage;
+	//mechanisim for setting the tray's new status
+	if(isset($_POST['confirm'])) {
+	
+		if(isset($_POST['newName'])) $clientName = $_POST['newName'];
+	
+		if($pickupDropoff == "pickup") {
+			$sql = "UPDATE trays SET atnow='usr' WHERE tray_id='$currentTrayId'";
+			$worker->query($sql);
+			//echo $sql;
+			header("Location: pickup.php");
+		} else if($destIsStorage == true) {
+			$sql = "UPDATE trays SET atnow='stor' WHERE tray_id='$currentTrayId'";
+			$worker->query($sql);
+			//$sql = "UPDATE assigns SET cli_nm='$clientName' WHERE tray_id='$currentTrayId'";
+			//$worker->query($sql);
+			//echo $sql;
+			$_SESSION{'destIsStorage'} = null;
+			header("Location: dropoff.php");
+		} else if ($destIsStorage == false) {
+			$sql = "UPDATE trays SET atnow='site' WHERE tray_id='$currentTrayId'";
+			$worker->query($sql);
+			//log signature name in database
+			//echo $sql;
+			header("Location: dropoff.php");
+		}
+	
 	}
 		
 		$htmlUtils->makeFooter();
