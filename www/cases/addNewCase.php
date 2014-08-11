@@ -43,7 +43,6 @@
 		
 	$dateTime = $worker->makeDateTimeSelect();
 	
-	//time field not currently hooked up
 	$form = "<form action='addNewCase.php' method='post'>" .
 	"New Case&#39;s Team: $teamSelector <br/>" .
 	"New Case&#39;s Doctor: $doctorSelector <br/>" .

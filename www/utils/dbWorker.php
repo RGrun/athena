@@ -233,7 +233,7 @@
 			
 			$selector = "<select name='new$requestTable" . $salt . "' size='1'>";
 			
-			if($pending == true) $selector .= "<option value='Pending'>Pending</option>";
+			if($pending == true) $selector .= "<option value='0'>Pending</option>";
 			if($requestTable == "teams") $selector .= "<option value='0'>None</option>";
 			
 			if($storage != null) {
@@ -655,19 +655,18 @@
 					$doc = $this->findDoctor($doc_id, "name");
 					$procedure = $this->findProcedure($proc_id, "name");
 					$siteName = $this->findSite($site_id, "name");
-					
-					$dttm = $this->checkTime($dttm);
 							
 					$caseTable = "<table>" .
-					"<tr><td><em>Case ID</em></td><td>$case_id</td></tr>" .
-					"<tr><td><em>Assigned Team</em></td><td>$team</td></tr>" .
-					"<tr><td><em>Doctor</em></td><td>$doc</td></tr>" .
-					"<tr><td><em>Procedure</em></td><td>$procedure</td></tr>" .
-					"<tr><td><em>Site</em></td><td>$siteName</td></tr>" .
-					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
-					"<tr><td><em>Time</em></td><td>$dttm</td></tr>" .
-					"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
-					"<tr><td><a href='caseInspector.php?complete=1&cid=$case_id'>Mark as Complete</a></td></tr>" .
+					"<tr><td><em>Case ID:</em></td><td>$case_id</td></tr>" .
+					"<tr><td><em>Assigned Team:</em></td><td>$team</td></tr>" .
+					"<tr><td><em>Doctor:</em></td><td>$doc</td></tr>" .
+					"<tr><td><em>Procedure:</em></td><td>$procedure</td></tr>" .
+					"<tr><td><em>Site:</em></td><td>$siteName</td></tr>" .
+					"<tr><td><em>Status:</em></td><td>$status</td></tr>" .
+					"<tr><td><em>Time Created:</em></td><td>$dttm</td></tr>" .
+					"<tr><td><em>Comment:</em></td><td>$cmt</td></tr>" .
+					"<tr><td><a href='reservations.php?complete=1&cid=$case_id'>Mark as Complete</a></td>" .
+					"<td><a href='addTrays.php?cid=$case_id'>Add/View Trays</a></td></tr>" .
 					"</table>";
 						
 					echo "<div class='caseTray'>$caseTable</div>";
@@ -724,7 +723,7 @@
 					"<tr><td><em>Status</em></td><td>$status</td></tr>" .
 					"<tr><td><em>Time</em></td><td>$dttm</td></tr>" .
 					"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
-					"<tr><td><a href='caseInspector.php?pending=1&cid=$case_id'>Mark as Pending</a></td></tr>" .
+					"<tr><td><a href='reservations.php?pending=1&cid=$case_id'>Mark as Pending</a></td></tr>" .
 					"</table>";
 						
 					echo "<div class='completed'>$caseTable</div>";
@@ -1045,11 +1044,8 @@
 			return $form;
 		}
 		
-		public function makeDateTimeSelect($alt = false) {
-		
-			$salt = "";
+		public function makeDateTimeSelect($salt = "") {
 			
-			if ($alt == true) $salt = "2";
 			
 			$yearSelect = "<select id='dateTime' name='newYear$salt'>";
 			
@@ -1107,6 +1103,35 @@
 			if(time() > strtotime($timeStamp)) return "<span class='error'>$timeStamp</span>"; // < 24 hours from now
 			else if($date <= $oneDayFromNow && time() < $date) return "<span class='warning'>$timeStamp</span>";
 			else return $timeStamp;
+		}
+		
+		//NOT USED CURRENTLY
+		public function makeTrayCheckboxes() {
+			//This function creates a form with checkboxes for each tray
+			//used in addTrays.php
+			$sql = "SELECT tray_id, name FROM trays";
+			
+			$result = $this->query($sql);
+			
+			$form = "<form method='post' action='addTrays2.php'>";
+			
+			$form .= "<h2>Add Trays to Reservation: </h2>";
+			
+			$counter = 0;
+			while($row = mysqli_fetch_array($result)) {
+				if($counter == 0) $salt = "";
+				$dateTime = $this->makeDateTimeSelect($salt);
+				$form .= "<label><input type='checkbox' name='newTray[]' value='$row[0]'>$row[1] </label> <br/>";
+				$form .= "$dateTime <br/>";
+				
+				$counter++;
+			}
+			
+			$form .= "<input type='submit' value='Commit Reservation'/>";
+		
+			$form .= "</form>";
+			
+			return $form;
 		}
 		
 	}

@@ -1,15 +1,20 @@
 <?php
 
-	//addNewAssignment.php
+	//newAssignment.php
+	//This file is for automatically generating new assignments
+	//when a new tray is added to the case in the $_GET var
 	
-	require_once "includes.php";
+	require_once $_SERVER['DOCUMENT_ROOT'] . "/athena/www/utils/htmlUtils.php";
+	require_once $_SERVER['DOCUMENT_ROOT'] . "/athena/www/utils/dbWorker.php";
 	
 	$htmlUtils = new htmlUtils();
 	$worker = new dbWorker();
 	
 	$htmlUtils->makeScriptHeader();
+	
+	$currentCase = $_GET['cid'];
 
-	if(isset($_POST['newcases'])) {
+	if(isset($_POST['newtrays'])) {
 	
 		extract($_POST);
 		
@@ -22,20 +27,18 @@
 		if($puDate == "1999-11-30 00:00:00") $puDate = "0000-00-00 00:00:00";
 		
 		$sql = "INSERT INTO assigns (case_id, tray_id, do_usr, pu_usr, do_dttm, pu_dttm, status, cmt)" .
-		"VALUES ('$newcases', '$newtrays', '$newusers', '$newusers2', '$doDate', '$puDate', '$newStatus', '$newComment')";
+		"VALUES ('$currentCase', '$newtrays', '$newusers', '$newusers2', '$doDate', '$puDate', '$newStatus', '$newComment')";
 
 		$worker->query($sql);
 		$worker->closeConnection();
 		
 		//echo $sql;
-		header( "Location: assignments.php" );
+		header( "Location: addTrays.php?cid=$currentCase" );
 		die();
 	}
 	
+	echo "<h2>Assign new tray to case:</h2>";
 	
-	echo "<h2>Input new assignment data:</h2>";
-	
-	$caseSelector = $worker->createSelector("cases", "case_id", "case_id");
 	$traySelector = $worker->createSelector("trays", "name", "tray_id");
 	$doUserSelector = $worker->createSelector("users", "uname", "usr_id", true);
 	$puUserSelector = $worker->createSelector("users", "uname", "usr_id", true, true);
@@ -47,18 +50,13 @@
 	"<option value='Complete'>Complete</option>" .
 	"</select>";
 	
-	$kindSelector = "<select name='newKind' size='1'>" . 
-	"<option value='1'>Dropoff</option>" .
-	"<option value='2'>Pickup</option>" .
-	"</select>";
-	
 			
 	$dateTime = $worker->makeDateTimeSelect();
 	$dateTime2 = $worker->makeDateTimeSelect("2");
 
-	$form = "<form action='addNewAssignment.php' method='post'>" .
-	"New Assignment&#39;s Case: $caseSelector <br/>" .
-	"New Assignment&#39;s Tray: $traySelector <br/>" .
+	$form = "<form action='newAssignment.php?cid=$currentCase' method='post'>" .
+	"Current Case: $currentCase <br/>" .
+	"Select Tray: $traySelector <br/>" .
 	"User to do Dropoff: $doUserSelector <br />" .
 	"User to do Pickup: $puUserSelector <br />" .
 	"<br/>Time of Dropoff: $dateTime <br />" .

@@ -21,7 +21,7 @@
 	
 		extract($_POST);
 		
-		$unixTime = mktime($newHour, $newMin, 0, $newMonth, $newDay, $newYear);
+		$unixTime = time();
 		
 		$date = date("Y-m-d H:i:s", $unixTime);
 		
@@ -32,7 +32,7 @@
 		$worker->query($sql);
 		$worker->closeConnection();
 		
-		header( "Location: caseInspector.php" );
+		header( "Location: reservations.php" );
 		die();
 	}
 	

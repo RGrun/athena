@@ -18,11 +18,13 @@
 		$newTeam = $_POST['newteams'];
 		$sql = "UPDATE trays SET loan_team='$newTeam' WHERE tray_id='$currentTray'";
 		$worker->query($sql);
-		header("Location: trayInspector.php?mtd=$method");
+		if($method == "dropoff") header("Location: dropoff.php");
+		else header("Location: pickup.php");
 	} else if($action == "return") {
 		$sql = "UPDATE trays SET loan_team='0' WHERE tray_id='$currentTray'";
 		$worker->query($sql);
-		header("Location: trayInspector.php?mtd=$method");
+		if($method == "dropoff") header("Location: dropoff.php");
+		else header("Location: pickup.php");
 	}
 	
 	
