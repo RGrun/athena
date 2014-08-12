@@ -1,5 +1,9 @@
 			
+			* {
 			
+			background: none repeat scroll 0% 0% transparent;
+			
+			}
 			
 			table {
 				
@@ -7,18 +11,42 @@
 				}
 			
 			body {
-				font-family: arial, sans-serif;
+				font-family: helvetica, sans-serif;
+				margin: 0;
+				background:  #f3f3f3;
 			}
 			
-			.header a {
+			.dashboard a {
 				text-decoration: none;
 				color: white;
 			}
 			
-			.header h1 {
+			
+			.dashboard ul {
+				padding: 0;
+			
+			}
+			
+			.dashboard {
+				margin-bottom: 10px;
+				/*background: #33CC33;*/
+				width: 100%;
+				background: linear-gradient(to bottom, #F7F7F7 0%, #D3D3D3 100%) repeat scroll 0% 0% transparent;
+			}
+			
+			#icon {
+				font-size: 20px;
+				margin-right: 8px;
+				background: linear-gradient(to bottom, #154B6C 0%, #1C688E 100%) repeat scroll 0% 0% transparent;
+				border: 1px solid #252662;
+				padding: 3px;
+				border-radius: 25px;
+			}
+			
+			.wrapper {
+				width: 960px;
 				position: relative;
-				top: 12px;
-				margin-top: 0;
+				margin: auto;
 			}
 			
 			.footer a {
@@ -46,22 +74,129 @@
 			}
 			
 			.completed div{
-			box-shadow: 5px 2px 5px #888;
+				box-shadow: 5px 2px 5px #888;
 			
 			}
 			
-			.header {
-				margin-bottom: 10px;
-				background: #33CC33;
-				
+			#header {
+				padding-top: 20px;
+				padding-bottom: 20px;
+				height: 40px;
+				position: relative;
+			
+			}
+			
+			#logo {
+				height: 40px;
+
+			
 			}
 			
 			.headernav {
-				background: #666633;
+				background: linear-gradient(to bottom, #67C2E7 0%, #27A7DA 1%, #252661 100%) repeat scroll 0% 0% transparent;
 				color: white;
+				height: 40px;
+			}
+			
+			.headernav ul {
+				position: relative;
+				top:5px;
+				border: 0;
+				margin-top: 0;
+				margin-bottom: 0;
+				padding: 0;
+				box-shadow: none;
+				height: 100%;
+
 			}
 
-			.headernav li { display: inline; }
+			.headernav li { 
+
+				/* border-radius: 25px; */
+				
+				border: 0;
+				vertical-align: middle;
+				height: auto;
+				margin: 0;
+				box-shadow: 0;
+				display: inline; 
+				padding: 15px 35px 15px 45px;
+				position: relative;
+				bottom: 2px;
+				cursor: pointer;
+				width: auto;
+				max-width: 192px;
+				font-weight: 500;
+				text-shadow: 1px 1px 2px black;
+				font-size: 15px;
+				text-align: center;
+				
+			}
+			
+			.extras {
+				position: absolute;
+				top: -20px;
+				right: 0px;
+				font-size: 12px;
+				background: linear-gradient(to bottom, #67C2E7 0%, #27A7DA 1%, #252661 100%) repeat scroll 0% 0% transparent;
+				padding: 10px;
+				height: 20px;
+				border-radius: 0px 0px 10px 10px;
+				
+				display: inline;
+			
+			}
+			
+			.extras ul li {
+				display: inline;
+				color: white;
+				list-style-type: none;
+				position: relative;
+				top: -18px;
+				margin-right: 10px;
+				
+			}
+			
+			.menulink {
+				display: inline;
+			
+			}
+			
+			.username {
+				position: absolute;
+				top: -20px;
+				right: 180px;
+				font-size: 12px;
+				background: linear-gradient(to bottom, #67C2E7 0%, #27A7DA 1%, #252661 100%) repeat scroll 0% 0% transparent;
+				padding: 10px;
+				height: 20px;
+				border-radius: 0px 0px 10px 10px;
+				
+				display: inline;
+			
+			}
+			
+			#username {
+				color: white;
+				position: relative;
+				font-weight: bold;
+				padding-bottom: 5px;
+				top: 3px;
+				margin: 5px;
+			}
+			
+			#extraicon {
+				font-size: 20px;
+				margin-top: 10px;
+				margin-right: 5px;
+				padding: 3px;
+			}
+			
+			.headernav li:hover{
+				
+				background: linear-gradient(to bottom, #252762 0%, #27A8DB 99%, #67C2E7 100%) repeat scroll 0% 0% transparent;
+				border-radius: 25px;
+			}
 			
 			.footer  {
 				margin-top: 10px;
@@ -81,6 +216,21 @@
 			.loan {
 			
 				color:  #CC7A00;
+			}
+			
+			.main {
+				margin-left: auto;
+				margin-right: auto;
+				width: 70%;
+				text-align: center;
+			}
+			
+			.main div {
+			
+				width:70%;
+				margin-left: auto;
+				margin-right: auto;
+			
 			}
 			
 			.mod {

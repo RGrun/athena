@@ -34,24 +34,43 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta content="utf-8" http-equiv="encoding">
 		<title>Athena System</title>
 		<link rel="stylesheet" type="text/css" href="/athena/www/styles.css">
 		<script src='/athena/www/helperFunctions.js'></script>
 	</head>	
 	<body>
-	<div class='header'>
-		<h1>Welcome to Athena</h1>
+		<div class='dashboard'>
+		<div id='header'>
+			<div class='wrapper'>
+				<a href="landing.php">
+					<img id='logo' src="/athena/www/utils/images/athena-logo.png"/>
+				</a>
+				<div class='username'>
+					<span id='username'>User: $userStr</span>
+				</div>
+				<div class='extras'>
+					<ul>
+						<a href='/athena/www/settings.php'><li><span id='extraicon'>&#x2699;</span>Settings</li></a>
+						<a href='/athena/www/logout.php'><li><span id='extraicon'>&#x1f6aa;</span>Logout</li></a>
+					</ul>
+			</div>
+			</div>
+		</div>
 		<div class='headernav'>
-		<ul>
-			<li><a href='/athena/www/dropoff.php'>Dropoff Trays</a> | </li>
-			<li><a href='/athena/www/pickup.php'>Pickup Trays</a> | </li> 
-			<li><a href='/athena/www/reservations.php'>Reservations</a> | </li>
-			<li><a href='/athena/www/admin.php'>Admin Panel</a></li>				
-		</ul>
-		</div>
-		</div>
+			<div class='wrapper'>		
+				<ul>
+						<a href='/athena/www/dropoff.php'><li><span id='icon'>&#x21f2;</span>DROPOFF TRAYS</li></a>
+						<a href='/athena/www/pickup.php'><li><span id='icon'>&#x21f1;</span>PICKUP TRAYS</li></a>
+						<a href='/athena/www/reservations.php'><li><span id='icon'>&#x1f551;</span>RESERVATIONS</li></a>
+						<a href='/athena/www/admin.php'><li><span id='icon'>&#x26a0;</span>ADMIN PANEL</li></a>				
+				</ul>
+			</div>
+		</div>	
+		
+	</div>
 		<div class='main'>
 
 _END;
@@ -69,7 +88,7 @@ _END;
 		<title>Athena System</title>
 	</head>	
 	<body>
-		<h1>Welcome to Athena</h1>
+		<h1>ATHENA</h1>
 		<div class='main'><h3>Please enter your username and password to log in</h3>
 		<p>$loginForm</p>
 		
@@ -78,7 +97,7 @@ _END;
 			if($loggedIn) {
 				
 				echo $header;
-				echo "Current User: $userStr <br/>";
+				//echo "Current User: $userStr <br/>";
 			} else {
 				echo $notLoggedInHeader;
 				die("<p>Please log in to Athena. <br/> <br/> <a href='login.php'>Click Here</a> to log in.</p>");
@@ -120,17 +139,35 @@ _END;
 		<script src='/athena/www/helperFunctions.js'></script>
 	</head>	
 	<body onload='formatTimeSelect()'>
-	<div class='header'>
-		<h1>Welcome to Athena</h1>
+			<div class='dashboard'>
+		<div id='header'>
+			<div class='wrapper'>
+				<a href="landing.php">
+					<img id='logo' src="/athena/www/utils/images/athena-logo.png"/>
+				</a>
+				<div class='username'>
+					<span id='username'>User: $userStr</span>
+				</div>
+				<div class='extras'>
+					<ul>
+						<a href='/athena/www/settings.php'><li><span id='extraicon'>&#x2699;</span>Settings</li></a>
+						<a href='/athena/www/logout.php'><li><span id='extraicon'>&#x1f6aa;</span>Logout</li></a>
+					</ul>
+			</div>
+			</div>
+		</div>
 		<div class='headernav'>
-		<ul>
-			<li><a href='/athena/www/dropoff.php'>Dropoff Trays</a> | </li>
-			<li><a href='/athena/www/pickup.php'>Pickup Trays</a> | </li> 
-			<li><a href='/athena/www/reservations.php'>Reservations</a> | </li>
-			<li><a href='/athena/www/admin.php'>Admin Panel</a></li>				
-		</ul>
-		</div>
-		</div>
+			<div class='wrapper'>		
+				<ul>
+						<a href='/athena/www/dropoff.php'><li><span id='icon'>&#x21f2;</span>DROPOFF TRAYS</li></a>
+						<a href='/athena/www/pickup.php'><li><span id='icon'>&#x21f1;</span>PICKUP TRAYS</li></a>
+						<a href='/athena/www/reservations.php'><li><span id='icon'>&#x1f551;</span>RESERVATIONS</li></a>
+						<a href='/athena/www/admin.php'><li><span id='icon'>&#x26a0;</span>ADMIN PANEL</li></a>				
+				</ul>
+			</div>
+		</div>	
+		
+	</div>
 		<div class='main'>
 
 _END;
@@ -157,7 +194,7 @@ _END;
 			if($loggedIn) {
 				
 				echo $header;
-				echo "Current User: $userStr <br/>";
+				//echo "Current User: $userStr <br/>";
 			} else {
 				echo $notLoggedInHeader;
 				die("<p>Please log in to Athena. <br/> <br/> <a href='login.php'>Click Here</a> to log in.</p>");

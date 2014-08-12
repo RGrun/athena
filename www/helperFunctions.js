@@ -48,15 +48,8 @@
 		selections.push(totalValues.options[i].value);
 		}
 		
-	//	O('js2').innerHTML = selections.toString();
-		
-		
 		//filter all/open/loaned/scheduled trays
 		if(currentValue == 'all') showAllElements();
-		else if(currentValue == 'returned') showReturnedElements();
-		else if(currentValue == 'loaned') showLoanedElements();
-		else if(currentValue == 'scheduled') showScheduledElements();	
-		else if(currentValue == 'cases') showCaseElements();
 		//filter site trays
 		else if(currentValue.search("_class")) showSiteElement(label);
 		
@@ -133,10 +126,14 @@
 		for(x = 0; x < divs.length; x++) {
 			if(divs[x].className == siteLabel) continue;
 			if(divs[x].className == 'sitesTray') continue;
-			if((divs[x].className == 'header') 
+			if((divs[x].className == 'dashboard') 
 			|| (divs[x].className == 'main') 
 			|| (divs[x].className == 'headernav')
-			|| (divs[x].className == 'filterform' )
+			|| (divs[x].id == 'header' )
+			|| (divs[x].className == 'filterform')
+			|| (divs[x].className == 'wrapper')
+			|| (divs[x].className == 'username')
+			|| (divs[x].className == 'extras')
 			|| (divs[x].className == 'landingview')
 			|| (divs[x].className == 'footer')) continue;
 			
@@ -168,6 +165,9 @@
 			|| (divs[x].className == 'headernav')
 			|| (divs[x].className == 'filterform' )
 			|| (divs[x].className == 'landingview')
+			|| (divs[x].className == 'wrapper')
+			|| (divs[x].className == 'username')
+			|| (divs[x].className == 'extras')
 			|| (divs[x].className == 'footer')) continue;
 			
 			S(divs[x]).display = 'none';
