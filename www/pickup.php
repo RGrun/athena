@@ -49,6 +49,8 @@
 	
 	}
 	
+	echo "</div>";
+	
 	$htmlUtils->makeFooter();
 	$worker->closeConnection();
 ?>
