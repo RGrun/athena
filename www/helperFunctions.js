@@ -130,6 +130,7 @@
 			|| (divs[x].className == 'main') 
 			|| (divs[x].className == 'headernav')
 			|| (divs[x].id == 'header' )
+			|| (divs[x].className == 'pagetitle')
 			|| (divs[x].className == 'filterform')
 			|| (divs[x].className == 'wrapper')
 			|| (divs[x].className == 'username')

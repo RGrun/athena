@@ -10,6 +10,10 @@
 	
 	$htmlUtils->makeScriptHeader();
 	
+	$pageTitle = "<div class='pagetitle'><div class='wrapper'><span id='titleicon'>&#x21f1;</span><span id='title'>PICKUP TRAYS</span></div></div>";
+	
+	echo $pageTitle;
+	
 	$userStr = $_SESSION['user'];
 	$userId = $_SESSION['userId'];
 	

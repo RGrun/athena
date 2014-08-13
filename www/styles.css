@@ -43,6 +43,34 @@
 				border-radius: 25px;
 			}
 			
+			#titleicon {
+				font-size: 25px;
+				margin-right: 8px;
+				position: relative;
+				
+			}
+			
+			#title {
+			
+				position: relative;
+				
+			
+			}
+			
+			.pagetitle {
+				background: none repeat scroll 0% 0% #EBEBEB;
+				font-size: 20px;
+				text-align: left;
+				position: relative;
+				width: 142.5%;
+				padding: 15px 0px 10px;
+				font-weight: 500;
+				top: -10px;
+				left: -210px;
+				
+			}
+			
+			
 			.wrapper {
 				width: 960px;
 				position: relative;
@@ -235,8 +263,6 @@
 			}
 			
 			.main div {
-			
-				width:70%;
 				margin-left: auto;
 				margin-right: auto;
 			

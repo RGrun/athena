@@ -9,6 +9,10 @@
 	
 	$htmlUtils->makeHeader();
 	
+	$pageTitle = "<div class='pagetitle'><div class='wrapper'><span id='titleicon'>&#x26a0;</span><span id='title'>ADMIN PANEL</span></div></div>";
+	
+	echo $pageTitle;
+	
 	$menu = 
 	"<ul>
 			<li><a href='/athena/www/companies/companies.php'>Companies</a></li>

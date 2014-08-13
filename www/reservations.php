@@ -11,6 +11,11 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/athena/www/utils/htmlUtils.php";
 	$htmlUtils->makeHeader();
 	//$htmlUtils->timestampLegend();
 	
+	$pageTitle = "<div class='pagetitle'><div class='wrapper'><span id='titleicon'>&#x1f551;</span><span id='title'>RESERVATIONS</span></div></div>";
+	
+	echo $pageTitle;
+	
+	
 	$userStr = $_SESSION['user'];
 	$userId = $_SESSION['userId'];
 	
