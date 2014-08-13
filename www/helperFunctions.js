@@ -164,8 +164,12 @@
 	function showAllElements() {
 		
 		var divs = document.getElementsByTagName("DIV");	
+
 		
 		for(x = 0; x < divs.length; x++) {
+			
+			var currentId = divs[x].id;
+			if(currentId.indexOf("_class_expanded") > 0) continue;
 			S(divs[x]).display = 'block';
 		}
 	}
