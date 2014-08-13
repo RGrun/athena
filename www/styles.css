@@ -2,7 +2,6 @@
 			* {
 			
 			background: none repeat scroll 0% 0% transparent;
-			
 			}
 			
 			table {
@@ -62,7 +61,7 @@
 				font-size: 20px;
 				text-align: left;
 				position: relative;
-				width: 142.5%;
+				width: 142%;
 				padding: 15px 0px 10px;
 				font-weight: 500;
 				top: -10px;
@@ -253,6 +252,7 @@
 				margin-right: auto;
 				width: 70%;
 				text-align: center;
+				
 			}
 			
 			.main table {
@@ -288,6 +288,51 @@
 				width: 70%;
 				margin-left: auto;
 				margin-right: auto;
+			}
+			
+			.filterform {
+				margin-bottom: 10px;
+			
+			}
+			
+			.trayclass {
+				width: 50%;
+				margin-left: auto;
+				margin-right: auto;
+				margin-bottom: 10px;
+				cursor: pointer;
+				
+				border-radius: 25px;
+				background: none repeat scroll 0% 0% #EBEBEB;
+				
+				padding-left: 10px;
+				padding-right: 10px;
+				padding-bottom: 10px;
+			}
+			
+			.trayclass h2 {
+				position: relative;
+				top: -25px;
+			
+			}
+			
+			#trayarrow {
+				position: relative;
+				left: -180px;
+				top: 25px;
+				font-size: 30px;
+			}
+			
+			.expandedtrayview {
+				display: none; /*THIS IS WHERE TRAY TABLE IS DISPLAYED */
+				background: #F7F7F7;
+				border-radius: 25px;
+				padding: 10px 0px 10px 0px;
+			
+			}
+			
+			.expandedtrayview table {
+				
 			
 			}
 		

@@ -10,7 +10,7 @@
 	
 	$htmlUtils->makeScriptHeader();
 	
-	$pageTitle = "<div class='pagetitle'><div class='wrapper'><span id='titleicon'>&#x21f2;</span><span id='title'>DROPOFF TRAYS</span></div></div>";
+	$pageTitle = "<div class='pagetitle'><div class='wrapper'><span id='titleicon'>&#x21f2;</span><span id='title'>DROP OFF TRAYS</span></div></div>";
 	
 	echo $pageTitle;
 	
@@ -47,7 +47,7 @@
 		//print tables
 		while($row = mysqli_fetch_assoc($result)) {
 			
-			$worker->makeDropoffSitesTrayTables($row, $usersTeamId);
+			echo $worker->makeDropoffSitesTrayTables($row, $usersTeamId);
 		
 		}
 	

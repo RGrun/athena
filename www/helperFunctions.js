@@ -115,16 +115,35 @@
 		}
 	}
 	
+	function expand(trayId) {
+		
+		var name = "Tray " + trayId + "_class";
+		var tray = O(name);
+		
+		//does not currently work, should invert arrow when tray is selected
+		var arrow = tray.getElementsByTagName('em');
+		
+		var expandedViewName = name + "_expanded";
+		
+		var expandedView = O(expandedViewName);
+		
+		if(S(expandedView).display == 'none') { S(expandedView).display = 'block'; arrow.innerHTML = "&#9650"; }
+		else { S(expandedView).display = 'none'; arrow.innerHTML = "&#9660"; }
+	
+	}
+	
 	function showSiteElement(label) {
 	
 		showAllElements();
 	
 		var siteLabel = label + "_class";
+		var siteLabelExpanded = label + "_class_expanded";
 		
 		var divs = document.getElementsByTagName("DIV");
 		
 		for(x = 0; x < divs.length; x++) {
-			if(divs[x].className == siteLabel) continue;
+			if(divs[x].id == siteLabel) continue;
+			if(divs[x].id == siteLabelExpanded) continue;
 			if(divs[x].className == 'sitesTray') continue;
 			if((divs[x].className == 'dashboard') 
 			|| (divs[x].className == 'main') 

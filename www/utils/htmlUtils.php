@@ -62,8 +62,8 @@
 		<div class='headernav'>
 			<div class='wrapper'>		
 				<ul>
-						<a href='/athena/www/dropoff.php'><li><span id='icon'>&#x21f2;</span>DROPOFF TRAYS</li></a>
-						<a href='/athena/www/pickup.php'><li><span id='icon'>&#x21f1;</span>PICKUP TRAYS</li></a>
+						<a href='/athena/www/dropoff.php'><li><span id='icon'>&#x21f2;</span>DROP OFF TRAYS</li></a>
+						<a href='/athena/www/pickup.php'><li><span id='icon'>&#x21f1;</span>PICK UP TRAYS</li></a>
 						<a href='/athena/www/reservations.php'><li><span id='icon'>&#x1f551;</span>RESERVATIONS</li></a>
 						<a href='/athena/www/admin.php'><li><span id='icon'>&#x26a0;</span>ADMIN PANEL</li></a>				
 				</ul>
@@ -176,8 +176,8 @@ _END;
 		<div class='headernav'>
 			<div class='wrapper'>		
 				<ul>
-						<a href='/athena/www/dropoff.php'><li><span id='icon'>&#x21f2;</span>DROPOFF TRAYS</li></a>
-						<a href='/athena/www/pickup.php'><li><span id='icon'>&#x21f1;</span>PICKUP TRAYS</li></a>
+						<a href='/athena/www/dropoff.php'><li><span id='icon'>&#x21f2;</span>DROP OFF TRAYS</li></a>
+						<a href='/athena/www/pickup.php'><li><span id='icon'>&#x21f1;</span>PICK UP TRAYS</li></a>
 						<a href='/athena/www/reservations.php'><li><span id='icon'>&#x1f551;</span>RESERVATIONS</li></a>
 						<a href='/athena/www/admin.php'><li><span id='icon'>&#x26a0;</span>ADMIN PANEL</li></a>				
 				</ul>

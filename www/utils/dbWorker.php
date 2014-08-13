@@ -329,9 +329,6 @@
 			
 			$trayNameClass = "$name" . "_class";
 			
-			echo "<div class='$trayNameClass'>";
-			echo "<h2>$name</h2>";
-					
 			$fromAnotherTeam = "";
 			$method = "dropoff";
 
@@ -341,9 +338,18 @@
 				$fromAnotherTeam = "<tr><td><span class='loan'>Borrowed from another team</span></td></tr>";
 			}
 			elseif($team_id == $teamId && $loan_team != 0) $loan = "<span class='loan'>Loaned</span>";
+			
+			//stuff here always visible
+			$newView = "<div id='$trayNameClass' class='trayclass' onclick='expand($tray_id)'>";
+			$newView .= "<em id='trayarrow'>&#x25bc;</em>";
+			$newView .= "<h2>$name</h2>";
+			
+			//this stuff is hidden at first, revealed by click
+			$newView .=  "<div id='$trayNameClass" . "_expanded' class='expandedtrayview' style='display: none;'>";
+			
+			$newView .= $fromAnotherTeam;
 						
-			$trayTable = "<table>" .
-			"$fromAnotherTeam" .
+			$newView .= "<table>" .
 			"<tr><td><em>Tray ID: </em></td><td>$tray_id</td></tr>" .
 			//"<tr><td><em>Name: </em></td><td>$name</td></tr>" .
 			"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
@@ -354,10 +360,11 @@
 			"<tr><td><a href='dropoffTray.php?tid=$tray_id'>View Details/Drop off</a></td>" .
 			"<td>$loan</td></tr>" .
 			"</table>";
+			
+			$newView .= "</div></div>";
 						
-			echo "<div class='sitesTray'>$trayTable</div>";
-				
-			echo "</div>";
+			//return $newView;			
+			return "<div class='sitesTray'>$newView</div>";
 		}
 		
 		//USED IN NEWEST REV (8/8/14)
@@ -385,9 +392,6 @@
 			
 			$trayNameClass = "$name" . "_class";
 			
-			echo "<div class='$trayNameClass'>";
-			echo "<h2>$name</h2>";
-					
 			$fromAnotherTeam = "";
 			$method = "pickup";
 
@@ -397,9 +401,18 @@
 				$fromAnotherTeam = "<tr><td><span class='loan'>Borrowed from another team</span></td></tr>";
 			}
 			elseif($team_id == $teamId && $loan_team != 0) $loan = "<span class='loan'>Loaned</span>";
+			
+			//stuff here always visible
+			$newView = "<div id='$trayNameClass' class='trayclass' onclick='expand($tray_id)'>";
+			$newView .= "<em id='trayarrow'>&#x25bc;</em>";
+			$newView .= "<h2>$name</h2>";
+			
+			//this stuff is hidden at first, revealed by click
+			$newView .=  "<div id='$trayNameClass" . "_expanded' class='expandedtrayview' style='display: none;'>";
+			
+			$newView .= $fromAnotherTeam;
 						
-			$trayTable = "<table>" .
-			"$fromAnotherTeam" .
+			$newView .= "<table>" .
 			"<tr><td><em>Tray ID: </em></td><td>$tray_id</td></tr>" .
 			//"<tr><td><em>Name: </em></td><td>$name</td></tr>" .
 			"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
@@ -407,14 +420,14 @@
 			"<tr><td><em>Loaned To: </em></td><td>$loanTeam</td></tr>" .
 			"<tr><td><em>Status: </em></td><td>$status</td></tr>" .
 			"<tr><td><em>Stored At: </em></td><td>$storage</td></tr>" .
-			"<tr><td><a href='pickupTray.php?tid=$tray_id'>View Details/Pick up</a></td>" .
+			"<tr><td><a href='dropoffTray.php?tid=$tray_id'>View Details/Drop off</a></td>" .
 			"<td>$loan</td></tr>" .
 			"</table>";
+			
+			$newView .= "</div></div>";
 						
-			echo "<div class='sitesTray'>$trayTable</div>";
-				
-			echo "</div>";
-				
+			//return $newView;			
+			return "<div class='sitesTray'>$newView</div>";
 		}
 		
 		//no longer used because open is no longer a valid status for trays
