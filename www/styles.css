@@ -60,6 +60,8 @@
 				margin-top: 10px;
 				margin-bottom: 10px;
 				padding: 3px;
+				max-width: 400px;
+				word-wrap: break-word;
 			}
 			.assignment {
 				margin-top:10px;
@@ -225,6 +227,13 @@
 				text-align: center;
 			}
 			
+			.main table {
+				width: 70%;
+				margin-left: auto;
+				margin-right: auto;
+			
+			}
+			
 			.main div {
 			
 				width:70%;
@@ -242,4 +251,17 @@
 				padding: 3px;
 				}
 			
+			#casetable table{
+				width: 70%;
+				margin-left: auto;
+				margin-right: auto;
+			
+			}
+			
+			#trayview table {
+				width: 70%;
+				margin-left: auto;
+				margin-right: auto;
+			
+			}
 		
