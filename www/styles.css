@@ -6,7 +6,7 @@
 			
 			table {
 				
-				box-shadow: 5px 2px 5px #888;
+				/*box-shadow: 5px 2px 5px #888; */
 				}
 			
 			body {
@@ -83,7 +83,7 @@
 			
 			
 			table, th, td {
-				border: 1px solid black;
+			 /*	border: 1px solid black; */
 				margin-top: 10px;
 				margin-bottom: 10px;
 				padding: 3px;
@@ -314,15 +314,49 @@
 			
 			.trayclass h2 {
 				position: relative;
-				top: -25px;
+				top: -80px;
+				text-align: left;
+			}
+			
+			.icon {
+				position: relative;
+				float: left;
+				margin-right: 10px;
+			}
+			.location {
+				position: relative;
+				text-align: left;
+				top: 70px;
 			
 			}
 			
 			.trayarrow {
 				position: relative;
-				left: -180px;
-				top: 25px;
+				right: -230px;
+				top: 40px;
 				font-size: 30px;
+			}
+			
+			.loanButton {
+			
+				position: relative;
+				left: 150px;
+				top: 5px;
+			
+			}
+			
+			.dropoffButton {
+			
+				position: relative;
+				left: 160px;
+				top: 5px;
+				margin-bottom: 5px;
+			}
+			
+			.clickable {
+				position: relative;
+				top: 7px;
+			
 			}
 			
 			.expandedtrayview {
@@ -335,6 +369,18 @@
 			
 			.expandedtrayview table {
 				
+			
+			}
+			
+			.innerAssignTable {
+				background: none repeat scroll 0% 0% #EBEBEB;
+				border-radius: 25px;
+				width: 90%;
+			
+			}
+			
+			.innerAssignTable table th td {
+				border: 0;
 			
 			}
 		

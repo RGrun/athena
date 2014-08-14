@@ -222,7 +222,7 @@
 				
 		//creative functions
 		
-		public function createSelector($requestTable, $field, $nameOfId, $pending = false, $alt = false, $storage = null) {
+		public function createSelector($requestTable, $field, $nameOfId, $pending = false, $alt = false, $storage = false) {
 		
 			$salt = "";
 			if($alt == true) $salt = "2";
@@ -236,11 +236,14 @@
 			if($pending == true) $selector .= "<option value='0'>Pending</option>";
 			if($requestTable == "teams") $selector .= "<option value='0'>None</option>";
 			
-			if($storage != null) {
+			if($storage != false) {
 			
-				$stor = $this->findStorage($storage, "name");
-				$selector .= "<option value='stor$storage'>$stor</option>";
-			
+				$sql2 = "SELECT stor_id, name FROM storage";
+				$result2 = $this->query($sql2);
+				while ($row2 = mysqli_fetch_array($result2)) {
+					//$stor = $this->findStorage($row[0], "name");
+					$selector .= "<option value='stor$row2[0]'>$row2[1]</option>";
+				}
 			}
 			
 			while($row = mysqli_fetch_array($result)) {
@@ -304,7 +307,7 @@
 		}
 		
 		//USED IN NEWEST REV (8/8/14)
-		public function makeDropoffSitesTrayTables($row, $teamId) {
+		public function makeDropoffSitesTrayTables($row, $teamId, $userId) {
 			
 			$team = $this->findTeam($teamId, "name");
 			
@@ -312,7 +315,8 @@
 			
 			$company = $this->findCompany($cmp_id, "name");
 			$team = $this->findTeam($team_id, "name");
-			$site = $this->findSite($site_id, "name");
+			if ($site_id == 0) $site = 0;
+			else $site = $this->findSite($site_id, "name");
 			$loanTeam = $this->findTeam($loan_team, "name");
 			$storage = $this->findStorage($stor_id, "name");
 			
@@ -339,9 +343,34 @@
 			}
 			elseif($team_id == $teamId && $loan_team != 0) $loan = "<span class='loan'>Loaned</span>";
 			
+			//figure out time of next pending dropoff event
+			$sql = "SELECT do_dttm FROM assigns INNER JOIN trays ON trays.tray_id=assigns.tray_id" .
+			" WHERE trays.tray_id='$tray_id' AND assigns.tray_id='$tray_id' ORDER BY do_dttm ASC";
+			
+			//echo $sql;
+			
+			$result = $this->query($sql);
+			$row = mysqli_fetch_array($result);
+			
+			$closestTime = $row[0];
+			
+			$closestTime = $this->checkTime($closestTime);
+			
+			$forIcon = "site";
+			if($site_id == 0 && $stor_id == 0) {  $site = "With User";  $forIcon = "user";  }
+			else if($site_id == 0 && $stor_id != 0) { $forIcon = "storage"; }
+			
+			
+			//generate icon/location
+			$icon = $this->makeIcon($forIcon);
+			$loc = "<div class='location'>$icon Current Location: $site <br/> Until: $closestTime</div>";
+			
 			//stuff here always visible
 			$newView = "<div id='$trayNameClass' class='trayclass'>";
+
+			$newView .= "<span class='dropoffButton'><a href='dropoffTray.php?tid=$tray_id'>View Details/Drop off</a></span>";
 			$newView .= "<div class='clickable' onclick='expand($tray_id)'>"; //open clickable
+			$newView .= $loc;
 			$newView .= "<em class='trayarrow' id='arrow$tray_id'>&#x25bc;</em>";
 			$newView .= "<h2>$name</h2>";
 			$newView .= "</div>"; //close clickable
@@ -350,8 +379,19 @@
 			$newView .=  "<div id='$trayNameClass" . "_expanded' class='expandedtrayview' style='display: none;'>";
 			
 			$newView .= $fromAnotherTeam;
-						
-			$newView .= "<table>" .
+			
+			$newView .= "<br/><span class='companydata'>Belongs To: $company.$team </span>";
+			
+			$sql = "SELECT * FROM assigns WHERE tray_id='$tray_id' AND (do_usr='$userId' OR pu_usr='$userId' OR status='Pending' OR status='Overdue')";
+			
+			$result = $this->query($sql);
+			while($row = mysqli_fetch_assoc($result)) {
+	
+				$newView .= $this->makeTrayAssignments($row, $userId);
+				
+			}
+			
+			/* $newView .= "<table>" .
 			"<tr><td><em>Tray ID: </em></td><td>$tray_id</td></tr>" .
 			//"<tr><td><em>Name: </em></td><td>$name</td></tr>" .
 			"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
@@ -361,16 +401,18 @@
 			"<tr><td><em>Stored At: </em></td><td>$storage</td></tr>" .
 			"<tr><td><a href='dropoffTray.php?tid=$tray_id'>View Details/Drop off</a></td>" .
 			"<td>$loan</td></tr>" .
-			"</table>";
+			"</table>"; */
 			
-			$newView .= "</div></div>";
+			$loanButton = "<span class='loanButton'>$loan</span>";
+			
+			$newView .= "</div>$loanButton</div>";
 						
 			//return $newView;			
 			return "<div class='sitesTray'>$newView</div>";
 		}
 		
 		//USED IN NEWEST REV (8/8/14)
-		public function makePickupSitesTrayTables($row, $teamId) {
+		public function makePickupSitesTrayTables($row, $teamId, $userId) {
 			
 			$team = $this->findTeam($teamId, "name");
 			
@@ -378,9 +420,12 @@
 			
 			$company = $this->findCompany($cmp_id, "name");
 			$team = $this->findTeam($team_id, "name");
-			$site = $this->findSite($site_id, "name");
+			if ($site_id == 0) $site = 0;
+			else $site = $this->findSite($site_id, "name");
 			$loanTeam = $this->findTeam($loan_team, "name");
 			$storage = $this->findStorage($stor_id, "name");
+			
+			if($site_id == 0) $site = $storage;
 			
 			//in user-held or site-held location trays only
 			if($atnow == "usr") return null;
@@ -404,9 +449,33 @@
 			}
 			elseif($team_id == $teamId && $loan_team != 0) $loan = "<span class='loan'>Loaned</span>";
 			
+			//figure out time of next pending dropoff event
+			$sql = "SELECT pu_dttm FROM assigns INNER JOIN trays ON trays.tray_id=assigns.tray_id" .
+			" WHERE trays.tray_id='$tray_id' AND assigns.tray_id='$tray_id' ORDER BY pu_dttm ASC";
+			
+			//echo $sql;
+			
+			$result = $this->query($sql);
+			$row = mysqli_fetch_array($result);
+			
+			$closestTime = $row[0];
+			
+			$closestTime = $this->checkTime($closestTime);
+
+			$forIcon = "site";
+			if($site_id == 0 && $stor_id == 0) {  $site = "With User";  $forIcon = "user";  }
+			else if($site_id == 0 && $stor_id != 0) { $forIcon = "storage"; }
+				
+			//generate icon/location
+			$icon = $this->makeIcon($forIcon);
+			$loc = "<div class='location'>$icon Current Location: $site <br/> Until: $closestTime</div>";
+			
 			//stuff here always visible
 			$newView = "<div id='$trayNameClass' class='trayclass'>";
+			
+			$newView .= "<span class='dropoffButton'><a href='pickupTray.php?tid=$tray_id'>View Details/Pick Up</a></span>";
 			$newView .= "<div class='clickable' onclick='expand($tray_id)'>"; //open clickable
+			$newView .= $loc;
 			$newView .= "<em class='trayarrow' id='arrow$tray_id'>&#x25bc;</em>";
 			$newView .= "<h2>$name</h2>";
 			$newView .= "</div>"; //close clickable
@@ -415,8 +484,20 @@
 			$newView .=  "<div id='$trayNameClass" . "_expanded' class='expandedtrayview' style='display: none;'>";
 			
 			$newView .= $fromAnotherTeam;
-						
-			$newView .= "<table>" .
+			
+			$newView .= "<br/><span class='companydata'>Belongs To: $company.$team </span>";
+			
+			$sql = "SELECT * FROM assigns WHERE tray_id='$tray_id' AND (do_usr='$userId' OR pu_usr='$userId' OR status='Pending' OR status='Overdue')";
+			
+			$result = $this->query($sql);
+			while($row = mysqli_fetch_assoc($result)) {
+	
+				$newView .= $this->makeTrayAssignments($row, $userId);
+				
+			}
+
+					
+			/* $newView .= "<table>" .
 			"<tr><td><em>Tray ID: </em></td><td>$tray_id</td></tr>" .
 			//"<tr><td><em>Name: </em></td><td>$name</td></tr>" .
 			"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
@@ -424,12 +505,13 @@
 			"<tr><td><em>Loaned To: </em></td><td>$loanTeam</td></tr>" .
 			"<tr><td><em>Status: </em></td><td>$status</td></tr>" .
 			"<tr><td><em>Stored At: </em></td><td>$storage</td></tr>" .
-			"<tr><td><a href='dropoffTray.php?tid=$tray_id'>View Details/Drop off</a></td>" .
+			"<tr><td><a href='pickupTray.php?tid=$tray_id'>View Details/Pick Up</a></td>" .
 			"<td>$loan</td></tr>" .
-			"</table>";
+			"</table>"; */
 			
-			$newView .= "</div></div>";
-						
+			$loanButton = "<span class='loanButton'>$loan</span>";
+			
+			$newView .= "</div>$loanButton</div>";			
 			//return $newView;			
 			return "<div class='sitesTray'>$newView</div>";
 		}
@@ -978,7 +1060,7 @@
 				}
 			}
 			
-			public function makeTrayAssignments($row) {
+			public function makeTrayAssignments($row, $userId) {
 				extract($row);
 				
 				//$newDiv = "<div id='assignment$asgn_id' class='assignmentTable'>";
@@ -989,19 +1071,36 @@
 				if($pickupUser == null) $pickupUser = "Pending";
 				if($dropoffUser == null) $dropoffUser = "Pending";
 				
+				//find doctor and site
+				$sql = "SELECT site_id, doc_id FROM cases INNER JOIN assigns ON cases.case_id=assigns.case_id WHERE assigns.do_usr='$userId' OR assigns.pu_usr='$userId'";
+				$result = $this->query($sql);
+				
+				$newDiv = "<div class='innerAssignWrapper'>";
+				while ($row2 = mysqli_fetch_array($result)) {
+				
+					$site = $this->findSite($row2[0], "name");
+					$doc = $this->findDoctor($row2[1], "name");
+					
+					$newDiv .= "<div class='innerAssignTable'>" .
+					"<table>" .
+					"<tr><td>DO: $doDTTM</td><td>PU: $puDTTM</td></tr>" .
+					"<tr><td>Location: $site</td><td>For: $doc</td></tr>" .
+					"<tr><td><a href='/athena/www/assignments/assignmentDetail.php?aid=$asgn_id'>View Details</a></td></tr>" .
+					"</table></div>";
+			
+				}
+				/*
 				$newDiv = "<table>" .
 							"<tr><td><em>Assignment ID</em></td><td>$asgn_id</td></tr>" .
 							"<tr><td><em>Case No</em></td><td>$case_id</td></tr>" .
-							"<tr><td><em>Dropped off By</em></td><td>$dropoffUser</td></tr>" .
-							"<tr><td><em>Picked up By</em></td><td>$pickupUser</td></tr>" .
 							"<tr><td><em>Dropoff Time</em></td><td>$doDTTM</td></tr>" .
 							"<tr><td><em>Pickup Time</em></td><td>$puDTTM</td></tr>" .
 							"<tr><td><em>Status</em></td><td>$status</td></tr>" .
 							"<tr><td><em>Comment</em></td><td>$cmt</td></tr>" .
 							"<tr><td><a href='/athena/www/assignments/editAssignmentDetails.php?aid=$asgn_id'>Modify Details</a></td></tr>" .
-							"</table>";
+							"</table>"; */
 				
-				//$newDiv .= "</div>";
+				$newDiv .= "</div>";
 				return $newDiv;
 			}
 			
@@ -1149,6 +1248,16 @@
 			$form .= "</form>";
 			
 			return $form;
+		}
+		
+		//this function will generate an icon corresponding to the site
+		//INCOMPLETE
+		public function makeIcon($dest) {
+			
+			if($dest == "site") return "<img class='icon' src='/athena/www/utils/images/hospital_symbol.png' height='40' width='40' />";
+			else if($dest == "storage") return "<img class='icon' src='/athena/www/utils/images/warehouse.png' height='40' width='40' />";
+			else if($dest == "user") return "<img class='icon' src='/athena/www/utils/images/truck.png' height='40' width='40' />";
+			
 		}
 		
 	}

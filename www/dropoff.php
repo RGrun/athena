@@ -27,6 +27,8 @@
 	"</div>";
 	
 	echo $filterForm;
+	
+	$htmlUtils->timestampLegend();
 
 	//these are for debugging javascript
 	//echo "<p id='js'></p>";
@@ -47,7 +49,7 @@
 		//print tables
 		while($row = mysqli_fetch_assoc($result)) {
 			
-			echo $worker->makeDropoffSitesTrayTables($row, $usersTeamId);
+			echo $worker->makeDropoffSitesTrayTables($row, $usersTeamId, $userId);
 		
 		}
 	

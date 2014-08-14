@@ -36,7 +36,7 @@
 	$result = $worker->query($sql);
 	while($row = mysqli_fetch_assoc($result)) {
 	
-		$newTable = $worker->makeTrayAssignments($row);
+		$newTable = $worker->makeTrayAssignments($row, $currentUserId);
 		$assignment = $row['asgn_id'];
 	
 		echo "<div style='display: none;' class='assignment$assignment'>$newTable</div>";
@@ -54,7 +54,7 @@
 		
 		echo "<h2>Tray Detail</h2>";
 		
-		$dropoffSelector = $worker->createSelector("sites", "name", "site_id", false, false, $stor_id);
+		$dropoffSelector = $worker->createSelector("sites", "name", "site_id", false, false, true);
 
 		
 		$company = $worker->findCompany($cmp_id, "name");

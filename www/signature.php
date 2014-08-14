@@ -34,14 +34,16 @@
 		
 		if(isset($_POST['newsites'])) $siteId = $_POST['newsites'];
 		if($pickupDropoff == "dropoff" && preg_match('/stor/', $siteId)) {
-			$storId = (int) substr($siteId, 4);
-			$dest = $worker->findStorage($storId, "name");
+			$destId = (int) substr($siteId, 4);
+			$destName = $worker->findStorage($destId, "name");
 			$destIsStorage = true;
 			$_SESSION['destIsStorage'] = $destIsStorage;
 		} else if ($pickupDropoff == "dropoff") {
-			$dest = $worker->findSite($siteId, "name");
+			$destId = $siteId;
+			$destName = $worker->findSite($destId, "name");
 		} else if($pickupDropoff == "pickup") {
-			$dest = "";
+			$destId = $siteId;
+			$destName = "";
 		}
 		
 		if ($destIsStorage) echo "<h5>Please ensure this information is correct.</h5>";
@@ -49,7 +51,7 @@
 		
 		echo "<h2>Tray $pickupDropoff</h2>";
 		
-		if($pickupDropoff == "dropoff") echo "<h2>Destination: $dest </h2>";
+		if($pickupDropoff == "dropoff") echo "<h2>Destination: $destName </h2>";
 		
 		$company = $worker->findCompany($cmp_id, "name");
 		$team = $worker->findTeam($team_id, "name");
@@ -68,7 +70,7 @@
 		"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
 		"<tr><td><em>Name</em></td><td>$name</td></tr>" .
 		"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
-		"<tr><td><em>Responsible Team:</em></td><td>$team</td></td></tr>" .
+		"<tr><td><em>Responsible Team:</em></td><td>$team</td></tr>" .
 		"<tr><td><em>Current Location</em></td><td>$site</td></tr>" .
 		"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
 		"<tr><td><em>Stored At: </em></td><td>$storage</td></tr>" .
@@ -105,11 +107,13 @@
 			"Enter your full name here: <br/> <input type='text' name='newName' /><br/>" .
 			"Accept: <input type='checkbox' name='accept'  onchange='signature()'/> <br/>" .
 			"<input type='hidden' name='confirm' value='1' />" .
+			"<input type='hidden' name='updatedSite' value='$destId' />" .
 			"<input id='proceed' type='submit' value='Proceed' disabled /> </form>";
 			
 			$pickupForm = "<form action='signature.php?tid=$currentTrayId&mtd=$pickupDropoff' method='post'>" .
 			"Accept: <input type='checkbox' name='accept'  onchange='signature()'/> <br/>" .
 			"<input type='hidden' name='confirm' value='1' />" .
+			"<input type='hidden' name='updatedSite' value='$destId' />" .
 			"<input id='proceed' type='submit' value='Proceed' disabled /> </form>";
 			
 			if ($pickupDropoff == "pickup" || $destIsStorage == true) echo $pickupForm;
@@ -121,18 +125,20 @@
 		}
 	}
 	//echo $destIsStorage;
-	//mechanisim for setting the tray's new status
+	//mechanisim for setting the tray's new status and site
 	if(isset($_POST['confirm'])) {
 	
 		if(isset($_POST['newName'])) $clientName = $_POST['newName'];
 	
 		if($pickupDropoff == "pickup") {
-			$sql = "UPDATE trays SET atnow='usr' WHERE tray_id='$currentTrayId'";
+			//$destId = $_POST['updatedSite'];
+			$sql = "UPDATE trays SET atnow='usr' , stor_id='0' , site_id='0' WHERE tray_id='$currentTrayId'";
 			$worker->query($sql);
 			//echo $sql;
 			header("Location: pickup.php");
 		} else if($destIsStorage == true) {
-			$sql = "UPDATE trays SET atnow='stor' WHERE tray_id='$currentTrayId'";
+			$destId = $_POST['updatedSite'];
+			$sql = "UPDATE trays SET atnow='stor' , site_id='0' , stor_id='$destId' WHERE tray_id='$currentTrayId'";
 			$worker->query($sql);
 			//$sql = "UPDATE assigns SET cli_nm='$clientName' WHERE tray_id='$currentTrayId'";
 			//$worker->query($sql);
@@ -140,7 +146,8 @@
 			$_SESSION{'destIsStorage'} = null;
 			header("Location: dropoff.php");
 		} else if ($destIsStorage == false) {
-			$sql = "UPDATE trays SET atnow='site' WHERE tray_id='$currentTrayId'";
+			$destId = $_POST['updatedSite'];
+			$sql = "UPDATE trays SET atnow='site' , stor_id='0' , site_id='$destId' WHERE tray_id='$currentTrayId'";
 			$worker->query($sql);
 			//log signature name in database
 			//echo $sql;

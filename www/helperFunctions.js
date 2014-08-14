@@ -94,6 +94,7 @@
 		}
 	}
 	
+	/*
 	function showCaseElements() {
 		
 		showAllElements();
@@ -113,7 +114,7 @@
 			
 			S(divs[x]).display = 'none';
 		}
-	}
+	} */
 	
 	function expand(trayId) {
 		
@@ -151,6 +152,7 @@
 			|| (divs[x].className == 'main') 
 			|| (divs[x].className == 'headernav')
 			|| (divs[x].id == 'header' )
+			|| (divs[x].className == 'location')
 			|| (divs[x].className == 'clickable')
 			|| (divs[x].className == 'pagetitle')
 			|| (divs[x].className == 'filterform')
