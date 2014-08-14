@@ -95,7 +95,7 @@ _END;
 		<div class='dashboard'>
 		<div id='header'>
 			<div class='wrapper'>
-				<a href="/athena/www/anding.php">
+				<a href="/athena/www/landing.php">
 					<img id='logo' src="/athena/www/utils/images/athena-logo.png"/>
 				</a>
 			</div>

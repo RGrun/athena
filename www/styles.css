@@ -303,6 +303,8 @@
 				cursor: pointer;
 				
 				border-radius: 25px;
+				border: 5px solid rgba(213, 213, 213, 0.44);
+				
 				background: none repeat scroll 0% 0% #EBEBEB;
 				
 				padding-left: 10px;
@@ -316,7 +318,7 @@
 			
 			}
 			
-			#trayarrow {
+			.trayarrow {
 				position: relative;
 				left: -180px;
 				top: 25px;

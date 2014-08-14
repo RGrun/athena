@@ -120,8 +120,10 @@
 		var name = "Tray " + trayId + "_class";
 		var tray = O(name);
 		
+		var arrowName = "arrow" + trayId;
+		
 		//does not currently work, should invert arrow when tray is selected
-		var arrow = tray.getElementsByTagName('em');
+		var arrow = document.getElementById(arrowName);
 		
 		var expandedViewName = name + "_expanded";
 		
@@ -149,6 +151,7 @@
 			|| (divs[x].className == 'main') 
 			|| (divs[x].className == 'headernav')
 			|| (divs[x].id == 'header' )
+			|| (divs[x].className == 'clickable')
 			|| (divs[x].className == 'pagetitle')
 			|| (divs[x].className == 'filterform')
 			|| (divs[x].className == 'wrapper')

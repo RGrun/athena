@@ -340,9 +340,11 @@
 			elseif($team_id == $teamId && $loan_team != 0) $loan = "<span class='loan'>Loaned</span>";
 			
 			//stuff here always visible
-			$newView = "<div id='$trayNameClass' class='trayclass' onclick='expand($tray_id)'>";
-			$newView .= "<em id='trayarrow'>&#x25bc;</em>";
+			$newView = "<div id='$trayNameClass' class='trayclass'>";
+			$newView .= "<div class='clickable' onclick='expand($tray_id)'>"; //open clickable
+			$newView .= "<em class='trayarrow' id='arrow$tray_id'>&#x25bc;</em>";
 			$newView .= "<h2>$name</h2>";
+			$newView .= "</div>"; //close clickable
 			
 			//this stuff is hidden at first, revealed by click
 			$newView .=  "<div id='$trayNameClass" . "_expanded' class='expandedtrayview' style='display: none;'>";
@@ -403,9 +405,11 @@
 			elseif($team_id == $teamId && $loan_team != 0) $loan = "<span class='loan'>Loaned</span>";
 			
 			//stuff here always visible
-			$newView = "<div id='$trayNameClass' class='trayclass' onclick='expand($tray_id)'>";
-			$newView .= "<em id='trayarrow'>&#x25bc;</em>";
+			$newView = "<div id='$trayNameClass' class='trayclass'>";
+			$newView .= "<div class='clickable' onclick='expand($tray_id)'>"; //open clickable
+			$newView .= "<em class='trayarrow' id='arrow$tray_id'>&#x25bc;</em>";
 			$newView .= "<h2>$name</h2>";
+			$newView .= "</div>"; //close clickable
 			
 			//this stuff is hidden at first, revealed by click
 			$newView .=  "<div id='$trayNameClass" . "_expanded' class='expandedtrayview' style='display: none;'>";
