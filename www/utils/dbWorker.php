@@ -385,6 +385,9 @@
 			$sql = "SELECT * FROM assigns WHERE tray_id='$tray_id' AND (do_usr='$userId' OR pu_usr='$userId' OR status='Pending' OR status='Overdue')";
 			
 			$result = $this->query($sql);
+			
+			$newView .= "<br/><br/><span class='assignmentsLabel'>Upcoming assignments:</span>";
+			
 			while($row = mysqli_fetch_assoc($result)) {
 	
 				$newView .= $this->makeTrayAssignments($row, $userId);
@@ -490,6 +493,9 @@
 			$sql = "SELECT * FROM assigns WHERE tray_id='$tray_id' AND (do_usr='$userId' OR pu_usr='$userId' OR status='Pending' OR status='Overdue')";
 			
 			$result = $this->query($sql);
+			
+			$newView .= "<br/><br/><span class='assignmentsLabel'>Upcoming assignments:</span>";
+
 			while($row = mysqli_fetch_assoc($result)) {
 	
 				$newView .= $this->makeTrayAssignments($row, $userId);
