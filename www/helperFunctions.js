@@ -123,7 +123,7 @@
 		
 		var arrowName = "arrow" + trayId;
 		
-		//does not currently work, should invert arrow when tray is selected
+		//invert arrow
 		var arrow = document.getElementById(arrowName);
 		
 		var expandedViewName = name + "_expanded";
@@ -133,6 +133,24 @@
 		if(S(expandedView).display == 'none') { S(expandedView).display = 'block'; arrow.innerHTML = "&#9650"; }
 		else { S(expandedView).display = 'none'; arrow.innerHTML = "&#9660"; }
 	
+	}
+	
+	function expandCase(caseId) {
+	
+		var name = caseId + "_class";
+		var caseObj = O(name);
+		
+		var arrowName = "arrow" + caseId;
+		
+		//invert arrow
+		var arrow = document.getElementById(arrowName);
+		
+		var expandedViewName = name + "_expanded";
+		
+		var expandedView = O(expandedViewName);
+		
+		if(S(expandedView).display == 'none') { S(expandedView).display = 'block'; arrow.innerHTML = "&#9650"; }
+		else { S(expandedView).display = 'none'; arrow.innerHTML = "&#9660"; }
 	}
 	
 	function showSiteElement(label) {

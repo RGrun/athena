@@ -49,18 +49,20 @@ require_once $_SERVER['DOCUMENT_ROOT'] . "/athena/www/utils/htmlUtils.php";
 	//display all cases
 	
 	//print cases tables
-	$sql = "SELECT case_id FROM cases WHERE team_id='$usersTeamId'";
+	
+	echo "<h3>Pending Cases: </h3>";
+	
+	echo $htmlUtils->timestampLegend();
+	
+	$sql = "SELECT * FROM cases WHERE team_id='$usersTeamId' AND status='Pending'";
 	$result = $worker->query($sql);
 	
-	$row = mysqli_fetch_array($result);
+	while ($row = mysqli_fetch_array($result)) {
 		
-	$worker->makeCasesTable($userId, $row[0]);
+		$worker->makeCasesTable($userId, $row);
 	
-	$worker->makeCompletedCasesTable($userId, $row[0]);
+	}
 	
-	
-	echo "</div>";
-
 	
 	$htmlUtils->makeFooter();
 

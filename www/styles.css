@@ -17,6 +17,11 @@
 								overflow-x:hidden;
 			}
 			
+			.legend {
+				margin-bottom: 5px;
+			
+			}
+			
 			.dashboard a {
 				text-decoration: none;
 				color: white;
@@ -31,7 +36,7 @@
 			.dashboard {
 				margin-bottom: 10px;
 				/*background: #33CC33;*/
-				width: 100%;
+				width: 1450px;
 				background: linear-gradient(to bottom, #F7F7F7 0%, #D3D3D3 100%) repeat scroll 0% 0% transparent;
 			}
 			
@@ -76,6 +81,7 @@
 				width: 960px;
 				position: relative;
 				margin: auto;
+				
 			}
 			
 			.footer a {
@@ -122,6 +128,7 @@
 
 			
 			}
+
 			
 			.headernav {
 				background: linear-gradient(to bottom, #67C2E7 0%, #27A7DA 1%, #252661 100%) repeat scroll 0% 0% transparent;
@@ -303,7 +310,7 @@
 				margin-left: auto;
 				margin-right: auto;
 				margin-bottom: 10px;
-				cursor: pointer;
+				
 				
 				border-radius: 25px;
 				border: 5px solid rgba(213, 213, 213, 0.44);
@@ -348,6 +355,12 @@
 			
 			}
 			
+						
+			.assignmentsLabel {
+				margin-top: 0;
+			
+			}
+			
 			.dropoffButton {
 			
 				position: relative;
@@ -359,6 +372,7 @@
 			.clickable {
 				position: relative;
 				top: 7px;
+				cursor: pointer;
 			
 			}
 			
@@ -375,15 +389,88 @@
 			
 			}
 			
+			.instrumentView {
+				background: none repeat scroll 0% 0% #EBEBEB;
+				width: 450px;
+				border-radius: 25px;
+				margin-bottom: 10px;
+			
+			}
+			
 			.innerAssignTable {
 				background: none repeat scroll 0% 0% #EBEBEB;
 				border-radius: 25px;
-				width: 90%;
+				width: 450px;
 			
 			}
 			
 			.innerAssignTable table th td {
 				border: 0;
+			}
+			
+			 .docSite {
+				text-align: left;
+				position: relative;
+				top: 65px;
+				
+			
+			} 
+			
+			.assignLink {
+				text-align: right;
+				position: relative;
+				right: 20px;
+				top: 10px;
+			
+			}
+			
+			.caseTime {
+				text-align: left;
+				position: relative;
+				top: 60px;
+			} 
+			
+			 .caseComment {
+				position: relative;
+				margin-top: 5px;
+			
+			} 
+			
+			.traysInCase {
+				height: 100px;
+				width: 450px;
+				background: none repeat scroll 0% 0% #EBEBEB;
+				border-radius: 25px;
+				margin: 10px;
+			
+			}
+			
+			.trayName {
+				text-align:left;
+				position: relative;
+				left: -30px;
+				top: -10px;
+				width: 350px;
+			}
+			
+			.linkToComplete {
+				position: relative;
+				top: 5px;
+				left: 180px;
 			
 			}
 		
+			.trayTeam {
+				text-align: left;
+				position: relative;
+				left: 20px;
+				top: 0px;
+			}
+			
+			.trayTime {
+				text-align: left;
+				position: relative;
+				left: 20px;
+				top: 10px;
+			
+			}

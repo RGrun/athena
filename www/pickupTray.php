@@ -35,7 +35,7 @@
 	$result = $worker->query($sql);
 	while($row = mysqli_fetch_assoc($result)) {
 	
-		$newTable = $worker->makeTrayAssignments($row);
+		$newTable = $worker->makeTrayAssignments($row, $currentUserId);
 		$assignment = $row['asgn_id'];
 	
 		echo "<div style='display: none;' class='assignment$assignment'>$newTable</div>";

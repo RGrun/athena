@@ -3,8 +3,6 @@
 	//addTrays.php
 	
 	//This page is part two of the reservation process.
-	//This is where a client can add trays to the case he's in the process of creating
-	//This page can only be reached when creating a new case
 	
 	require_once $_SERVER['DOCUMENT_ROOT'] . "/athena/www/utils/htmlUtils.php";
 	require_once $_SERVER['DOCUMENT_ROOT'] . "/athena/www/utils/dbWorker.php";

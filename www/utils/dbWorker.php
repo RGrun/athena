@@ -382,17 +382,41 @@
 			
 			$newView .= "<br/><span class='companydata'>Belongs To: $company.$team </span>";
 			
-			$sql = "SELECT * FROM assigns WHERE tray_id='$tray_id' AND (do_usr='$userId' OR pu_usr='$userId' OR status='Pending' OR status='Overdue')";
+			$sql = "SELECT * FROM assigns WHERE tray_id='$tray_id' AND (do_usr='$userId' OR pu_usr='$userId' OR do_usr='0' OR pu_usr='0') AND (status='Pending' OR status='Overdue')";
+			
 			
 			$result = $this->query($sql);
 			
-			$newView .= "<br/><br/><span class='assignmentsLabel'>Upcoming assignments:</span>";
 			
-			while($row = mysqli_fetch_assoc($result)) {
+			$newView .= "<br/><br/><h4 class='assignmentsLabel'>Upcoming assignments:</h4>";
+			
+			while($row2 = mysqli_fetch_assoc($result)) {
 	
-				$newView .= $this->makeTrayAssignments($row, $userId);
+				$newView .= $this->makeTrayAssignments($row2, $userId);
+				
 				
 			}
+				
+			//create traycont table (tray contents)
+			$sql3 = "SELECT * FROM traycont WHERE tray_id='$tray_id'";
+			
+			$newView .= "<h4>Tray contents: </h4>";
+
+			if($result3 = $this->query($sql3)) {
+				
+				while ($row3 = mysqli_fetch_assoc($result3)) {
+					
+					extract($row3);
+					
+					$instrument = $this->findInstrument($inst_id, "name");
+					
+					$newView .= "<div class='instrumentView'>";
+					$newView .= "$quant x $instrument";
+					$newView .= "</div>";
+				}
+				
+			}
+				
 			
 			/* $newView .= "<table>" .
 			"<tr><td><em>Tray ID: </em></td><td>$tray_id</td></tr>" .
@@ -405,6 +429,7 @@
 			"<tr><td><a href='dropoffTray.php?tid=$tray_id'>View Details/Drop off</a></td>" .
 			"<td>$loan</td></tr>" .
 			"</table>"; */
+		
 			
 			$loanButton = "<span class='loanButton'>$loan</span>";
 			
@@ -413,6 +438,7 @@
 			//return $newView;			
 			return "<div class='sitesTray'>$newView</div>";
 		}
+	
 		
 		//USED IN NEWEST REV (8/8/14)
 		public function makePickupSitesTrayTables($row, $teamId, $userId) {
@@ -494,11 +520,31 @@
 			
 			$result = $this->query($sql);
 			
-			$newView .= "<br/><br/><span class='assignmentsLabel'>Upcoming assignments:</span>";
+			$newView .= "<br/><br/><h4 class='assignmentsLabel'>Upcoming assignments:</h4>";
 
 			while($row = mysqli_fetch_assoc($result)) {
 	
 				$newView .= $this->makeTrayAssignments($row, $userId);
+				
+			}
+			
+			//create traycont table (tray contents)
+			$sql3 = "SELECT * FROM traycont WHERE tray_id='$tray_id'";
+			
+			$newView .= "<h4>Tray contents: </h4>";
+
+			if($result3 = $this->query($sql3)) {
+				
+				while ($row3 = mysqli_fetch_assoc($result3)) {
+					
+					extract($row3);
+					
+					$instrument = $this->findInstrument($inst_id, "name");
+					
+					$newView .= "<div class='instrumentView'>";
+					$newView .= "$quant x $instrument";
+					$newView .= "</div>";
+				}
 				
 			}
 
@@ -569,7 +615,7 @@
 				
 		} */
 		
-		public function makeLoanedTables($usersTeamId, $method) {			
+		/* public function makeLoanedTables($usersTeamId, $method) {			
 			$sql = "SELECT * from trays WHERE status='Loaned' and (team_id='$usersTeamId' or loan_team='$usersTeamId')";	
 			
 			$result = $this->query($sql);
@@ -621,7 +667,7 @@
 				//echo "No currently loaned trays.";
 			}
 				
-		}
+		} */
 		
 		public function makeScheduledTables($usersTeamId, $method) {
 			$sql = "SELECT * from trays WHERE status='Scheduled' and (team_id='$usersTeamId' or loan_team='$usersTeamId')";	
@@ -731,21 +777,123 @@
 		}
 
 		
-		public function makeCasesTable($userId, $caseId) {
+		public function makeCasesTable($userId, $row) {
+		
+			extract($row);
 				
 			//first, find the users teamid
 			$sql = "SELECT team_id from users WHERE usr_id='$userId'";
 			$result = $this->query($sql);
-			$row = mysqli_fetch_array($result);
-			$usersTeamId = $row[0];
+			$row2 = mysqli_fetch_array($result);
+			$usersTeamId = $row2[0];
 			
-			//now, find cases assigned to that team, but only pending cases
-			$sql = "SELECT * FROM cases WHERE team_id='$usersTeamId' AND status='Pending'";
+			$trayNameClass = "$case_id" . "_class";
+			
+			//date
+			$date = $this->checkTime($dttm);
+			$date = "<div class='caseTime'>Due: $date</div>";
+			
+			//doctor
+			$doc = $this->findDoctor($doc_id, "name");
+			$site = $this->findSite($site_id, "name");
+			
+			$docSite = "<div class='docSite'>$doc @ $site</div>";
+			
+			$comment = "<div class='caseComment'>$cmt</div>";
+			
+			//stuff here always visible
+			$newView = "<div id='$trayNameClass' class='trayclass'>";
+			$newView .= "<div class='linkToComplete'><a href='/athena/www/reservations.php?complete=1&cid=$case_id'>Mark as Complete</a></div>";
+			$newView .= "<div class='clickable' onclick='expandCase($case_id)'>"; //open clickable
+			$newView .= $date;
+			$newView .= $docSite;
+			//$newView .= $comment;
+			$newView .= "<em class='trayarrow' id='arrow$case_id'>&#x25bc;</em>";
+			$newView .= "<h2>Case No: $case_id</h2>";
+			$newView .= "</div>"; //close clickable
+			
+			//This stuff is revealed by clicking, its in the dropdown
+			
+			$newView .=  "<div id='$trayNameClass" . "_expanded' class='expandedtrayview' style='display: none;'>";
+			
+			$newView .= "<h4 class='assignmentsLabel'>Trays assigned to this case: </h4>";
+			
+			//generate trays associated with this case
+			$sql = "SELECT tray_id FROM assigns INNER JOIN cases ON cases.case_id=assigns.case_id " .
+			"WHERE (cases.case_id='$case_id' AND assigns.case_id='$case_id')";
 			
 			$result = $this->query($sql);
+	
+			while($row3 = mysqli_fetch_assoc($result)) {
+			
+				$tray = $row3['tray_id'];
+			
+				$sql2 = "SELECT * FROM trays WHERE tray_id='$tray'";
+				
+				$result2 = $this->query($sql2);
+				
+				$row4 = mysqli_fetch_assoc($result2);
+				
+				extract($row4);
+				
+				$company = $this->findCompany($cmp_id, "name");
+				$team = $this->findTeam($team_id, "name");
+				$site = $this->findSite($site_id, "name");
+				$loanTeam = $this->findTeam($loan_team, "name");
+				$storage = $this->findStorage($stor_id, "name");
+				
+				if($loanTeam == null) $loanTeam = "None";
+				
+				if($atnow == "usr") $status = "With user";
+				if($atnow == "site") $status = "At site";
+				if($atnow == "stor") $status = "In storage";
+				if($atnow == "unk") $status = "Unknown";
+				
+				//figure out next avalibale time
+				$sql5 = "SELECT do_dttm, pu_dttm FROM assigns INNER JOIN trays ON trays.tray_id=assigns.tray_id" .
+				" WHERE trays.tray_id='$tray_id' AND assigns.tray_id='$tray_id' ORDER BY do_dttm ASC, pu_dttm ASC";
+				
+				//echo $sql5;
+				
+				$result5 = $this->query($sql5);
+				
+				$closestTime = 0;
+				while($row5 = mysqli_fetch_array($result5)) {
+					
+					$doDTTM = strtotime($row5[0]);
+					$puDTTM = strtotime($row5[1]);
+					
+					$closestTime = $row5[0];
+					if ($closestTime < time() && time() > $doDTTM) $closestTime = $row5[1];
+				
+				}
+				
+				$avalibleTime = $this->checkTime($closestTime);
+				
+				$newView .= "<div class='traysInCase'>" .
+				"<div class='assignLink'><a href='/athena/www/trays/trayDetail.php?tid=$tray'>Details</a></div>" .
+				"<div class='trayName'>Name: $name</div>" .
+				"<div class='trayTeam'>Team: $team For: $doc</div>" .
+				"<div class='trayTime'>Avaliable: $avalibleTime</div>" .
+				"</div>";
+				
+				
+				 /* $table = "<table>" .
+				"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
+				"<tr><td><em>Name</em></td><td>$name</td></tr>" .
+				"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
+				"<tr><td><em>Responsible Team:</em></td><td>$team</td></td></tr>" .
+				"<tr><td><em>Current Location</em></td><td>$site</td></tr>" .
+				"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
+				"<tr><td><em>Stored At: </em></td><td>$storage</td></tr>" .
+				"<tr><td><em>Status</em></td><td>$status</td></tr>" .
+				"<tr><td><a href='deleteTray.php?tid=$tray_id&cid=$currentCase'>Remove Tray</a></td></tt>" .
+				"</table>"; */
+
+			}
 			
 			
-			if($result->num_rows != 0) {
+			/* if($result->num_rows != 0) {
 			
 				echo "<div class='caseelement'>";
 				echo "<h2>Pending Cases:</h2>";
@@ -777,15 +925,18 @@
 					echo "<div class='caseTray'>$caseTable</div>";
 				}
 				
-				echo "</div>";
+				echo "</div>"; */
 					
-			} else {
+			//} else {
 			
-				//echo "No trays at that location.";
+				$newView .= "<p><a href='/athena/www/addTrays.php?cid=$case_id'>Add Trays to Case</a></p>";
+			
+				$newView .= "</div>$comment</div>";
+			
+				echo $newView;
 			}
-			
-			
-		}
+		
+
 		
 		public function makeCompletedCasesTable($userId, $caseId) {
 				
@@ -1077,9 +1228,12 @@
 				if($pickupUser == null) $pickupUser = "Pending";
 				if($dropoffUser == null) $dropoffUser = "Pending";
 				
+				$assignment = $row['asgn_id'];
+				
 				//find doctor and site
-				$sql = "SELECT site_id, doc_id FROM cases INNER JOIN assigns ON cases.case_id=assigns.case_id WHERE assigns.do_usr='$userId' OR assigns.pu_usr='$userId'";
+				$sql = "SELECT site_id, doc_id FROM cases INNER JOIN assigns ON cases.case_id=assigns.case_id WHERE assigns.asgn_id='$assignment'";
 				$result = $this->query($sql);
+
 				
 				$newDiv = "<div class='innerAssignWrapper'>";
 				while ($row2 = mysqli_fetch_array($result)) {
