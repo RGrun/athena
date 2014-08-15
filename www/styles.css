@@ -13,6 +13,8 @@
 				font-family: helvetica, sans-serif;
 				margin: 0;
 				background:  #f3f3f3;
+				
+								overflow-x:hidden;
 			}
 			
 			.dashboard a {
@@ -250,7 +252,8 @@
 			.main {
 				margin-left: auto;
 				margin-right: auto;
-				width: 70%;
+				width: 1400px;
+
 				text-align: center;
 				
 			}
