@@ -336,14 +336,14 @@
 			.location {
 				position: relative;
 				text-align: left;
-				top: 70px;
+				top: 0px;
 			
 			}
 			
 			.trayarrow {
 				position: relative;
 				right: -200px;
-				top: 0px;
+				top: -10px;
 				font-size: 30px;
 			}
 			

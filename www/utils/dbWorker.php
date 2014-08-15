@@ -370,9 +370,9 @@
 
 			$newView .= "<span class='dropoffButton'><a href='dropoffTray.php?tid=$tray_id'>View Details/Drop off</a></span>";
 			$newView .= "<div class='clickable' onclick='expand($tray_id)'>"; //open clickable
+			$newView .= "<h2>$name</h2>";
 			$newView .= $loc;
 			$newView .= "<em class='trayarrow' id='arrow$tray_id'>&#x25bc;</em>";
-			$newView .= "<h2>$name</h2>";
 			$newView .= "</div>"; //close clickable
 			
 			//this stuff is hidden at first, revealed by click
@@ -504,9 +504,9 @@
 			
 			$newView .= "<span class='dropoffButton'><a href='pickupTray.php?tid=$tray_id'>View Details/Pick Up</a></span>";
 			$newView .= "<div class='clickable' onclick='expand($tray_id)'>"; //open clickable
+			$newView .= "<h2>$name</h2>";
 			$newView .= $loc;
 			$newView .= "<em class='trayarrow' id='arrow$tray_id'>&#x25bc;</em>";
-			$newView .= "<h2>$name</h2>";
 			$newView .= "</div>"; //close clickable
 			
 			//this stuff is hidden at first, revealed by click
