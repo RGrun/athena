@@ -805,11 +805,11 @@
 			$newView = "<div id='$trayNameClass' class='trayclass'>";
 			$newView .= "<div class='linkToComplete'><a href='/athena/www/reservations.php?complete=1&cid=$case_id'>Mark as Complete</a></div>";
 			$newView .= "<div class='clickable' onclick='expandCase($case_id)'>"; //open clickable
+			$newView .= "<h2>Case No: $case_id</h2>";
 			$newView .= $date;
 			$newView .= $docSite;
 			//$newView .= $comment;
 			$newView .= "<em class='trayarrow' id='arrow$case_id'>&#x25bc;</em>";
-			$newView .= "<h2>Case No: $case_id</h2>";
 			$newView .= "</div>"; //close clickable
 			
 			//This stuff is revealed by clicking, its in the dropdown

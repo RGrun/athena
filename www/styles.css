@@ -324,7 +324,7 @@
 			
 			.trayclass h2 {
 				position: relative;
-				top: -80px;
+				top: 0px;
 				text-align: left;
 			}
 			
@@ -343,7 +343,7 @@
 			.trayarrow {
 				position: relative;
 				right: -200px;
-				top: 40px;
+				top: 0px;
 				font-size: 30px;
 			}
 			
@@ -411,7 +411,8 @@
 			 .docSite {
 				text-align: left;
 				position: relative;
-				top: 65px;
+				top: 0px;
+				margin-top: 10px;
 				
 			
 			} 
@@ -427,7 +428,7 @@
 			.caseTime {
 				text-align: left;
 				position: relative;
-				top: 60px;
+				top: 0px;
 			} 
 			
 			 .caseComment {
