@@ -1419,7 +1419,6 @@
 			else if($dest == "user") return "<img class='icon' src='/athena/www/utils/images/truck.png' height='40' width='40' />";
 			
 		}
-		
 	}
 				
 ?>

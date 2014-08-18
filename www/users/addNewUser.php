@@ -52,6 +52,7 @@
 	"Is this user currently active? <br />" .
 	"Yes <input type='radio' name='isActive' value='1' checked='checked' /> <br />" .
 	"No <input type='radio' name='isActive' value='0' /> <br />" .
+	"<p>New users are created without any administrator permissions. To add permissions, edit the user's data after creation.</p>" .
 	"<input type='submit' value='Commit Changes' /> </form>";
 	
 	echo "<p>$form</p>";

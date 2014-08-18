@@ -9,6 +9,8 @@
 	
 	$htmlUtils->makeHeader();
 	
+	echo "<div class='adminTable'>";
+	
 	$currentUsrId = $_GET['uid'];
 	
 	$_SESSION['currentUserId'] = $currentUsrId;
@@ -60,6 +62,7 @@
 		"<tr><td><em>Email</em></td><td>$email</td><td><a href='editUserInfo.php?mtd=email'>Edit</a></td></tr>" .
 		"<tr><td><em>Phone</em></td><td>$phone</td><td><a href='editUserInfo.php?mtd=phone'>Edit</a></td></tr>" .
 		"<tr><td><em>SMS</em></td><td>$sms</td><td><a href='editUserInfo.php?mtd=sms'>Edit</a></td></tr>" .
+		"<tr><td><em>Permissions</em></td><td>$perm</td><td><a href='editUserInfo.php?mtd=perm'>Edit</a></td></tr>" .
 		"</table><br/><br/>";
 		
 		echo "<p>$table</p>";
@@ -101,6 +104,8 @@
 		"<input type='submit' value='Commit Changes' />  </form>";
 		
 		echo "<p>$companiesForm</p>";
+		
+		echo "</div>";
 			
 	} else {
 			echo "Database connection error.";

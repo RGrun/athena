@@ -16,7 +16,7 @@
 	echo "<em><a href='addNewUser.php'>Add New User</a></em><br/><br/>";
 	
 	echo "<table>" .
-	"<tr><th>User ID</th><th>Active?</th><th>Team ID</th><th>First Name</th><th>Last Name</th><th>Username</th><th>Email</th><th>Phone</th><th>SMS</th></tr>";
+	"<tr><th>User ID</th><th>Active?</th><th>Team ID</th><th>First Name</th><th>Last Name</th><th>Username</th><th>Email</th><th>Phone</th><th>SMS</th><th>Permissions</th></tr>";
 	
 	$sql = "SELECT * FROM users";
 	
@@ -43,6 +43,7 @@
 			echo "<td>$email</td>";
 			echo "<td>$phone</td>";
 			echo "<td>$sms</td>";
+			echo "<td>$perm</td>";
 			echo "<td><a href='userDetail.php?uid=$usr_id'>Detail</a></td>";
 			echo "<td><a href='deleteUser.php?uid=$usr_id'>Delete</a></td></tr>";
 			

@@ -36,16 +36,23 @@
 			//$pass = "!@#$pass!@#";
 			//$pass = md5($pass);
 			
-			//first, look to see if person logging in is a user
-			$sql = "SELECT uname, pwd FROM users WHERE uname='$user' AND pwd='$pass'";
+			//first, look to see if person logging in is a user, and check their permissions
+			$sql = "SELECT uname, pwd, perm FROM users WHERE uname='$user' AND pwd='$pass'";
 			
 			$result = $worker->query($sql);
 			
 			if(mysqli_num_rows($result) != 0) {
 				//see if its a user
-				$sql = "SELECT usr_id FROM users WHERE uname='$user'";
+				$sql = "SELECT usr_id, perm FROM users WHERE uname='$user'";
 				$result = $worker->query($sql);
 				$row = mysqli_fetch_array($result);
+				
+				//check admin permission
+				$a = preg_match("/admin/i", $row[1]);
+				
+				
+				if($a == TRUE) $_SESSION['isAdmin'] = TRUE;
+				else $_SESSION{'isAdmin'} = FALSE;
 				
 				
 				$_SESSION['user'] = $user;
