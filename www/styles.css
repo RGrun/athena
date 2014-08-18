@@ -17,6 +17,36 @@
 				overflow-x:hidden;
 			}
 			
+			.welcomeArea {
+				
+				position: relative;
+
+			}
+			
+			.welcomeHeader {
+				position: relative;
+
+			
+			}
+			
+			.loginArea {
+				
+				position: relative;
+			
+			}
+			
+			.loginForm {
+			
+				position: relative;
+				top: 100px;
+			
+			}
+			
+			.loginForm input {
+		
+			
+			}
+			
 			.legend {
 				margin-bottom: 5px;
 			

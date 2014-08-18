@@ -121,8 +121,10 @@ _END;
 _END;
 
 		$loginForm = "<form method='post' action='/athena/www/login.php'>$error" .
-		"<span class='fieldname'>Username: </span><input type='text' name='user' /><br/>".
-		"<span class='fieldname'>Password: </span><input type='password' name='pass' /><br/>" .
+		"<table>" .
+		"<tr><td>Username: </td><td><input type='text' name='user' /></td></tr>".
+		"<tr><td>Password: </td><td><input type='password' name='pass' /></td></tr>" .
+		"</table>" .
 		"<input type='submit' value='Login' /> </form>";
 	
 		$notLoggedInHeader = <<<_END
@@ -151,8 +153,20 @@ _END;
 		</div>	
 		
 	</div>
-		<div class='main'><h3>Please enter your username and password to log in</h3>
-		<p>$loginForm</p>
+		<div class='main'>
+			<div class='welcomeArea'>
+				<div class='welcomeHeader'>
+					<h2>Welcome to Athena</h2>
+				</div>
+				<div class='welcomeHeader'>
+					<h3>Please enter your username and password to log in</h3>
+				</div>
+			</div>
+		<div class='loginArea'>
+			<div class='loginForm'>
+				$loginForm
+			</div>
+		</div>
 		
 _END;
 			
