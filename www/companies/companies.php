@@ -12,6 +12,8 @@
 	
 	$htmlUtils->makeHeader();
 	
+	echo "<div class='adminTable'>";
+	
    
 	
 	echo" <h2>Companies</h2>";
@@ -57,6 +59,8 @@
 		}
 		
 		echo "</table>";
+		
+		echo "</div>";
 	} else {
 		echo "Connection to database failed.";
 	}

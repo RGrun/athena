@@ -17,6 +17,8 @@
 	
 	if($result = $worker->query($sql)) {
 	
+		echo "<div class='adminTable'>";
+		
 		$table = "<table>" .
 		"<tr><th>Tray ID</th><th>Name</th><th>Belongs To</th><th>Team</th><th>Site</th><th>Storage Location</th><th>Loaned To</th><th>Status</th></tr>"; 
 		
@@ -46,6 +48,8 @@
 		$table .= "</table>";
 		
 		echo "<p>$table</p>";
+		
+		echo "</div>";
 		
 	} else {
 		echo "Error connecting to database.";

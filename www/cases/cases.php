@@ -9,6 +9,8 @@
 	
 	$htmlUtils->makeHeader();
 	
+	echo "<div class='adminTable'>";
+	
 	echo "<h2>Cases</h2>";
 	
 	echo "<em><a href='addNewCase.php'>Add New Case</a></em> <br/> <br/>";
@@ -47,6 +49,8 @@
 		}
 		
 		echo "</table>";
+		
+		echo "</div>";
 		
 	} else {
 		echo "Database Connection Error";

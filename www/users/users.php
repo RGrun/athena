@@ -9,6 +9,8 @@
 	
 	$htmlUtils->makeHeader();
 	
+	echo "<div class='adminTable'>";
+	
 	echo "<h2>Athena Users</h2>";
 	
 	echo "<em><a href='addNewUser.php'>Add New User</a></em><br/><br/>";
@@ -46,6 +48,8 @@
 			
 		}
 			echo "</table>";
+			
+			echo "</div>";
 			
 	} else {
 		echo "Database Connection Error";

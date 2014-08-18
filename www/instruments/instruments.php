@@ -9,6 +9,8 @@
 	
 	$htmlUtils->makeHeader();
 	
+	echo "<div class='adminTable'>";
+	
 	echo "<h2>Athena Instruments</h2>";
 	
 	echo "<em><a href='addNewInstrument.php'>Add New Instrument</a></em>";
@@ -32,6 +34,8 @@
 		$table .= "</table>";
 		
 		echo "<p>$table</p>";
+		
+		echo "</div>";
 		
 	} else {
 		echo "Error connecting to database.";

@@ -9,6 +9,8 @@
 	
 	$htmlUtils->makeHeader();
 	
+	echo "<div class='adminTable'>";
+	
 	echo "<h2>Sites</h2>";
 	
 	echo "<em><a href='addNewSite.php'>Add New Site</a></em> <br/> <br/>";
@@ -44,6 +46,8 @@
 		}
 		
 		echo "</table>";
+		
+		echo "</div>";
 		
 	} else {
 		echo "Database Connection Error";

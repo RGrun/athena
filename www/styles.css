@@ -14,7 +14,7 @@
 				margin: 0;
 				background:  #f3f3f3;
 				
-								overflow-x:hidden;
+				overflow-x:hidden;
 			}
 			
 			.legend {
@@ -90,14 +90,36 @@
 			}
 			
 			
-			table, th, td {
-			 /*	border: 1px solid black; */
+			.main table, .main th, .main td {
+				/* border: 1px solid black; */
 				margin-top: 10px;
 				margin-bottom: 10px;
 				padding: 3px;
 				max-width: 400px;
 				word-wrap: break-word;
+				
+				border-collapse: collapse;
+				
 			}
+			
+			.adminTable th, .adminTable td {
+			
+				border: 1px solid black;
+				margin-top: 10px;
+				margin-bottom: 10px;
+				padding: 3px;
+				max-width: 400px;
+				word-wrap: break-word;
+				border-collapse: collapse;
+			}
+			
+			.adminTable th {
+				background: #EBEBEB;
+				max-width: 500px;
+			
+			}
+			
+			
 			.assignment {
 				margin-top:10px;
 				margin-bottom:10px;
@@ -266,11 +288,12 @@
 			}
 			
 			.main table {
-				width: 70%;
+				width: 300px;
 				margin-left: auto;
 				margin-right: auto;
 			
 			}
+			
 			
 			.main div {
 				margin-left: auto;
@@ -320,6 +343,11 @@
 				padding-left: 10px;
 				padding-right: 10px;
 				padding-bottom: 10px;
+			}
+			
+			.trayclass table th td {
+				border: 0px;
+			
 			}
 			
 			.trayclass h2 {

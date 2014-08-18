@@ -9,6 +9,8 @@
 	
 	$htmlUtils->makeHeader();
 	
+	echo "<div class='adminTable'>";
+	
 	$currentProcedure = $_GET['pid'];
 	
 	$_SESSION['currentProcedureId'] = $currentProcedure;
@@ -91,6 +93,8 @@
 		"<input type='submit' value='Commit Changes' />  </form>";
 		
 		echo "<p>$instForm</p>";
+		
+		echo "</div>";
 		
 	} else {
 		echo "Error connecting to database.";

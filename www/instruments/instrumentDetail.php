@@ -9,6 +9,8 @@
 	
 	$htmlUtils->makeHeader();
 	
+	echo "<div class='adminTable'>";
+	
 	$currentInstrumentId = $_GET['iid'];
 	
 	$_SESSION['currentInstrumentId'] = $currentInstrumentId;
@@ -29,6 +31,8 @@
 		"</table>";
 		
 		echo "<p>$table</p>";
+		
+		echo "</div>";
 		
 	} else {
 		echo "Error connecting to database";

@@ -9,6 +9,8 @@
 	
 	$htmlUtils->makeHeader();
 	
+	echo "<div class='adminTable'>";
+	
 	echo "<h2>Regions</h2>";
 	
 	echo "<em><a href='addNewRegion.php'>Add New Region</a></em> <br/> <br/>";
@@ -38,6 +40,8 @@
 		}
 		
 		echo "</table>";
+		
+		echo "</div>";
 		
 	} else {
 		echo "Database Connection Error";

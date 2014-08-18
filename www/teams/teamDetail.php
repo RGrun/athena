@@ -9,6 +9,8 @@
 	
 	$htmlUtils->makeHeader();
 	
+	echo "<div class='adminTable'>";
+	
 	$currentTeamId = $_GET['tid'];
 	
 	$_SESSION['currentTeamId'] = $currentTeamId;
@@ -36,6 +38,7 @@
 		"</table>";
 		
 		echo "<p>$table</p>";
+		echo "</div>";
 		
 	} else {
 		echo "Error connecting to database";

@@ -61,6 +61,8 @@
 		
 		extract($row);
 		
+		echo "<div class='adminTable'>";
+		
 		echo "<h2>Tray Detail</h2>";
 		
 		//echo "<span class='error'>$error</span>";
@@ -79,14 +81,14 @@
 		if($atnow == "unk") $status = "Unknown";
 		
 		$table = "<table>" .
-		"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
-		"<tr><td><em>Name</em></td><td>$name</td><td><a href='editTrayInfo.php?mtd=name'>Edit</a></td></tr>" .
+		"<tr><td><em>Tray ID:</em></td><td>$tray_id</td></tr>" .
+		"<tr><td><em>Name:</em></td><td>$name</td><td><a href='editTrayInfo.php?mtd=name'>Edit</a></td></tr>" .
 		"<tr><td><em>Belongs To:</em></td><td>$company</td><td><a href='editTrayInfo.php?mtd=company'>Edit</a></td></tr>" .
 		"<tr><td><em>Responsible Team:</em></td><td>$team</td><td><a href='editTrayInfo.php?mtd=team'>Edit</a></td></tr>" .
-		"<tr><td><em>Current Location</em></td><td>$site</td><td><a href='editTrayInfo.php?mtd=site'>Edit</a></td></tr>" .
-		"<tr><td><em>Loaned To</em></td><td>$loanTeam</td><td><a href='editTrayInfo.php?mtd=loanTeam'>Edit</a></td></tr>" .
-		"<tr><td><em>Storage Location</em></td><td>$storage</td><td><a href='editTrayInfo.php?mtd=stor_id'>Edit</a></td></tr>" .
-		"<tr><td><em>Status</em></td><td>$status</td><td><a href='editTrayInfo.php?mtd=atnow'>Edit</a></td></tr>" .
+		"<tr><td><em>Current Location:</em></td><td>$site</td><td><a href='editTrayInfo.php?mtd=site'>Edit</a></td></tr>" .
+		"<tr><td><em>Loaned To:</em></td><td>$loanTeam</td><td><a href='editTrayInfo.php?mtd=loanTeam'>Edit</a></td></tr>" .
+		"<tr><td><em>Storage Location:</em></td><td>$storage</td><td><a href='editTrayInfo.php?mtd=stor_id'>Edit</a></td></tr>" .
+		"<tr><td><em>Status:</em></td><td>$status</td><td><a href='editTrayInfo.php?mtd=atnow'>Edit</a></td></tr>" .
 		"</table>";
 		
 		echo "<p>$table</p>";
@@ -137,6 +139,8 @@
 		"<input type='submit' value='Commit Changes' />  </form>";
 		
 		echo "<p>$trayForm</p>";
+		
+		echo "</div>";
 		
 		
 	} else {

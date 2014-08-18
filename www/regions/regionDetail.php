@@ -9,9 +9,30 @@
 	
 	$htmlUtils->makeHeader();
 	
+	echo "<div class='adminTable'>";
+	
 	$currentRegion = $_GET['rid'];
 	
 	$_SESSION['currentRegionId'] = $currentRegion;
+	
+	//add new site to region
+	if(isset($_POST['addNew'])) {
+	
+		$site = $_POST['newsites'];
+	
+		$sql = "INSERT INTO site_region(site_id, reg_id) VALUES ($site, $currentRegion)";
+		$result = $worker->query($sql);
+	
+	}
+	
+	//delete site from region
+	if(isset($_GET['delete'])) {
+		$toDelete = $_GET['sid'];
+		
+		$sql = "DELETE FROM site_region WHERE site_id='$toDelete' AND reg_id='$currentRegion'";
+		$result = $worker->query($sql);
+	
+	}
 	
 	$sql = "SELECT * FROM regions WHERE reg_id='$currentRegion'";
 	
@@ -32,7 +53,7 @@
 		echo "<p>$table</p>";
 		
 		//create site-region relation table
-		$sql = "SELECT * FROM site_region WHERE region='$name'";
+		$sql = "SELECT * FROM site_region WHERE reg_id='$currentRegion'";
 		
 		if($result = $worker->query($sql)) {
 		
@@ -45,7 +66,7 @@
 				
 				$site = $worker->findSite($site_id, "name");
 				
-				$site_region .= "<tr><td>$site</td>" .
+				$site_region .= "<tr><td>$site</td><td><a href='regionDetail.php?delete=1&sid=$site_id&rid=$currentRegion'>Detele</a></td>" .
 				"</tr>";
 				
 			}
@@ -55,15 +76,20 @@
 			echo "<p>$site_region</p>";
 			
 		}
-	/*
+	
+	
 		$sitesSelector = $worker->createSelector("sites", "name", "site_id");
 		
 		$sitesForm = "<form action='regionDetail.php?rid=$reg_id' method='post'>" .
 		"Add Site: $sitesSelector <br/>" .
+		"<input type='hidden' value='1' name='addNew' />" .
 		"<input type='submit' value='Commit Changes' />  </form>";
 		
 		echo "<p>$sitesForm</p>";
-	*/
+	
+	
+		echo "</div>";
+	
 	} else {
 		echo "Error connecting to database.";
 	}

@@ -20,6 +20,8 @@
 		$row = mysqli_fetch_assoc($result);
 		
 		extract($row);
+		
+		echo "<div class='adminTable'>";
 			
 		echo "<h2>Assignment No: $asgn_id</h2>";
 		
@@ -47,6 +49,7 @@
 		
 		echo "<p>$table</p>";
 				
+		echo "</div>";		
 	} else {
 		echo "Error connecting to database.";
 	}

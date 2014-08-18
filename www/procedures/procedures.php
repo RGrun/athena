@@ -9,6 +9,8 @@
 	
 	$htmlUtils->makeHeader();
 	
+	echo "<div class='adminTable'>";
+	
 	echo "<h2>Athena Procedures</h2>";
 	
 	echo "<em><a href='addNewProcedure.php'>Add New Procedure</a></em>";
@@ -32,6 +34,8 @@
 		$table .= "</table>";
 		
 		echo "<p>$table</p>";
+		
+		echo "</div>";
 		
 	} else {
 		echo "Error connecting to database.";

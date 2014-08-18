@@ -11,6 +11,8 @@
 	$htmlUtils = new htmlUtils();
 	$htmlUtils->makeHeader();
 	
+	echo "<div class='adminTable'>";
+	
 	$detailedCompany = $_GET['cid'];
 	
 	//delete relationship
@@ -101,6 +103,7 @@
 		
 		echo "<p>$companiesForm</p>";
 			
+		echo "</div>";	
 	} else {
 			echo "Database connection error.";
 	}

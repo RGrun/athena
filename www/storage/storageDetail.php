@@ -9,6 +9,8 @@
 	
 	$htmlUtils->makeHeader();
 	
+	echo "<div class='adminTable'>";
+	
 	$currentStorageId = $_GET['sid'];
 	
 	$_SESSION['currentStorageId'] = $currentStorageId;	
@@ -39,7 +41,8 @@
 		
 		echo "<p>$table</p>";
 		
-			
+		echo "</div>";
+		
 	} else {
 			echo "Database connection error.";
 	}

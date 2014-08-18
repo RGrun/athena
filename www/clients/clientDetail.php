@@ -9,6 +9,8 @@
 	
 	$htmlUtils->makeHeader();
 	
+	echo "<div class='adminTable'>";
+	
 	$currentClientId = $_GET['cid'];
 	
 	$_SESSION['currentClientId'] = $currentClientId;
@@ -91,6 +93,8 @@
 		"<input type='submit' value='Commit Changes' />  </form>";
 		
 		echo "<p>$siteForm</p>";
+		
+		echo "</div>";
 		
 	} else {
 		echo "Error connecting to database";

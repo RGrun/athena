@@ -9,6 +9,8 @@
 	
 	$htmlUtils->makeHeader();
 	
+	echo "<div class='adminTable'>";
+	
 	$currentCase = $_GET['cid'];
 	
 	$_SESSION['currentCaseId'] = $currentCase;
@@ -41,6 +43,8 @@
 		"</table>";
 		
 		echo "<p>$table</p>";
+		
+		echo "</div>";
 				
 	} else {
 		echo "Error connecting to database.";
