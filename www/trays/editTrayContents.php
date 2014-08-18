@@ -11,12 +11,18 @@
 	$htmlUtils->makeHeader();
 	
 	$currentTrayId = $_SESSION['currentTrayId'];
+	$currentMethod = $_GET['mtd'];
 	
 	//check to see if this page was reached from an admin page or a user's page
 	if(isset($_GET['su'])) {
 		$backLink = "<h6><a href='trayDetail.php?tid=$currentTrayId'>Back to tray admin page.</a></h6>";
 	} else {
-		$backLink = "<h6><a href='/athena/www/viewTrayDetail.php?tid=$currentTrayId'>Click here when finished editing</a></h6>";	
+		if($currentMethod == "dropoff") {
+			$backLink = "<h6><a href='/athena/www/dropoffTray.php?tid=$currentTrayId'>Click here when finished editing</a></h6>";	
+		} else if($currentMethod == "pickup") {
+			$backLink = "<h6><a href='/athena/www/pickupTray.php?tid=$currentTrayId'>Click here when finished editing</a></h6>";
+		}
+		
 	}
 	
 	if(isset($_GET['iid'])) {
@@ -24,11 +30,11 @@
 	}
 	
 	if(isset($_POST['newQuant'])) {
-		$worker->editTrayContents("quant", $currentInstId, $_POST['newQuant'], $currentTrayId);
+		$worker->editTrayContents("quant", $currentInstId, $_POST['newQuant'], $currentTrayId, $currentMethod);
 	} if(isset($_POST['newState'])) {
-		$worker->editTrayContents("state", $currentInstId, $_POST['newState'], $currentTrayId);
+		$worker->editTrayContents("state", $currentInstId, $_POST['newState'], $currentTrayId, $currentMethod);
 	} if(isset($_POST['newComment'])) {
-		$worker->editTrayContents("cmt", $currentInstId, addSlashes($_POST['newComment']), $currentTrayId);
+		$worker->editTrayContents("cmt", $currentInstId, addSlashes($_POST['newComment']), $currentTrayId, $currentMethod);
 	}
 	
 	//create traycont table (tray contents)
@@ -38,6 +44,8 @@
 		
 			$instrument = $worker->findInstrument($currentInstId, "name");
 			$tray = $worker->findTray($currentTrayId, "name");
+			
+			echo "<div class='adminTable'>";
 			
 			echo "<h2>Modifying $instrument in $tray</h2>";
 			
@@ -57,7 +65,7 @@
 			
 			$traycont .= "</table>";
 			
-			echo "<p>$traycont</p>";
+			echo "$traycont";
 		
 		$stateSelector = "<select name='newState' size='1'>" .
 		"<option value='Present'>Present</option>" .
@@ -67,7 +75,7 @@
 		"<option value='Spent'>Spent</option>" .
 		"</select>";
 		
-		$trayForm = "<form action='editTrayContents.php?iid=$currentInstId' method='post'>" .
+		$trayForm = "<form action='editTrayContents.php?iid=$currentInstId&mtd=$currentMethod' method='post'>" .
 		"Quantity: <input type='text' name='newQuant' maxlength='4' /> <br/>" .
 		"State of Item: $stateSelector <br />" .
 		"Comment: <textarea rows='4' cols='50' name='newComment'></textarea><br/>" .
@@ -75,7 +83,9 @@
 		
 		echo "<h2>Modify tray data: </h2>";
 		
-		echo "<p>$trayForm</p>";
+		echo "$trayForm";
+		
+		echo "</div>";
 		
 
 	}

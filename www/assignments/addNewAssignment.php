@@ -57,14 +57,16 @@
 	$dateTime2 = $worker->makeDateTimeSelect("2");
 
 	$form = "<form action='addNewAssignment.php' method='post'>" .
-	"New Assignment&#39;s Case: $caseSelector <br/>" .
-	"New Assignment&#39;s Tray: $traySelector <br/>" .
-	"User to do Dropoff: $doUserSelector <br />" .
-	"User to do Pickup: $puUserSelector <br />" .
+	"<table>" .
+	"<tr><td>New Assignment&#39;s Case: </td><td>$caseSelector </td></tr>" .
+	"<tr><td>New Assignment&#39;s Tray: </td><td>$traySelector </td></tr>" .
+	"<tr><td>User to do Dropoff: </td><td>$doUserSelector </td></tr>" .
+	"<tr><td>User to do Pickup: </td><td>$puUserSelector </td></tr>" .
 	"<br/>Time of Dropoff: $dateTime <br />" .
 	"<br/>Time of Pickup: $dateTime2 <br/>" .
-	"Comment: <input type='text' name='newComment' /> <br/>" . 
-	"New Assignment&#39;s Status: $statusSelector <br />" .
+	"<tr><td>Comment: </td><td><input type='text' name='newComment' /> </td></tr>" . 
+	"<tr><td>New Assignment&#39;s Status: </td><td>$statusSelector </td></tr>" .
+	"</table>" .
 	"<input type='submit' value='Commit Changes' /> </form>";
 	
 	echo "<p>$form</p>";

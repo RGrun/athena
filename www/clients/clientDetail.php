@@ -57,9 +57,10 @@
 		"<tr><td><em>Email</em></td><td>$email</td><td><a href='editClientInfo.php?mtd=email'>Edit</a></td></tr>" .
 		"<tr><td><em>Phone</em></td><td>$phone</td><td><a href='editClientInfo.php?mtd=phone'>Edit</a></td></tr>" .
 		"<tr><td><em>SMS</em></td><td>$sms</td><td><a href='editClientInfo.php?mtd=sms'>Edit</a></td></tr>" .
+		"<tr><td><em>Permissions</em></td><td>$perm</td><td><a href='editClientInfo.php?mtd=perm'>Edit</a></td></tr>" .
 		"</table>";
 		
-		echo "<p>$table</p>";
+		echo $table;
 		
 		//create client-site relation table
 		$sql = "SELECT * FROM cli_site WHERE cli_id='$currentClientId'";
@@ -82,7 +83,7 @@
 			
 			$client_site .= "</table>";
 			
-			echo "<p>$client_site</p>";
+			echo "$client_site";
 			
 		}
 		
@@ -92,7 +93,7 @@
 		"Add Region: $siteSelector <br/>" .
 		"<input type='submit' value='Commit Changes' />  </form>";
 		
-		echo "<p>$siteForm</p>";
+		echo "$siteForm";
 		
 		echo "</div>";
 		

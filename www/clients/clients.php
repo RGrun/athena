@@ -20,7 +20,7 @@
 	if($result = $worker->query($sql)) {
 	
 		$table = "<table>" .
-		"<tr><th>Client ID</th><th>Is Active?</th><th>First Name</th><th>Last Name</th><th>Username</th><th>Email</th><th>Phone</th><th>SMS</th></tr>"; 
+		"<tr><th>Client ID</th><th>Is Active?</th><th>First Name</th><th>Last Name</th><th>Username</th><th>Email</th><th>Phone</th><th>SMS</th><th>Permissions</th></tr>"; 
 		
 		while($row = mysqli_fetch_assoc($result)) {			
 			
@@ -29,7 +29,7 @@
 			$isActive = ($active == 1) ? "Yes" : "No";
 	
 			$table .= ("<tr><td>$cli_id</td><td>$isActive</td><td>$fname</td><td>$lname</td><td>$uname</td>" .
-			"<td>$email</td><td>$phone</td><td>$sms</td></td>" .
+			"<td>$email</td><td>$phone</td><td>$sms</td><td>$perm</td>" .
 			"<td><a href='clientDetail.php?cid=$cli_id'>Detail</a></td><td><a href='deleteClient.php?cid=$cli_id'>Delete</a></td>");
 
 		}

@@ -47,6 +47,11 @@
 			
 			}
 			
+			input, textarea{
+				background: white;
+			
+			}
+			
 			.legend {
 				margin-bottom: 5px;
 			

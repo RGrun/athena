@@ -27,14 +27,16 @@
 
 	
 	$form = "<form action='addNewCompany.php' method='post'>" .
-	"New Company&#39;s Name: <input type='text' name='newName' /> <br/>" .
-	"New Company&#39;s Address: <input type='text' name='newAddress' /> <br/>" .
-	"New Company&#39;s City: <input type='text' name='newCity' /> <br />" .
-	"New Company&#39;s State: <input type='text' name='newState' maxLength='2' /> <br />" .
-	"New Company&#39;s Zip Code: <input type='text' name='newZip' maxLength='5' /> <br />" .
-	"Is this company currently active? <br />" .
-	"Yes <input type='radio' name='isActive' value='1' checked='checked' /> <br />" .
-	"No <input type='radio' name='isActive' value='0' /> <br />" .
+	"<table>" .
+	"<tr><td>New Company&#39;s Name: </td><td><input type='text' name='newName' /> </td></tr>" .
+	"<tr><td>New Company&#39;s Address:</td><td> <input type='text' name='newAddress' /> </td></tr>" .
+	"<tr><td>New Company&#39;s City: </td><td><input type='text' name='newCity' /> </td></tr>" .
+	"<tr><td>New Company&#39;s State: </td><td><input type='text' name='newState' maxLength='2' /> </td></tr>" .
+	"<tr><td>New Company&#39;s Zip Code: </td><td><input type='text' name='newZip' maxLength='5' /> </td></tr>" .
+	"<tr><td>Is this company currently active? </td>" .
+	"<td>Yes <input type='radio' name='isActive' value='1' checked='checked' />" .
+	"No <input type='radio' name='isActive' value='0' /> </td></tr>" .
+	"</table>" .
 	"<input type='submit' value='Commit Changes' /> </form>";
 	
 	echo $form;

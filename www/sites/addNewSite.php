@@ -26,15 +26,17 @@
 	echo "<h2>Input new site data:</h2>";
 
 	$form = "<form action='addNewSite.php' method='post'>" .
-	"New Site&#39;s Name: <input type='text' name='newName' /> <br/>" .
-	"New Site&#39;s Address: <input type='text' name='newAddress' /> <br/>" .
-	"New Site&#39s City: <input type='text' name='newCity' /> <br/>" .
-	"New Site&#39;s State (two-letter abbrivation): <input type='text' maxLength='2' name='newState' /> <br />" .
-	"New Site&#39;s Zip Code: <input type='text' maxLength='5' name='newZip' /> <br />" .
-	"New Site&#39;s Fax: <input type='text' name='newFax' maxLength='10' /> <br />" .
-	"Is this site currently active? <br />" .
-	"Yes <input type='radio' name='isActive' value='1' checked='checked' /> <br />" .
-	"No <input type='radio' name='isActive' value='0' /> <br />" .
+	"<table>" .
+	"<tr><td>New Site&#39;s Name: </td><td><input type='text' name='newName' /> </td></tr>" .
+	"<tr><td>New Site&#39;s Address: </td><td><input type='text' name='newAddress' /> </td></tr>" .
+	"<tr><td>New Site&#39s City: </td><td><input type='text' name='newCity' /> </td></tr>" .
+	"<tr><td>New Site&#39;s State (two-letter abbrivation): </td><td><input type='text' maxLength='2' name='newState' /> </td></tr>" .
+	"<tr><td>New Site&#39;s Zip Code: </td><td><input type='text' maxLength='5' name='newZip' /> </td></tr>" .
+	"<tr><td>New Site&#39;s Fax: </td><td><input type='text' name='newFax' maxLength='10' /> </td></tr>" .
+	"<tr><td>Is this site currently active? </td>" .
+	"<td>Yes <input type='radio' name='isActive' value='1' checked='checked' />" .
+	"No <input type='radio' name='isActive' value='0' /> </td></tr>" .
+	"</table>" .
 	"<input type='submit' value='Commit Changes' /> </form>";
 	
 	echo "<p>$form</p>";

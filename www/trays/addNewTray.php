@@ -40,12 +40,14 @@
 		"</select>";
 	
 	$form = "<form action='addNewTray.php?added=true' method='post'>" .
-	"New Tray&#39;s Name: <input type='text' name='newName' /> <br/>" .
-	"New Tray&#39;s Company: $companySelector <br />" .
-	"Team Responsible for Tray: $teamSelector <br />" .
-	"New Tray&#39;s Location: $siteSelector <br />" .
-	"New Tray&#39;s Storage Location: $storageSelector <br/>" .
-	"New Tray&#39;s Status: $statusSelector <br/>" .
+	"<table>" .
+	"<tr><td>New Tray&#39;s Name: </td><td><input type='text' name='newName' /> </td></tr>" .
+	"<tr><td>New Tray&#39;s Company: </td><td>$companySelector </td></tr>" .
+	"<tr><td>Team Responsible for Tray: </td><td>$teamSelector </td></tr>" .
+	"<tr><td>New Tray&#39;s Location: </td><td>$siteSelector </td></tr>" .
+	"<tr><td>New Tray&#39;s Storage Location: </td><td>$storageSelector </td></tr>" .
+	"<tr><td>New Tray&#39;s Status: </td><td>$statusSelector </td></tr>" .
+	"</table>" .
 	"<input type='submit' value='Commit Changes' /> </form>";
 	
 	echo "<p>$form</p>";

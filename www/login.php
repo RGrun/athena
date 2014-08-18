@@ -37,7 +37,7 @@
 			//$pass = md5($pass);
 			
 			//first, look to see if person logging in is a user, and check their permissions
-			$sql = "SELECT uname, pwd, perm FROM users WHERE uname='$user' AND pwd='$pass'";
+			$sql = "SELECT uname, perm FROM users WHERE uname='$user' AND pwd='$pass'";
 			
 			$result = $worker->query($sql);
 			
@@ -57,20 +57,27 @@
 				
 				$_SESSION['user'] = $user;
 				$_SESSION['userId'] = $row[0];
-				$_SESSION['pass'] = $pass;
 				header("Location: landing.php");
 				die();
 			} else {
 				//...or a client
 				//THIS CURRENTLY DOES NOT WORK
-				$sql = "SELECT uname, pwd from cilents WHERE uname='$user'"; // AND pwd='$pass'";
-				
+				$sql = "SELECT uname, perm from clients WHERE uname='$user' AND pwd='$pass'";
+				//echo $sql;
 				$result = $worker->query($sql);
 				
 				if(mysqli_num_rows($result) != 0 ) {
-					$sql = "SELECT cli_id from clients WHERE uname='$user'";
+					$sql = "SELECT cli_id, perm from clients WHERE uname='$user'";
 					$result = $worker->query($sql);
 					$row = mysqli_fetch_array($result);
+					
+						
+					//check admin permission
+					$a = preg_match("/admin/i", $row[1]);
+					
+					
+					if($a == TRUE) $_SESSION['isAdmin'] = TRUE;
+					else $_SESSION{'isAdmin'} = FALSE;
 					
 					$_SESSION['user'] = $user;
 					$_SESSION['userId'] = $row[0];

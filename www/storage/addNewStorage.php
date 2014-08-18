@@ -30,15 +30,17 @@
 	$companySelector = $worker->createSelector("company", "name", "cmp_id");
 	
 	$form = "<form action='addNewStorage.php' method='post'>" .
-	"New Location&#39;s Name: <input type='text' name='newName' /> <br/>" .
-	"New Location&#39;s Company: $companySelector <br />" .
-	"New Location&#39;s Address: <input type='text' name='newAddress' /> <br />" .
-	"New Location&#39;s City: <input type='text' name='newCity' /> <br/>" .
-	"New Location&#39;s State: <input type='text' name='newState' maxLength='2' /> <br/>" .
-	"New Location&#39;s Zip Code: <input type='text' name='newZip' />	<br/>" .
-	"Is this location currently active? <br />" .
-	"Yes <input type='radio' name='isActive' value='1' checked='checked' /> <br />" .
-	"No <input type='radio' name='isActive' value='0' /> <br />" .
+	"<table>" .
+	"<tr><td>New Location&#39;s Name: </td><td><input type='text' name='newName' /> </td></tr>" .
+	"<tr><td>New Location&#39;s Company: </td><td>$companySelector </tr> </td>" .
+	"<tr><td>New Location&#39;s Address: </td><td><input type='text' name='newAddress' /> </td></tr>" .
+	"<tr><td>New Location&#39;s City: </td><td><input type='text' name='newCity' /> </td></tr>" .
+	"<tr><td>New Location&#39;s State: </td><td><input type='text' name='newState' maxLength='2' /> </td> </tr>" .
+	"<tr><td>New Location&#39;s Zip Code: </td><td><input type='text' name='newZip' />	</td></tr>" .
+	"<tr><td>Is this location currently active?</td>" .
+	"<td>Yes <input type='radio' name='isActive' value='1' checked='checked' />" .
+	"No <input type='radio' name='isActive' value='0' /> </td></tr>" .
+	"</table>" .
 	"<input type='submit' value='Commit Changes' /> </form>";
 	
 	echo "<p>$form</p>";

@@ -22,7 +22,7 @@
 	
 	echo "<h2>Case Details: </h2>";
 	
-	echo "<div id='casetable'>";
+	echo "<div class='adminTable'>";
 	
 	extract($_POST);
 	
@@ -44,7 +44,7 @@
 	
 	echo $caseTable;
 	
-	echo "</div><br/>";
+	echo "</div>";
 	
 	//This form links to a page where you can add more trays to the case
 	$form = "<form method='post' action='newAssignment.php?cid=$case_id'>" .
@@ -77,6 +77,8 @@
 		
 		extract($row2);
 		
+		echo "<div class='adminTable'>";
+		
 		$company = $worker->findCompany($cmp_id, "name");
 		$team = $worker->findTeam($team_id, "name");
 		$site = $worker->findSite($site_id, "name");
@@ -103,6 +105,8 @@
 		"</table>";
 		
 		echo "$table";
+		
+		echo "</div>";
 	}
 	
 	echo "</div>";

@@ -52,6 +52,8 @@
 		
 		extract($row);
 		
+		echo "<div class='adminTable'>";
+		
 		echo "<h2>Tray Detail</h2>";
 		
 		$dropoffSelector = $worker->createSelector("sites", "name", "site_id", false, false, true);
@@ -99,7 +101,7 @@
 				$instrument = $worker->findInstrument($inst_id, "name");
 				
 				$traycont .= "<tr><td>$instrument</td>" .
-				"<td>$quant</td><td>$state</td><td>$cmt</td><td class='mod'><a href='/athena/www/trays/editTrayContents.php?iid=$inst_id'>Modify</a></td></tr>";
+				"<td>$quant</td><td>$state</td><td>$cmt</td><td class='mod'><a href='/athena/www/trays/editTrayContents.php?iid=$inst_id&mtd=dropoff'>Modify</a></td></tr>";
 				
 			}
 			
@@ -116,6 +118,8 @@
 			echo $proceedButton;
 			
 		}
+		
+		echo "</div>";
 		
 	} else {
 		echo "Error connecting to database";

@@ -27,10 +27,12 @@
 	echo "<h2>Input new doctor data:</h2>";
 	
 	$form = "<form action='addNewDoctor.php' method='post'>" .
-	"New Doctor&#39;s Name: <input type='text' name='newName' /> <br/>" . 
-	"Is this doctor currently active? <br />" .
-	"Yes <input type='radio' name='isActive' value='1' checked='checked' /> <br />" .
-	"No <input type='radio' name='isActive' value='0' /> <br />" .
+	"<table>" .
+	"<tr><td>New Doctor&#39;s Name: </td><td><input type='text' name='newName' /> </td></tr>" . 
+	"<tr><td>Is this doctor currently active? </td>" .
+	"<td>Yes <input type='radio' name='isActive' value='1' checked='checked' /> " .
+	"No <input type='radio' name='isActive' value='0' /> </td>" .
+	"</table>" .
 	"<input type='submit' value='Commit Changes' /> </form>";
 	
 	echo "<p>$form</p>";

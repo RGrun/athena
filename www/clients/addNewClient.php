@@ -16,8 +16,8 @@
 		if(isset($_POST['newPassword'])) {
 			
 			$pass= $_POST['newPassword'];
-			$pass = "!@#$pass!@#";
-			$pass = md5($pass);
+			//$pass = "!@#$pass!@#";
+			//$pass = md5($pass);
 		} else {
 			$pass = "";
 		}
@@ -36,16 +36,19 @@
 	echo "<h2>Input new client data:</h2>";
 	
 	$form = "<form action='addNewClient.php' method='post'>" .
-	"New Client&#39;s First Name: <input type='text' name='newFName' /> <br/>" .
-	"New Client&#39;s Last Name: <input type='text' name='newLName' /> <br/>" .
-	"New Client&#39;s Username: <input type='text' name='newUserName' /> <br />" .
-	"New Client&#39;s Password: <input type='password' name='newPassword' /> <br />" .
-	"New Client&#39;s Email: <input type='text' name='newEmail' /> <br />" .
-	"New Client&#39;s Phone: <input type='text' name='newPhone' /> <br />" .
-	"New Client&#39;s SMS: <input type='text' name='newSMS' /> <br/>" . 
-	"Is this client currently active? <br />" .
-	"Yes <input type='radio' name='isActive' value='1' checked='checked' /> <br />" .
-	"No <input type='radio' name='isActive' value='0' /> <br />" .
+	"<table>" .
+	"<tr><td>New Client&#39;s First Name: </td><td><input type='text' name='newFName' /> </td></tr>" .
+	"<tr><td>New Client&#39;s Last Name:</td><td> <input type='text' name='newLName' /> </td></tr>" .
+	"<tr><td>New Client&#39;s Username: </td><td><input type='text' name='newUserName' /> </td></tr>" .
+	"<tr><td>New Client&#39;s Password: </td><td><input type='password' name='newPassword' /> </td></tr>" .
+	"<tr><td>New Client&#39;s Email: </td><td><input type='text' name='newEmail' /> </td></tr>" .
+	"<tr><td>New Client&#39;s Phone: </td><td><input type='text' name='newPhone' /> </td></tr>" .
+	"<tr><td>New Client&#39;s SMS: </td><td><input type='text' name='newSMS' /> </td></tr>" . 
+	"<tr><td>Is this client currently active?" .
+	"<td>Yes <input type='radio' name='isActive' value='1' checked='checked' />" .
+	"No <input type='radio' name='isActive' value='0' /> </td></tr>" .
+	"</table>" .
+	"<p>New clients are created without any administrator permissions. To add permissions, edit the client's data after creation.</p>" .
 	"<input type='submit' value='Commit Changes' /> </form>";
 	
 	echo "<p>$form</p>";

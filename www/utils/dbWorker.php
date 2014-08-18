@@ -214,10 +214,11 @@
 				if($this->query($sql)) header( "Location: caseDetail.php?cid=$id" );
 		}
 				
-		public function editTrayContents($column, $id, $newData = null, $tray_id) {
+		public function editTrayContents($column, $id, $newData = null, $tray_id, $method) {
 				$sql = "UPDATE traycont SET $column='$newData' WHERE inst_id='$id' AND tray_id='$tray_id'";
 				//echo $sql;
-				if($this->query($sql)) header( "Location: editTrayContents.php?iid=$id" );
+				$this->query($sql);
+				header( "Location: /athena/www/trays/editTrayContents.php?iid=$id&mtd=$method" );
 		}		
 				
 		//creative functions

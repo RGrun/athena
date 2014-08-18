@@ -27,8 +27,10 @@
 	echo "<h2>Input new instrument data:</h2>";
 	
 	$form = "<form action='addNewInstrument.php' method='post'>" .
-	"New Instrument&#39;s Name: <input type='text' name='newName' /> <br/>" . 
-	"Part Number: <input type='text' name='newPartno' /> <br/>" .
+	"<table>" .
+	"<tr><td>New Instrument&#39;s Name: </td><td><input type='text' name='newName' /> </td></tr>" . 
+	"<tr><td>Part Number: </td><td><input type='text' name='newPartno' /> </td></tr>" .
+	"</table>" .
 	"<input type='submit' value='Commit Changes' /> </form>";
 	
 	echo "<p>$form</p>";

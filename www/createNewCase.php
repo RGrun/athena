@@ -36,6 +36,7 @@
 		die();
 	}
 	
+	echo "<div class='adminTable'>";
 	
 	echo "<h2>Input new case data:</h2>";
 	
@@ -52,16 +53,20 @@
 	$dateTime = $worker->makeDateTimeSelect();
 	
 	$form = "<form action='createNewCase.php' method='post'>" .
-	"New Case&#39;s Team: $usersTeamName <br/>" .
-	"New Case&#39;s Doctor: $doctorSelector <br/>" .
-	"New Case&#39;s Procedure: $procedureSelector <br />" .
-	"New Case&#39;s Site: $siteSelector <br />" .
-	"New Case&#39;s Status: $statusSelector <br />" .
+	"<table>" .
+	"<tr><td>New Case&#39;s Team: </td><td>$usersTeamName </td></tr>" .
+	"<tr><td>New Case&#39;s Doctor: </td><td>$doctorSelector </td></tr>" .
+	"<tr><td>New Case&#39;s Procedure: </td><td>$procedureSelector </td></tr>" .
+	"<tr><td>New Case&#39;s Site: </td><td>$siteSelector </td></tr>" .
+	"<tr><td>New Case&#39;s Status: </td><td>$statusSelector </td></tr>" .
 	"<br/>Time of new case: $dateTime <br />" .
-	"Comment: <input type='text' name='newComment' /> <br/>" . 
+	"<tr><td>Comment: </td><td><input type='text' name='newComment' /> </td></tr>" .
+	"</table>" .	
 	"<input type='submit' value='Commit Changes' /> </form>";
 	
 	echo "$form";
+	
+	echo "</div>";
 	
 	
 	$worker->closeConnection();

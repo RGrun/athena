@@ -33,11 +33,13 @@
 	$regionSelector = $worker->createSelector("regions", "name", "reg_id");
 	
 	$form = "<form action='addNewTeam.php?added=true' method='post'>" .
-	"New Team&#39;s Name: <input type='text' name='newName' /> <br/>" .
-	"New Team&#39;s Region: $regionSelector <br />" .
-	"New Team&#39;s State: <input type='text' name='newState' maxLength='2' /> <br />" .
-	"New Team&#39;s Company: $companySelector <br />" .
-	"New Team&#39;s Leader: $leaderSelector <br />" .
+	"<table>" .
+	"<tr><td>New Team&#39;s Name: </td><td><input type='text' name='newName' /> </td></tr>" .
+	"<tr><td>New Team&#39;s Region: </td><td>$regionSelector </td></tr>" .
+	"<tr><td>New Team&#39;s State: </td><td><input type='text' name='newState' maxLength='2' /> </td></tr>" .
+	"<tr><td>New Team&#39;s Company: </td><td>$companySelector </td></tr>" .
+	"<tr><td>New Team&#39;s Leader: </td><td>$leaderSelector </td></tr>" .
+	"</table>" .
 	"<input type='submit' value='Commit Changes' /> </form>";
 	
 	echo "<p>$form</p>";
