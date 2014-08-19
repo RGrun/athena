@@ -11,7 +11,8 @@
 	$htmlUtils->makeHeader();
 	
 	$currentTrayId = $_SESSION['currentTrayId'];
-	$currentMethod = $_GET['mtd'];
+	if(isset($_GET['mtd']))$currentMethod = $_GET['mtd'];
+	else $currentMethod = "";
 	
 	//check to see if this page was reached from an admin page or a user's page
 	if(isset($_GET['su'])) {
@@ -21,6 +22,8 @@
 			$backLink = "<h6><a href='/athena/www/dropoffTray.php?tid=$currentTrayId'>Click here when finished editing</a></h6>";	
 		} else if($currentMethod == "pickup") {
 			$backLink = "<h6><a href='/athena/www/pickupTray.php?tid=$currentTrayId'>Click here when finished editing</a></h6>";
+		} else {
+			$backLink = "";
 		}
 		
 	}
@@ -35,6 +38,18 @@
 		$worker->editTrayContents("state", $currentInstId, $_POST['newState'], $currentTrayId, $currentMethod);
 	} if(isset($_POST['newComment'])) {
 		$worker->editTrayContents("cmt", $currentInstId, addSlashes($_POST['newComment']), $currentTrayId, $currentMethod);
+		//need this info for logging
+		$sql = "SELECT * FROM traycont WHERE inst_id='$currentInstId' AND tray_id='$currentTrayId'";
+				
+		$result = $worker->query($sql);
+		$row = mysqli_fetch_assoc($result);
+		extract($row);
+				
+		$time = time();
+		$time = date("Y-m-d H:i:s", $time);
+		//logging
+		$sql = "INSERT INTO h_traycont (asgn_id, tray_id, inst_id, quant, state, cmt, dttm) VALUES ('0', '$tray_id', '$inst_id', '$quant', '$state', '$cmt', '$time')";
+		$worker->query($sql);
 	}
 	
 	//create traycont table (tray contents)

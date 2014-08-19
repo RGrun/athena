@@ -291,7 +291,8 @@ create table if not exists h_traycont
   inst_id   int(10)      not null,
   quant     int(4)       not null default 1,
   state     varchar(20)  not null default 'p',     -- Missing, Broken, Spent
-  cmt       varchar(255) not null default ''       -- description of change from assignment, or other source.
+  cmt       varchar(255) not null default '',  -- description of change from assignment, or other source.
+  dttm		datetime	 not null default '0/0/0'
 );
 
 -- --------------------------------------------------------
@@ -390,8 +391,8 @@ create table if not exists sevents
   u_id      int(10)        not null,                  -- the primary key of the user typ
   name      varchar(20)    not null,                  -- which event happened
   item      varchar(512)   not null,                  -- information for each event
-  from      varchar(512)   not null,                  -- information for each event
-  to        varchar(512)   not null,                  -- information for each event
+  was      varchar(512)   not null,                  -- information for each event
+  now        varchar(512)   not null,                  -- information for each event
   dttm      datetime       not null,                  -- the dttm that the event happened
   primary key (evt_id)
 );

@@ -52,6 +52,9 @@
 				<div class='username'>
 					<span id='username'>User: $userStr</span>
 				</div>
+				<div class='logView'>
+					<a href='/athena/www/logs/logs.php'><span id='logIcon'>&#x1f4d6;</span> <span id='logText'>View Logs</span></a>
+				</div>
 				<div class='extras'>
 					<ul>
 						<a href='/athena/www/settings.php'><li><span id='extraicon'>&#x2699;</span>Settings</li></a>
@@ -230,6 +233,9 @@ _END;
 				</a>
 				<div class='username'>
 					<span id='username'>User: $userStr</span>
+				</div>
+				<div class='logView'>
+					<a href='/athena/www/logs/logs.php'><span id='logIcon'>&#x1f4d6;</span> <span id='logText'>View Logs</span></a>
 				</div>
 				<div class='extras'>
 					<ul>

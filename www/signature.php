@@ -19,6 +19,8 @@
 	
 	$_SESSION['currentTrayId'] = $currentTrayId;
 	
+	$userId = $_SESSION['userId'];
+	
 	
 	$sql = "SELECT * FROM trays WHERE tray_id='$currentTrayId'";
 	
@@ -45,6 +47,8 @@
 			$destId = $siteId;
 			$destName = "";
 		}
+		
+		echo "<div class='adminTable'>";
 		
 		if ($destIsStorage) echo "<h5>Please ensure this information is correct.</h5>";
 		else echo "<h5>Please ensure this information is correct, then input your name in the box below.";
@@ -119,6 +123,7 @@
 			if ($pickupDropoff == "pickup" || $destIsStorage == true) echo $pickupForm;
 			else if($pickupDropoff== "dropoff") echo $dropoffForm;
 			
+			echo "</div>";
 			
 		} else {
 			echo "Database connection error.";
@@ -140,10 +145,12 @@
 			$destId = $_POST['updatedSite'];
 			$sql = "UPDATE trays SET atnow='stor' , site_id='0' , stor_id='$destId' WHERE tray_id='$currentTrayId'";
 			$worker->query($sql);
-			//$sql = "UPDATE assigns SET cli_nm='$clientName' WHERE tray_id='$currentTrayId'";
-			//$worker->query($sql);
+			$currentTime = time();
+			$currentTime = date("Y-m-d H:i:s", $currentTime);
+			$sql = "INSERT INTO h_traystor (tray_id, stor_id, usr_id, dttm) VALUES ('$currentTrayId', '$destId', '$userId', '$currentTime')";
+			$worker->query($sql);
 			//echo $sql;
-			$_SESSION{'destIsStorage'} = null;
+			$_SESSION['destIsStorage'] = null;
 			header("Location: dropoff.php");
 		} else if ($destIsStorage == false) {
 			$destId = $_POST['updatedSite'];

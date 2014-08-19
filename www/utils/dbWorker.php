@@ -27,6 +27,16 @@
 		//Database editing functions
 		
 		public function editCompanyDatabase($column, $id, $newData = null) {
+			//get old data so we can log it
+			$sql = "SELECT * FROM company WHERE cmp_id='$id'";
+			$result = $this->query($sql);
+			$old = mysqli_fetch_assoc($result);
+		
+			$oldData = $old["$column"];
+		
+			if($old["$column"] == $newData) header( "Location: companyDetail.php?cid=$id" );
+				
+			$userId = $_SESSION['userId'];
 		
 			if($column == "active") {
 				$sql = "SELECT active FROM company WHERE cmp_id='$id'";
@@ -34,11 +44,15 @@
 					$row = mysqli_fetch_assoc($result);
 					if($row['active'] == 1) {
 						$sql = "UPDATE company SET active='0' WHERE cmp_id='$id'";
-						
+						$oldData = "Active";
+						$newData = "Inactive";
+						$this->logSevent($userId, "change.company", $column, $oldData, $newData); 
 						if($this->query($sql)) header( "Location: companyDetail.php?cid=$id" );
 					} else {
 						$sql = "UPDATE company SET active='1' WHERE cmp_id='$id'";
-						
+						$oldData = "Inactive";
+						$newData = "Active";
+						$this->logSevent($userId, "change.company", $column, $oldData, $newData); 
 						if($this->query($sql)) header( "Location: companyDetail.php?cid=$id" );
 					}
 					
@@ -46,24 +60,47 @@
 			} else {
 			
 				$sql = "UPDATE company SET $column='$newData' WHERE cmp_id='$id'";
-				
+				$this->logSevent($userId, "change.company", $column, $oldData, $newData); 
+
 				if($this->query($sql)) header( "Location: companyDetail.php?cid=$id" );
 				
 			}
 		}
 		
 		public function editUserDatabase($column, $id, $newData = null) {
+		
+			//get old data so we can log it
+			$sql = "SELECT * FROM users WHERE usr_id='$id'";
+			$result = $this->query($sql);
+			$old = mysqli_fetch_assoc($result);
+			
+			//log it
+				if($column == "team_id") {
+					$oldData = $this->findTeam($old["$column"], "name");
+					$newData = $this->findTeam($newData, "name");
+				} else {
+					$oldData = $old["$column"];
+				}
+				
+			if($old["$column"] == $newData) header( "Location: userDetail.php?uid=$id" );
+				
+			$userId = $_SESSION['userId'];
+				
 			if($column == "active") {
 				$sql = "SELECT active FROM users WHERE usr_id='$id'";
 				if($result = $this->query($sql)) {
 					$row = mysqli_fetch_assoc($result);
 					if($row['active'] == 1) {
 						$sql = "UPDATE users SET active='0' WHERE usr_id='$id'";
-						
+						$oldData = "Active";
+						$newData = "Inactive";
+						$this->logSevent($userId, "change.users", $column, $oldData, $newData); 
 						if($this->query($sql)) header( "Location: userDetail.php?uid=$id" );
 					} else {
 						$sql = "UPDATE users SET active='1' WHERE usr_id='$id'";
-						
+						$oldData = "Inactive";
+						$newData = "Active";
+						$this->logSevent($userId, "change.users", $column, $oldData, $newData); 
 						if($this->query($sql)) header( "Location: userDetail.php?uid=$id" );
 					}
 					
@@ -71,24 +108,45 @@
 			} else {
 			
 				$sql = "UPDATE users SET $column='$newData' WHERE usr_id='$id'";
-				
+				$this->logSevent($userId, "change.users", $column, $oldData, $newData); 
 				if($this->query($sql)) header( "Location: userDetail.php?uid=$id" );
 				
 			}
 		}
 		
 		public function editStorageDatabase($column, $id, $newData = null) {
+			//get old data so we can log it
+			$sql = "SELECT * FROM storage WHERE site_id='$id'";
+			$result = $this->query($sql);
+			$old = mysqli_fetch_assoc($result);
+			
+			//log it
+				if($column == "cmp_id") {
+					$oldData = $this->findCompany($old["$column"], "name");
+					$newData = $this->findCompany($newData, "name");
+				} else {
+					$oldData = $old["$column"];
+				}
+			
+			if($old["$column"] == $newData) header( "Location: storageDetail.php?sid=$id" );
+				
+			$userId = $_SESSION['userId'];
+			
 			if($column == "active") {
 				$sql = "SELECT active FROM storage WHERE stor_id='$id'";
 				if($result = $this->query($sql)) {
 					$row = mysqli_fetch_assoc($result);
 					if($row['active'] == 1) {
 						$sql = "UPDATE storage SET active='0' WHERE stor_id='$id'";
-						
+						$oldData = "Active";
+						$newData = "Inactive";
+						$this->logSevent($userId, "change.storage", $column, $oldData, $newData); 
 						if($this->query($sql)) header( "Location: storageDetail.php?sid=$id" );
 					} else {
 						$sql = "UPDATE storage SET active='1' WHERE stor_id='$id'";
-						
+						$oldData = "Inactive";
+						$newData = "Active";
+						$this->logSevent($userId, "change.storage", $column, $oldData, $newData); 
 						if($this->query($sql)) header( "Location: storageDetail.php?sid=$id" );
 					}
 					
@@ -96,23 +154,39 @@
 			} else {
 			
 				$sql = "UPDATE storage SET $column='$newData' WHERE stor_id='$id'";
-				
+				$this->logSevent($userId, "change.storage", $column, $oldData, $newData); 
 				if($this->query($sql)) header( "Location: storageDetail.php?sid=$id" );
 				
 			}
 		}
 		
 		public function editSiteDatabase($column, $id, $newData = null) {
+			//get old data so we can log it
+			$sql = "SELECT * FROM sites WHERE site_id='$id'";
+			$result = $this->query($sql);
+			$old = mysqli_fetch_assoc($result);
+			
+			$oldData = $old["$column"];
+		
+			if($old["$column"] == $newData) header( "Location: siteDetail.php?sid=$id" );
+				
+			$userId = $_SESSION['userId'];
+		
 			if($column == "active") {
 				$sql = "SELECT active FROM sites WHERE site_id='$id'";
 				if($result = $this->query($sql)) {
 					$row = mysqli_fetch_assoc($result);
 					if($row['active'] == 1) {
 						$sql = "UPDATE sites SET active='0' WHERE site_id='$id'";
-						
+						$oldData = "Active";
+						$newData = "Inactive";
+						$this->logSevent($userId, "change.sites", $column, $oldData, $newData); 
 						if($this->query($sql)) header( "Location: siteDetail.php?sid=$id" );
 					} else {
 						$sql = "UPDATE sites SET active='1' WHERE site_id='$id'";
+						$oldData = "Inactive";
+						$newData = "Active";
+						$this->logSevent($userId, "change.sites", $column, $oldData, $newData); 
 						
 						if($this->query($sql)) header( "Location: siteDetail.php?sid=$id" );
 					}
@@ -121,24 +195,41 @@
 			} else {
 			
 				$sql = "UPDATE sites SET $column='$newData' WHERE site_id='$id'";
-				
+				$this->logSevent($userId, "change.sites", $column, $oldData, $newData); 
+
 				if($this->query($sql)) header( "Location: siteDetail.php?sid=$id" );
 				
 			}
 		}
 		
 		public function editClientDatabase($column, $id, $newData = null) {
+		//get old data so we can log it
+			$sql = "SELECT * FROM clients WHERE cli_id='$id'";
+			$result = $this->query($sql);
+			$old = mysqli_fetch_assoc($result);
+		
+			$oldData = $old["$column"];
+		
+			if($old["$column"] == $newData) header( "Location: clientDetail.php?cid=$id" );
+				
+			$userId = $_SESSION['userId'];
+		
+		
 			if($column == "active") {
 				$sql = "SELECT active FROM clients WHERE cli_id='$id'";
 				if($result = $this->query($sql)) {
 					$row = mysqli_fetch_assoc($result);
 					if($row['active'] == 1) {
 						$sql = "UPDATE clients SET active='0' WHERE cli_id='$id'";
-						
+						$oldData = "Active";
+						$newData = "Inactive";
+						$this->logSevent($userId, "change.clients", $column, $oldData, $newData); 
 						if($this->query($sql)) header( "Location: clientDetail.php?cid=$id" );
 					} else {
 						$sql = "UPDATE clients SET active='1' WHERE cli_id='$id'";
-						
+						$oldData = "Inactive";
+						$newData = "Active";
+						$this->logSevent($userId, "change.clients", $column, $oldData, $newData); 
 						if($this->query($sql)) header( "Location: clientDetail.php?cid=$id" );
 					}
 					
@@ -146,24 +237,42 @@
 			} else {
 			
 				$sql = "UPDATE clients SET $column='$newData' WHERE cli_id='$id'";
-				
+				$this->logSevent($userId, "change.clients", $column, $oldData, $newData); 
+
 				if($this->query($sql)) header( "Location: clientDetail.php?cid=$id" );
 				
 			}
 		}
 		
 		public function editDoctorDatabase($column, $id, $newData = null) {
+			//get old data so we can log it
+			$sql = "SELECT * FROM doctors WHERE doc_id='$id'";
+			$result = $this->query($sql);
+			$old = mysqli_fetch_assoc($result);
+		
+			$oldData = $old["$column"];
+		
+			
+			if($old["$column"] == $newData) header( "Location: doctorDetail.php?did=$id" );
+				
+			$userId = $_SESSION['userId'];
+				
+		
 			if($column == "active") {
 				$sql = "SELECT active FROM doctors WHERE doc_id='$id'";
 				if($result = $this->query($sql)) {
 					$row = mysqli_fetch_assoc($result);
 					if($row['active'] == 1) {
 						$sql = "UPDATE doctors SET active='0' WHERE doc_id='$id'";
-						
+						$oldData = "Active";
+						$newData = "Inactive";
+						$this->logSevent($userId, "change.doctors", $column, $oldData, $newData); 
 						if($this->query($sql)) header( "Location: doctorDetail.php?did=$id" );
 					} else {
 						$sql = "UPDATE doctors SET active='1' WHERE doc_id='$id'";
-						
+						$oldData = "Inactive";
+						$newData = "Active";
+						$this->logSevent($userId, "change.doctors", $column, $oldData, $newData); 
 						if($this->query($sql)) header( "Location: doctorDetail.php?did=$id" );
 					}
 					
@@ -171,37 +280,148 @@
 			} else {
 			
 				$sql = "UPDATE doctors SET $column='$newData' WHERE doc_id='$id'";
-				
+				$this->logSevent($userId, "change.doctors", $column, $oldData, $newData); 
 				if($this->query($sql)) header( "Location: doctorDetail.php?did=$id" );
 				
 			}
 		}
 		
-		public function editTeamDatabase($column, $id, $newData = null) {		
+		public function editTeamDatabase($column, $id, $newData = null) {	
+				//get old data so we can log it
+				$sql = "SELECT * FROM teams WHERE team_id='$id'";
+				$result = $this->query($sql);
+				$old = mysqli_fetch_assoc($result);
+		
+				//log it
+				if($column == "cmp_id") {
+					$oldData = $this->findCompany($old["$column"], "name");
+					$newData = $this->findCompany($newData, "name");
+				} else if ($column == "head_id") {
+					$oldData = $this->findUser($old["$column"], "uname");
+					$newData = $this->findUser($newData, "uname");
+				} else {
+					$oldData = $old["$column"];
+				}
+				
+				if($old["$column"] == $newData) header( "Location: teamDetail.php?tid=$id" );
+				
+				$userId = $_SESSION['userId'];
+				
+				$this->logSevent($userId, "change.teams", $column, $oldData, $newData); 
+				
 				$sql = "UPDATE teams SET $column='$newData' WHERE team_id='$id'";
 				//echo $sql;
-				if($this->query($sql)) header( "Location: teamDetail.php?tid=$id" );
+				$this->query($sql);
+				header( "Location: teamDetail.php?tid=$id" );
 		}
 		
-		public function editInstrumentDatabase($column, $id, $newData = null) {		
+		public function editInstrumentDatabase($column, $id, $newData = null) {
+				//get old data so we can log it
+				$sql = "SELECT * FROM instruments WHERE inst_id='$id'";
+				$result = $this->query($sql);
+				$old = mysqli_fetch_assoc($result);
+				
+				if($old["$column"] == $newData) header( "Location: instrumentDetail.php?iid=$id" );
+				
+				$userId = $_SESSION['userId'];
+				
+				$oldData = $old["$column"];
+				
+				$this->logSevent($userId, "change.tray", $column, $oldData, $newData); 
+				
+		
 				$sql = "UPDATE instruments SET $column='$newData' WHERE inst_id='$id'";
 				//echo $sql;
-				if($this->query($sql)) header( "Location: instrumentDetail.php?iid=$id" );
+				$this->query($sql); 
+				header( "Location: instrumentDetail.php?iid=$id" );
 		}
 		
 		public function editTrayDatabase($column, $id, $newData = null) {
+				//get old data so we can log it
+				$sql = "SELECT * FROM trays WHERE tray_id='$id'";
+				$result = $this->query($sql);
+				$old = mysqli_fetch_assoc($result);
+				
+				
+				//log it
+				if($column == "cmp_id") {
+					$oldData = $this->findCompany($old["$column"], "name");
+					$newData = $this->findCompany($newData, "name");
+				} else if ($column == "team_id" || $column == "loan_team") {
+					$oldData = $this->findTeam($old["$column"], "name");
+					$newData = $this->findTeam($newData, "name");
+				} else if ($column == "stor_id") {
+					$oldData = $this->findStorage($old["$column"], "uname");
+					$newData = $this->findStorage($newData, "uname");
+				} else if($column == "site_id") {
+					$oldData = $this->findSite($old["$column"], "name");
+					$newData = $this->findSite($newData, "name");
+				} else {
+					$oldData = $old["$column"];
+				}
+				
+				if($old["$column"] == $newData) header( "Location: trayDetail.php?tid=$id" );
+				
+				$userId = $_SESSION['userId'];
+				
+				$this->logSevent($userId, "change.tray", $column, $oldData, $newData); 
+				
+		
 				$sql = "UPDATE trays SET $column='$newData' WHERE tray_id='$id'";
 				//echo $sql;
-				if($this->query($sql)) header( "Location: trayDetail.php?tid=$id" );
+				$this->query($sql);
+				header( "Location: trayDetail.php?tid=$id" );
 		}
 		
 		public function editRegionDatabase($column, $id, $newData = null) {
+				//get old data so we can log it
+				$sql = "SELECT * FROM regions WHERE reg_id='$id'";
+				$result = $this->query($sql);
+				$old = mysqli_fetch_assoc($result);
+		
+		
+				//log it
+				$oldData = $old["$column"];
+		
+				if($old["$column"] == $newData)  header( "Location: regionDetail.php?rid=$id" );
+				
+				$userId = $_SESSION['userId'];
+				
+				$this->logSevent($userId, "change.region", $column, $oldData, $newData); 
+				
+		
 				$sql = "UPDATE regions SET $column='$newData' WHERE reg_id='$id'";
 				//echo $sql;
 				if($this->query($sql)) header( "Location: regionDetail.php?rid=$id" );
 		}
 		
 		public function editAssignmentDatabase($column, $id, $newData = null, $link = true) {
+				//get old data so we can log it
+				$sql = "SELECT * FROM assigns WHERE asgn_id='$id'";
+				$result = $this->query($sql);
+				$old = mysqli_fetch_assoc($result);
+				
+				//log it
+				if($column == "tray_id") {
+					$oldData = $this->findTray($old["$column"], "name");
+					$newData = $this->findTray($newData, "name");
+				} else if ($column == "cli_id") {
+					$oldData = $this->findClient($old["$column"], "name");
+					$newData = $this->findClient($newData, "name");
+				} else if ($column == "do_usr" || $column == "pu_usr") {
+					$oldData = $this->findUser($old["$column"], "uname");
+					$newData = $this->findUser($newData, "uname");
+				} else {
+					$oldData = $old["$column"];
+				}
+
+				if($old["$column"] == $newData) header("Location: assignmentDetail.php?aid=$id");
+				
+				$userId = $_SESSION['userId'];
+				
+				$this->logSevent($userId, "change.assignment", $column, $oldData, $newData); 
+				
+				//make actual DB change
 				$sql = "UPDATE assigns SET $column='$newData' WHERE asgn_id='$id'";
 				//echo $sql;
 				if($this->query($sql) && $link == true) header( "Location: assignmentDetail.php?aid=$id" );
@@ -209,17 +429,76 @@
 		}
 		
 		public function editCaseDatabase($column, $id, $newData = null) {
+				//get old data so we can log it
+				$sql = "SELECT * FROM cases WHERE case_id='$id'";
+				$result = $this->query($sql);
+				$old = mysqli_fetch_assoc($result);
+		
 				$sql = "UPDATE cases SET $column='$newData' WHERE case_id='$id'";
 				//echo $sql;
-				if($this->query($sql)) header( "Location: caseDetail.php?cid=$id" );
+				$this->query($sql);
+				
+				//log it
+				if($column == "team_id") {
+					$oldData = $this->findTeam($old["$column"], "name");
+					$newData = $this->findTeam($newData, "name");
+				} else if ($column == "doc_id") {
+					$oldData = $this->findDoctor($old["$column"], "name");
+					$newData = $this->findDoctor($newData, "name");
+				} else if ($column == "proc_id") {
+					$oldData = $this->findProcedure($old["$column"], "name");
+					$newData = $this->findProcedure($newData, "name");
+				} else if ($column == "site_id") {
+					$oldData = $this->findSite($old["$column"], "name");
+					$newdata = $this->findSite($newData, "name");
+				} else {
+					$oldData = $old["$column"];
+				}
+
+				if($old["$column"] == $newData) header( "Location: caseDetail.php?cid=$id" );
+				
+				$userId = $_SESSION['userId'];
+				$this->logSevent($userId, "change.case", $column, $oldData, $newData); 
+
+				header( "Location: caseDetail.php?cid=$id" );
+				
+				
 		}
 				
-		public function editTrayContents($column, $id, $newData = null, $tray_id, $method) {
-				$sql = "UPDATE traycont SET $column='$newData' WHERE inst_id='$id' AND tray_id='$tray_id'";
+		public function editTrayContents($column, $iid, $newData = null, $tid, $method) {
+		
+				//get old data so we can log it
+				$sql = "SELECT * FROM traycont WHERE inst_id='$iid' AND tray_id='$tid'";
+				$result = $this->query($sql);
+				$old = mysqli_fetch_assoc($result);
+		
+				$sql = "UPDATE traycont SET $column='$newData' WHERE inst_id='$iid' AND tray_id='$tid'";
 				//echo $sql;
 				$this->query($sql);
-				header( "Location: /athena/www/trays/editTrayContents.php?iid=$id&mtd=$method" );
-		}		
+				
+				$userId = $_SESSION['userId'];
+				$item = $this->findInstrument($iid, "name");
+				
+				if($old["$column"] == $newData) return null;
+
+				$this->logSevent($userId, "change.trayContents", $item, $old["$column"], $newData); 
+
+				header( "Location: /athena/www/trays/editTrayContents.php?iid=$iid&mtd=$method" );
+		}
+		
+		public function logSevent($userId, $name, $item, $from, $to) {
+		
+			$time = time();
+			$time = date("Y-m-d H:i:s", $time);
+		
+			$sql = "INSERT INTO sevents (u_id, name, item, was, now, dttm) VALUES ('$userId', '$name', '$item', '$from', '$to', '$time')";
+			
+			//echo $sql;
+			
+			$this->query($sql);
+		
+		
+		}
 				
 		//creative functions
 		

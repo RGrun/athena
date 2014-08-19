@@ -293,6 +293,39 @@
 				border-radius: 25px;
 			}
 			
+			.logView {
+			
+				position: absolute;
+				top: -20px;
+				right: 300px;
+				font-size: 12px;
+				padding: 10px;
+				height: 20px;
+				border-radius: 0px 0px 10px 10px;
+			
+				background: linear-gradient(to bottom, #67C2E7 0%, #27A7DA 1%, #252661 100%) repeat scroll 0% 0% transparent;
+			
+			}
+			
+			#logIcon {
+				position: relative;
+				font-size: 20px;
+				margin-top: 10px;
+				margin-right: 5px;
+				padding: 3px;
+				top: -5px;
+			}
+			
+			#logText {
+			
+				position: relative;
+				font-weight: bold;
+				padding-bottom: 5px;
+				top: -5px;
+				margin: 5px;
+			
+			}
+			
 			.footer  {
 				margin-top: 10px;
 				background: #666633;

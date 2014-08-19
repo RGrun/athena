@@ -50,11 +50,14 @@
 			
 			if($selectedMethod == "active" && $currentData == 1) {
 				echo "Company is active. <br />";
+				echo $currentData;
 				echo $activityForm;
 			} else if($selectedMethod == "active" && $currentData == 0) {
 				echo "Company is inactive. <br />";
+				echo $currentData;
 				echo $activityForm;
 			} else {
+				echo $currentData;
 				echo $form;
 			}
 			

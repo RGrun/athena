@@ -46,6 +46,13 @@
 		$sql = "INSERT INTO traycont (tray_id, inst_id, quant, state, cmt)" .
 		"VALUES ('$currentTrayId', '$inst', '$quant', '$state', '$cmt')";
 		$worker->query($sql);
+		
+		$time = time();
+		$time = date("Y-m-d H:i:s", $time);
+		//log changes
+		$sql = "INSERT INTO h_traycont (asgn_id, tray_id, inst_id, quant, state, cmt, dttm) VALUES ('0', '$currentTrayId', '$inst', '$quant', '$state', '$cmt', '$time')";
+		//echo $sql;
+		$worker->query($sql);
 
 		//echo "Data successfully updated";
 		} else {
