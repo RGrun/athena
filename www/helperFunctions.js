@@ -170,6 +170,7 @@
 			|| (divs[x].className == 'main') 
 			|| (divs[x].className == 'headernav')
 			|| (divs[x].id == 'header' )
+			|| (divs[x].className == 'logView')
 			|| (divs[x].className == 'location')
 			|| (divs[x].className == 'clickable')
 			|| (divs[x].className == 'pagetitle')
@@ -197,72 +198,8 @@
 		}
 	}
 	
-	function showReturnedElements() {
-		
-		showAllElements();
-		
-		//get am array of all divs in the page
-		var divs = document.getElementsByTagName("DIV");
-		
-		for(x = 0; x < divs.length; x++) {
-			if(divs[x].className == 'returnedelement') continue;
-			if(divs[x].className == 'returnedTray') continue;
-			if((divs[x].className == 'header') 
-			|| (divs[x].className == 'main') 
-			|| (divs[x].className == 'headernav')
-			|| (divs[x].className == 'filterform' )
-			|| (divs[x].className == 'landingview')
-			|| (divs[x].className == 'wrapper')
-			|| (divs[x].className == 'username')
-			|| (divs[x].className == 'extras')
-			|| (divs[x].className == 'footer')) continue;
-			
-			S(divs[x]).display = 'none';
-		}
-	}
 	
-	function showLoanedElements() {
-		
-		showAllElements();
-		
-		//get am array of all divs in the page
-		var divs = document.getElementsByTagName("DIV");
-		
-		for(x = 0; x < divs.length; x++) {
-			if(divs[x].className == 'loanedelement') continue;
-			if(divs[x].className == 'loanedTray') continue;
-			if((divs[x].className == 'header') 
-			|| (divs[x].className == 'main') 
-			|| (divs[x].className == 'headernav')
-			|| (divs[x].className == 'filterform' )
-			|| (divs[x].className == 'landingview')
-			|| (divs[x].className == 'footer')) continue;
-			
-			S(divs[x]).display = 'none';
-		}
-	}		
-			
-			
-	function showScheduledElements() {
 	
-		showAllElements();
-		
-		//get am array of all divs in the page
-		var divs = document.getElementsByTagName("DIV");
-		
-		for(x = 0; x < divs.length; x++) {
-			if(divs[x].className == 'scheduledelement') continue;
-			if(divs[x].className == 'scheduledTray') continue;
-			if((divs[x].className == 'header') 
-			|| (divs[x].className == 'main') 
-			|| (divs[x].className == 'headernav')
-			|| (divs[x].className == 'filterform' )
-			|| (divs[x].className == 'landingview')
-			|| (divs[x].className == 'footer')) continue;
-			
-			S(divs[x]).display = 'none';
-		}
-	}		
 			
 	//used in viewTrayDetail page
 	function showHide() {

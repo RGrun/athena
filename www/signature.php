@@ -36,9 +36,26 @@
 			} 
 	
 		if($pickupDropoff == "pickup") {
-			//$destId = $_POST['updatedSite'];
+			$destId = $_POST['updatedSite'];
 			$sql = "UPDATE trays SET atnow='usr' , stor_id='0' , site_id='0' WHERE tray_id='$currentTrayId'";
 			$worker->query($sql);
+			//this is the mechanism for completing assignments. If the tray is being picked up from a site,
+			//the related assignment is marked as "complete". The user picking up the tray is then responsible for returning
+			//it to storage
+			$sql = "SELECT asgn_id, tray_id, pu_usr FROM assigns WHERE tray_id='$currentTrayId' AND (pu_usr='$userId' OR pu_usr='0')";
+			$result = $worker->query($sql);
+			while($row = mysqli_fetch_array($result)) {
+				if($row[1] == $currentTrayId && ($row[2] == $userId || $row[2] == 0)) {
+					$sql2 = "UPDATE assigns SET status='Complete' WHERE asgn_id='$row[0]'";
+					$worker->query($sql2);
+				}
+			}
+			
+			$tray = $worker->findTray($currentTrayId, "name");
+			$user = $worker->findUser($userId, "uname");
+			$worker->logSevent($userId, "pickup.site", $tray , "At site", "With $user"); 
+			
+			
 			//echo $sql;
 			header("Location: pickup.php");
 		} else if($destIsStorage == true) {
@@ -50,6 +67,13 @@
 			$sql = "INSERT INTO h_traystor (tray_id, stor_id, usr_id, dttm) VALUES ('$currentTrayId', '$destId', '$userId', '$currentTime')";
 			$worker->query($sql);
 			//echo $sql;
+			
+			
+			$tray = $worker->findTray($currentTrayId, "name");
+			$user = $worker->findUser($userId, "uname");
+			$dest = $worker->findStorage($destId, "name");
+			$worker->logSevent($userId, "dropoff.storage", $tray , "With $user", $dest); 
+			
 			header("Location: dropoff.php");
 		} else if ($destIsStorage == false) {
 			$destId = $_POST['updatedSite'];
@@ -67,6 +91,13 @@
 			$sql = "INSERT INTO traytrans (tray_id, signer, site_id, from_usr, to_usr, case_id, dttm) VALUES ('$currentTrayId', '$name','$destId', '$userId', '$row[1]', '$row[0]', '$time')";
 			//echo $sql;
 			$worker->query($sql);
+			
+			$tray = $worker->findTray($currentTrayId, "name");
+			$user = $worker->findUser($userId, "uname");
+			$dest = $worker->findSite($destId, "name");
+			$worker->logSevent($userId, "dropoff.site", $tray , "With $user", $dest); 
+
+			
 			header("Location: dropoff.php");
 		}
 	

@@ -45,14 +45,14 @@
 					if($row['active'] == 1) {
 						$sql = "UPDATE company SET active='0' WHERE cmp_id='$id'";
 						$oldData = "Active";
-						$newData = "Inactive";
-						$this->logSevent($userId, "change.company", $column, $oldData, $newData); 
+						$new = "Inactive";
+						$this->logSevent($userId, "change.company", $column, $oldData, $new); 
 						if($this->query($sql)) header( "Location: companyDetail.php?cid=$id" );
 					} else {
 						$sql = "UPDATE company SET active='1' WHERE cmp_id='$id'";
 						$oldData = "Inactive";
-						$newData = "Active";
-						$this->logSevent($userId, "change.company", $column, $oldData, $newData); 
+						$new = "Active";
+						$this->logSevent($userId, "change.company", $column, $oldData, $new); 
 						if($this->query($sql)) header( "Location: companyDetail.php?cid=$id" );
 					}
 					
@@ -60,7 +60,7 @@
 			} else {
 			
 				$sql = "UPDATE company SET $column='$newData' WHERE cmp_id='$id'";
-				$this->logSevent($userId, "change.company", $column, $oldData, $newData); 
+				$this->logSevent($userId, "change.company", $column, $oldData, $new); 
 
 				if($this->query($sql)) header( "Location: companyDetail.php?cid=$id" );
 				
@@ -77,7 +77,7 @@
 			//log it
 				if($column == "team_id") {
 					$oldData = $this->findTeam($old["$column"], "name");
-					$newData = $this->findTeam($newData, "name");
+					$new = $this->findTeam($newData, "name");
 				} else {
 					$oldData = $old["$column"];
 				}
@@ -93,14 +93,14 @@
 					if($row['active'] == 1) {
 						$sql = "UPDATE users SET active='0' WHERE usr_id='$id'";
 						$oldData = "Active";
-						$newData = "Inactive";
-						$this->logSevent($userId, "change.users", $column, $oldData, $newData); 
+						$new = "Inactive";
+						$this->logSevent($userId, "change.users", $column, $oldData, $new); 
 						if($this->query($sql)) header( "Location: userDetail.php?uid=$id" );
 					} else {
 						$sql = "UPDATE users SET active='1' WHERE usr_id='$id'";
 						$oldData = "Inactive";
-						$newData = "Active";
-						$this->logSevent($userId, "change.users", $column, $oldData, $newData); 
+						$new = "Active";
+						$this->logSevent($userId, "change.users", $column, $oldData, $new); 
 						if($this->query($sql)) header( "Location: userDetail.php?uid=$id" );
 					}
 					
@@ -108,7 +108,7 @@
 			} else {
 			
 				$sql = "UPDATE users SET $column='$newData' WHERE usr_id='$id'";
-				$this->logSevent($userId, "change.users", $column, $oldData, $newData); 
+				$this->logSevent($userId, "change.users", $column, $oldData, $new); 
 				if($this->query($sql)) header( "Location: userDetail.php?uid=$id" );
 				
 			}
@@ -123,7 +123,7 @@
 			//log it
 				if($column == "cmp_id") {
 					$oldData = $this->findCompany($old["$column"], "name");
-					$newData = $this->findCompany($newData, "name");
+					$new = $this->findCompany($newData, "name");
 				} else {
 					$oldData = $old["$column"];
 				}
@@ -139,14 +139,14 @@
 					if($row['active'] == 1) {
 						$sql = "UPDATE storage SET active='0' WHERE stor_id='$id'";
 						$oldData = "Active";
-						$newData = "Inactive";
-						$this->logSevent($userId, "change.storage", $column, $oldData, $newData); 
+						$new = "Inactive";
+						$this->logSevent($userId, "change.storage", $column, $oldData, $new); 
 						if($this->query($sql)) header( "Location: storageDetail.php?sid=$id" );
 					} else {
 						$sql = "UPDATE storage SET active='1' WHERE stor_id='$id'";
 						$oldData = "Inactive";
-						$newData = "Active";
-						$this->logSevent($userId, "change.storage", $column, $oldData, $newData); 
+						$new = "Active";
+						$this->logSevent($userId, "change.storage", $column, $oldData, $new); 
 						if($this->query($sql)) header( "Location: storageDetail.php?sid=$id" );
 					}
 					
@@ -154,7 +154,7 @@
 			} else {
 			
 				$sql = "UPDATE storage SET $column='$newData' WHERE stor_id='$id'";
-				$this->logSevent($userId, "change.storage", $column, $oldData, $newData); 
+				$this->logSevent($userId, "change.storage", $column, $oldData, $new); 
 				if($this->query($sql)) header( "Location: storageDetail.php?sid=$id" );
 				
 			}
@@ -179,14 +179,14 @@
 					if($row['active'] == 1) {
 						$sql = "UPDATE sites SET active='0' WHERE site_id='$id'";
 						$oldData = "Active";
-						$newData = "Inactive";
-						$this->logSevent($userId, "change.sites", $column, $oldData, $newData); 
+						$new = "Inactive";
+						$this->logSevent($userId, "change.sites", $column, $oldData, $new); 
 						if($this->query($sql)) header( "Location: siteDetail.php?sid=$id" );
 					} else {
 						$sql = "UPDATE sites SET active='1' WHERE site_id='$id'";
 						$oldData = "Inactive";
-						$newData = "Active";
-						$this->logSevent($userId, "change.sites", $column, $oldData, $newData); 
+						$new = "Active";
+						$this->logSevent($userId, "change.sites", $column, $oldData, $new); 
 						
 						if($this->query($sql)) header( "Location: siteDetail.php?sid=$id" );
 					}
@@ -195,7 +195,7 @@
 			} else {
 			
 				$sql = "UPDATE sites SET $column='$newData' WHERE site_id='$id'";
-				$this->logSevent($userId, "change.sites", $column, $oldData, $newData); 
+				$this->logSevent($userId, "change.sites", $column, $oldData, $new); 
 
 				if($this->query($sql)) header( "Location: siteDetail.php?sid=$id" );
 				
@@ -222,14 +222,14 @@
 					if($row['active'] == 1) {
 						$sql = "UPDATE clients SET active='0' WHERE cli_id='$id'";
 						$oldData = "Active";
-						$newData = "Inactive";
-						$this->logSevent($userId, "change.clients", $column, $oldData, $newData); 
+						$new = "Inactive";
+						$this->logSevent($userId, "change.clients", $column, $oldData, $new); 
 						if($this->query($sql)) header( "Location: clientDetail.php?cid=$id" );
 					} else {
 						$sql = "UPDATE clients SET active='1' WHERE cli_id='$id'";
 						$oldData = "Inactive";
-						$newData = "Active";
-						$this->logSevent($userId, "change.clients", $column, $oldData, $newData); 
+						$new = "Active";
+						$this->logSevent($userId, "change.clients", $column, $oldData, $new); 
 						if($this->query($sql)) header( "Location: clientDetail.php?cid=$id" );
 					}
 					
@@ -237,7 +237,7 @@
 			} else {
 			
 				$sql = "UPDATE clients SET $column='$newData' WHERE cli_id='$id'";
-				$this->logSevent($userId, "change.clients", $column, $oldData, $newData); 
+				$this->logSevent($userId, "change.clients", $column, $oldData, $new); 
 
 				if($this->query($sql)) header( "Location: clientDetail.php?cid=$id" );
 				
@@ -265,14 +265,14 @@
 					if($row['active'] == 1) {
 						$sql = "UPDATE doctors SET active='0' WHERE doc_id='$id'";
 						$oldData = "Active";
-						$newData = "Inactive";
-						$this->logSevent($userId, "change.doctors", $column, $oldData, $newData); 
+						$new = "Inactive";
+						$this->logSevent($userId, "change.doctors", $column, $oldData, $new); 
 						if($this->query($sql)) header( "Location: doctorDetail.php?did=$id" );
 					} else {
 						$sql = "UPDATE doctors SET active='1' WHERE doc_id='$id'";
 						$oldData = "Inactive";
-						$newData = "Active";
-						$this->logSevent($userId, "change.doctors", $column, $oldData, $newData); 
+						$new = "Active";
+						$this->logSevent($userId, "change.doctors", $column, $oldData, $new); 
 						if($this->query($sql)) header( "Location: doctorDetail.php?did=$id" );
 					}
 					
@@ -280,7 +280,7 @@
 			} else {
 			
 				$sql = "UPDATE doctors SET $column='$newData' WHERE doc_id='$id'";
-				$this->logSevent($userId, "change.doctors", $column, $oldData, $newData); 
+				$this->logSevent($userId, "change.doctors", $column, $oldData, $new); 
 				if($this->query($sql)) header( "Location: doctorDetail.php?did=$id" );
 				
 			}
@@ -291,14 +291,18 @@
 				$sql = "SELECT * FROM teams WHERE team_id='$id'";
 				$result = $this->query($sql);
 				$old = mysqli_fetch_assoc($result);
+				
+				$sql = "UPDATE teams SET $column='$newData' WHERE team_id='$id'";
+				echo $sql;
+				$this->query($sql);
 		
 				//log it
 				if($column == "cmp_id") {
 					$oldData = $this->findCompany($old["$column"], "name");
-					$newData = $this->findCompany($newData, "name");
+					$new = $this->findCompany($newData, "name");
 				} else if ($column == "head_id") {
 					$oldData = $this->findUser($old["$column"], "uname");
-					$newData = $this->findUser($newData, "uname");
+					$new = $this->findUser($newData, "uname");
 				} else {
 					$oldData = $old["$column"];
 				}
@@ -307,11 +311,9 @@
 				
 				$userId = $_SESSION['userId'];
 				
-				$this->logSevent($userId, "change.teams", $column, $oldData, $newData); 
+				$this->logSevent($userId, "change.teams", $column, $oldData, $new); 
 				
-				$sql = "UPDATE teams SET $column='$newData' WHERE team_id='$id'";
-				//echo $sql;
-				$this->query($sql);
+				
 				header( "Location: teamDetail.php?tid=$id" );
 		}
 		
@@ -350,16 +352,16 @@
 				//log it
 				if($column == "cmp_id") {
 					$oldData = $this->findCompany($old["$column"], "name");
-					$newData = $this->findCompany($newData, "name");
+					$new = $this->findCompany($newData, "name");
 				} else if ($column == "team_id" || $column == "loan_team") {
 					$oldData = $this->findTeam($old["$column"], "name");
-					$newData = $this->findTeam($newData, "name");
+					$new = $this->findTeam($newData, "name");
 				} else if ($column == "stor_id") {
 					$oldData = $this->findStorage($old["$column"], "uname");
-					$newData = $this->findStorage($newData, "uname");
+					$new = $this->findStorage($newData, "uname");
 				} else if($column == "site_id") {
 					$oldData = $this->findSite($old["$column"], "name");
-					$newData = $this->findSite($newData, "name");
+					$new = $this->findSite($newData, "name");
 				} else {
 					$oldData = $old["$column"];
 				}
@@ -368,7 +370,7 @@
 				
 				$userId = $_SESSION['userId'];
 				
-				$this->logSevent($userId, "change.tray", $column, $oldData, $newData); 
+				$this->logSevent($userId, "change.tray", $column, $oldData, $new); 
 				
 		
 				
@@ -406,13 +408,13 @@
 				//log it
 				if($column == "tray_id") {
 					$oldData = $this->findTray($old["$column"], "name");
-					$newData = $this->findTray($newData, "name");
+					$new = $this->findTray($newData, "name");
 				} else if ($column == "cli_id") {
 					$oldData = $this->findClient($old["$column"], "name");
-					$newData = $this->findClient($newData, "name");
+					$new = $this->findClient($newData, "name");
 				} else if ($column == "do_usr" || $column == "pu_usr") {
 					$oldData = $this->findUser($old["$column"], "uname");
-					$newData = $this->findUser($newData, "uname");
+					$new = $this->findUser($newData, "uname");
 				} else {
 					$oldData = $old["$column"];
 				}
@@ -421,13 +423,13 @@
 				
 				$userId = $_SESSION['userId'];
 				
-				$this->logSevent($userId, "change.assignment", $column, $oldData, $newData); 
+				$this->logSevent($userId, "change.assignment", $column, $oldData, $new); 
 				
 				//make actual DB change
 				$sql = "UPDATE assigns SET $column='$newData' WHERE asgn_id='$id'";
-				//echo $sql;
+				echo $sql;
 				if($this->query($sql) && $link == true) header( "Location: assignmentDetail.php?aid=$id" );
-				else $this->query($sql);
+				$this->query($sql);
 		}
 		
 		public function editCaseDatabase($column, $id, $newData = null) {
@@ -443,16 +445,16 @@
 				//log it
 				if($column == "team_id") {
 					$oldData = $this->findTeam($old["$column"], "name");
-					$newData = $this->findTeam($newData, "name");
+					$new = $this->findTeam($newData, "name");
 				} else if ($column == "doc_id") {
 					$oldData = $this->findDoctor($old["$column"], "name");
-					$newData = $this->findDoctor($newData, "name");
+					$new = $this->findDoctor($newData, "name");
 				} else if ($column == "proc_id") {
 					$oldData = $this->findProcedure($old["$column"], "name");
-					$newData = $this->findProcedure($newData, "name");
+					$new = $this->findProcedure($newData, "name");
 				} else if ($column == "site_id") {
 					$oldData = $this->findSite($old["$column"], "name");
-					$newdata = $this->findSite($newData, "name");
+					$new = $this->findSite($newData, "name");
 				} else {
 					$oldData = $old["$column"];
 				}
@@ -460,7 +462,7 @@
 				if($old["$column"] == $newData) header( "Location: caseDetail.php?cid=$id" );
 				
 				$userId = $_SESSION['userId'];
-				$this->logSevent($userId, "change.case", $column, $oldData, $newData); 
+				$this->logSevent($userId, "change.case", $column, $oldData, $new); 
 
 				header( "Location: caseDetail.php?cid=$id" );
 				
@@ -495,7 +497,7 @@
 		
 			$sql = "INSERT INTO sevents (u_id, name, item, was, now, dttm) VALUES ('$userId', '$name', '$item', '$from', '$to', '$time')";
 			
-			//echo $sql;
+			echo $sql;
 			
 			$this->query($sql);
 		
@@ -601,6 +603,7 @@
 			else $site = $this->findSite($site_id, "name");
 			$loanTeam = $this->findTeam($loan_team, "name");
 			$storage = $this->findStorage($stor_id, "name");
+			$user = $this->findUser($userId, "uname");
 			
 			//with user or unknown trays only
 			if($atnow == "site" || $atnow == "stor") return null;
@@ -608,7 +611,7 @@
 		
 			if($loanTeam == null) $loanTeam = "None";
 		
-			if($atnow == "usr") $status = "With user";
+			if($atnow == "usr") $status = "With $user";
 			if($atnow == "site") $status = "At site";
 			if($atnow == "stor") $status = "In storage";
 			if($atnow == "unk") $status = "Unknown";
@@ -627,7 +630,7 @@
 			
 			//figure out time of next pending dropoff event
 			$sql = "SELECT do_dttm FROM assigns INNER JOIN trays ON trays.tray_id=assigns.tray_id" .
-			" WHERE trays.tray_id='$tray_id' AND assigns.tray_id='$tray_id' ORDER BY do_dttm ASC";
+			" WHERE trays.tray_id='$tray_id' AND assigns.tray_id='$tray_id' AND assigns.status!='Complete' ORDER BY do_dttm DESC";
 			
 			//echo $sql;
 			
@@ -640,7 +643,7 @@
 			else $closestTime = "None Scheduled";
 			
 			$forIcon = "site";
-			if($site_id == 0 && $stor_id == 0) {  $site = "With User";  $forIcon = "user";  }
+			if($site_id == 0 && $stor_id == 0) {  $site = "With $user";  $forIcon = "user";  }
 			else if($site_id == 0 && $stor_id != 0) { $forIcon = "storage"; }
 			
 			
@@ -763,7 +766,7 @@
 			
 			//figure out time of next pending dropoff event
 			$sql = "SELECT pu_dttm FROM assigns INNER JOIN trays ON trays.tray_id=assigns.tray_id" .
-			" WHERE trays.tray_id='$tray_id' AND assigns.tray_id='$tray_id' ORDER BY pu_dttm ASC";
+			" WHERE trays.tray_id='$tray_id' AND assigns.tray_id='$tray_id' ORDER BY pu_dttm DESC";
 			
 			//echo $sql;
 			
@@ -801,7 +804,7 @@
 			
 			$newView .= "<br/><span class='companydata'>Belongs To: $company.$team </span>";
 			
-			$sql = "SELECT * FROM assigns WHERE tray_id='$tray_id' AND (do_usr='$userId' OR pu_usr='$userId' OR status='Pending' OR status='Overdue')";
+			$sql = "SELECT * FROM assigns WHERE tray_id='$tray_id' AND (do_usr='$userId' OR pu_usr='$userId' OR do_usr='0' OR pu_usr='0') AND  (status='Pending' OR status='Overdue')";
 			
 			$result = $this->query($sql);
 			
@@ -1136,7 +1139,7 @@
 				
 				//figure out next avalibale time
 				$sql5 = "SELECT do_dttm, pu_dttm FROM assigns INNER JOIN trays ON trays.tray_id=assigns.tray_id" .
-				" WHERE trays.tray_id='$tray_id' AND assigns.tray_id='$tray_id' ORDER BY do_dttm ASC, pu_dttm ASC";
+				" WHERE trays.tray_id='$tray_id' AND assigns.tray_id='$tray_id' ORDER BY do_dttm DESC, pu_dttm DESC";
 				
 				//echo $sql5;
 				
@@ -1155,71 +1158,26 @@
 				
 				$avalibleTime = $this->checkTime($closestTime);
 				
+				
 				$newView .= "<div class='traysInCase'>" .
 				"<div class='assignLink'><a href='/athena/www/trays/trayDetail.php?tid=$tray'>Details</a></div>" .
 				"<div class='trayName'>Name: $name</div>" .
 				"<div class='trayTeam'>Team: $team For: $doc</div>" .
-				"<div class='trayTime'>Avaliable: $avalibleTime</div>" .
+				"<div class='trayTime'>Busy Until: $avalibleTime</div>" .
+				"<div class='trayStatus'>Status: $status</div>" .
 				"</div>";
 				
+			
 				
-				 /* $table = "<table>" .
-				"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
-				"<tr><td><em>Name</em></td><td>$name</td></tr>" .
-				"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
-				"<tr><td><em>Responsible Team:</em></td><td>$team</td></td></tr>" .
-				"<tr><td><em>Current Location</em></td><td>$site</td></tr>" .
-				"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
-				"<tr><td><em>Stored At: </em></td><td>$storage</td></tr>" .
-				"<tr><td><em>Status</em></td><td>$status</td></tr>" .
-				"<tr><td><a href='deleteTray.php?tid=$tray_id&cid=$currentCase'>Remove Tray</a></td></tt>" .
-				"</table>"; */
-
+			
+				
 			}
 			
+			$newView .= "<p><a href='/athena/www/addTrays.php?cid=$case_id'>Add Trays to Case</a></p>";
 			
-			/* if($result->num_rows != 0) {
-			
-				echo "<div class='caseelement'>";
-				echo "<h2>Pending Cases:</h2>";
-				
-				while($row = mysqli_fetch_assoc($result)) {
-				
-					//get assoc array and print table data
-
-					extract($row);
-					
-					$team = $this->findTeam($team_id, "name");
-					$doc = $this->findDoctor($doc_id, "name");
-					$procedure = $this->findProcedure($proc_id, "name");
-					$siteName = $this->findSite($site_id, "name");
-							
-					$caseTable = "<table>" .
-					"<tr><td><em>Case ID:</em></td><td>$case_id</td></tr>" .
-					"<tr><td><em>Assigned Team:</em></td><td>$team</td></tr>" .
-					"<tr><td><em>Doctor:</em></td><td>$doc</td></tr>" .
-					"<tr><td><em>Procedure:</em></td><td>$procedure</td></tr>" .
-					"<tr><td><em>Site:</em></td><td>$siteName</td></tr>" .
-					"<tr><td><em>Status:</em></td><td>$status</td></tr>" .
-					"<tr><td><em>Time Created:</em></td><td>$dttm</td></tr>" .
-					"<tr><td><em>Comment:</em></td><td>$cmt</td></tr>" .
-					"<tr><td><a href='reservations.php?complete=1&cid=$case_id'>Mark as Complete</a></td>" .
-					"<td><a href='addTrays.php?cid=$case_id'>Add/View Trays</a></td></tr>" .
-					"</table>";
-						
-					echo "<div class='caseTray'>$caseTable</div>";
-				}
-				
-				echo "</div>"; */
-					
-			//} else {
-			
-				$newView .= "<p><a href='/athena/www/addTrays.php?cid=$case_id'>Add Trays to Case</a></p>";
-			
-				$newView .= "</div>$comment</div>";
-			
-				echo $newView;
-			}
+			$newView .= "</div>$comment</div>";
+			echo $newView;
+		}
 		
 
 		

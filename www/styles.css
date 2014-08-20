@@ -569,5 +569,11 @@
 				position: relative;
 				left: 20px;
 				top: 10px;
+			}
+			
+			.trayStatus {
+				position: relative;
+				right: -140px;
+				top: -10px;
 			
 			}

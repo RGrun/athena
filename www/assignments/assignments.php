@@ -15,6 +15,8 @@
 	
 	echo "<em><a href='addNewAssignment.php'>Add New Assignment</a></em> <br/> <br/>";
 	
+	echo "<p>All recent assignments are displayed here.</p><p>Completed assignments over one week old are not displayed. To see older information, check the logs.</p>";
+	
 	echo "<table>" .
 	"<tr><th>Assignment ID</th><th>Case</th><th>Tray</th><th>Dropped Off By</th><th>Picked Up By</th><th>Dropoff Time</th><th>Pickup Time</th><th>Status</th><th>Comment</th></tr>";
 	
@@ -26,6 +28,16 @@
 		while($row = mysqli_fetch_assoc($result)) {
 			
 			extract($row);
+			
+			$DOdate = strtotime($do_dttm);
+			$PUdate = strtotime($pu_dttm);
+		
+			
+			if(strtotime("-1 week") >= $DOdate || strtotime("-1 week") >= $PUdate) continue;
+
+			//if(time() > strtotime($timeStamp)) return "<span class='error'>$timeStamp</span>"; // < 24 hours from now
+			//else if($date <= $oneDayFromNow && time() < $date) return "<span class='warning'>$timeStamp</span>";
+			//else return $timeStamp;
 			
 			$dropoffUser = $worker->findUser($do_usr, "uname");
 			$pickupUser = $worker->findUser($pu_usr, "uname");

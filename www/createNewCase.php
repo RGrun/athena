@@ -32,6 +32,9 @@
 		$worker->query($sql);
 		$worker->closeConnection();
 		
+		$proc = $worker->findProcedure($newprocs, "name");
+		$worker->logSevent($userId, "create.case", $proc , "", ""); 
+		
 		header( "Location: reservations.php" );
 		die();
 	}
@@ -59,7 +62,7 @@
 	"<tr><td>New Case&#39;s Procedure: </td><td>$procedureSelector </td></tr>" .
 	"<tr><td>New Case&#39;s Site: </td><td>$siteSelector </td></tr>" .
 	"<tr><td>New Case&#39;s Status: </td><td>$statusSelector </td></tr>" .
-	"<br/>Time of new case: $dateTime <br />" .
+	"<br/>Trays are due at: <br/> $dateTime <br />" .
 	"<tr><td>Comment: </td><td><input type='text' name='newComment' /> </td></tr>" .
 	"</table>" .	
 	"<input type='submit' value='Commit Changes' /> </form>";

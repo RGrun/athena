@@ -13,6 +13,8 @@
 	$htmlUtils->makeScriptHeader();
 	
 	$currentCase = $_GET['cid'];
+	
+	$userId = $_SESSION['userId'];
 
 	if(isset($_POST['newtrays'])) {
 	
@@ -33,6 +35,8 @@
 		$worker->closeConnection();
 		
 		//echo $sql;
+		
+		
 		header( "Location: addTrays.php?cid=$currentCase" );
 		die();
 	}
