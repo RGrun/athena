@@ -269,13 +269,12 @@ drop table if exists traytrans;
 create table if not exists traytrans 
 ( tran_id   int(10)      not null auto_increment,
   tray_id   int(10)      not null,
-  to_team   int(10)      not null,                   -- the team borrowing the tray
-  from_usr  int(10)      not null default 0,         -- 0 if pending (any team member can drop or pickup)
-  to_usr    int(10)      not null default 0,         -- 0 if pending (any team member can receive or release)
+  signer    varchar(25)  not null,                   -- name of person who signed for tray during dropoff
+  site_id   int(10)      not null,					 -- where tray was dropped off
+  from_usr  int(10)      not null default 0,         -- User dropping off tray
+  to_usr    int(10)      not null default 0,         -- User assigned to pick up tray
   case_id   int(10)      not null,                   -- the case that requires the tray
-  status    varchar(25)  not null default '',        -- pending, delivered, overdue, complete, ...
   dttm      datetime     not null default '0/0/0',   -- date/time of loan
-  cmt       varchar(255) not null default '',
   primary key (tran_id)
 );
 

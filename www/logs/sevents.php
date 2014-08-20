@@ -41,7 +41,7 @@
 	}
 	
 	$tableToPrint .= "<table>" .
-	"<tr><th>Event ID</th><th>By User</th><th>Type of Event</th><th>Type</th><th>Changed From</th><th>Changed To</th><th>Time</th></tr>";
+	"<tr><th>Event ID</th><th>By User</th><th>Type of Event</th><th>Field</th><th>Changed From</th><th>Changed To</th><th>Time</th></tr>";
 	
 	$result = $worker->query($sql);
 	while ($row = mysqli_fetch_assoc($result)) {

@@ -342,6 +342,10 @@
 				$result = $this->query($sql);
 				$old = mysqli_fetch_assoc($result);
 				
+				$sql = "UPDATE trays SET $column='$newData' WHERE tray_id='$id'";
+				echo $sql;
+				$this->query($sql);
+				
 				
 				//log it
 				if($column == "cmp_id") {
@@ -367,9 +371,7 @@
 				$this->logSevent($userId, "change.tray", $column, $oldData, $newData); 
 				
 		
-				$sql = "UPDATE trays SET $column='$newData' WHERE tray_id='$id'";
-				//echo $sql;
-				$this->query($sql);
+				
 				header( "Location: trayDetail.php?tid=$id" );
 		}
 		
@@ -600,7 +602,7 @@
 			$loanTeam = $this->findTeam($loan_team, "name");
 			$storage = $this->findStorage($stor_id, "name");
 			
-			//in storage or unknown location trays only
+			//with user or unknown trays only
 			if($atnow == "site" || $atnow == "stor") return null;
 			//$atnow == "usr" || $atnow == "unk"
 		
@@ -634,7 +636,8 @@
 			
 			$closestTime = $row[0];
 			
-			$closestTime = $this->checkTime($closestTime);
+			if($closestTime != null) $closestTime = $this->checkTime($closestTime);
+			else $closestTime = "None Scheduled";
 			
 			$forIcon = "site";
 			if($site_id == 0 && $stor_id == 0) {  $site = "With User";  $forIcon = "user";  }
@@ -648,7 +651,7 @@
 			//stuff here always visible
 			$newView = "<div id='$trayNameClass' class='trayclass'>";
 
-			$newView .= "<span class='dropoffButton'><a href='dropoffTray.php?tid=$tray_id'>View Details/Drop off</a></span>";
+			if($loan_team == 0 && $loan_team != $teamId) $newView .= "<span class='dropoffButton'><a href='dropoffTray.php?tid=$tray_id'>View Details/Drop off</a></span>";
 			$newView .= "<div class='clickable' onclick='expand($tray_id)'>"; //open clickable
 			$newView .= "<h2>$name</h2>";
 			$newView .= $loc;
@@ -769,7 +772,8 @@
 			
 			$closestTime = $row[0];
 			
-			$closestTime = $this->checkTime($closestTime);
+			if($closestTime != null) $closestTime = $this->checkTime($closestTime);
+			else $closestTime = "None Scheduled";
 
 			$forIcon = "site";
 			if($site_id == 0 && $stor_id == 0) {  $site = "With User";  $forIcon = "user";  }
@@ -777,7 +781,8 @@
 				
 			//generate icon/location
 			$icon = $this->makeIcon($forIcon);
-			$loc = "<div class='location'>$icon Current Location: $site <br/> Until: $closestTime</div>";
+			if($forIcon != "storage") $loc = "<div class='location'>$icon Current Location: $site <br/> Until: $closestTime</div>";
+			else $loc = "<div class='location'>$icon Current Location: $site <br/> </div>";
 			
 			//stuff here always visible
 			$newView = "<div id='$trayNameClass' class='trayclass'>";
