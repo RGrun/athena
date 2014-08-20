@@ -19,10 +19,12 @@
 			$loggedIn = TRUE;
 			$userStr = $currentUser;
 			$currentUserId = $_SESSION['userId'];
+			date_default_timezone_set('America/Los_Angeles');
 		} else {
 			$loggedIn = FALSE;
 			$userStr = "Guest";
 			$currentUserId = "";
+			date_default_timezone_set('America/Los_Angeles');
 		}
 		
 		if(isset($_GET['a'])) {
@@ -200,10 +202,12 @@ _END;
 			$loggedIn = TRUE;
 			$userStr = $currentUser;
 			$currentUserId = $_SESSION['userId'];
+			date_default_timezone_set('America/Los_Angeles');
 		} else {
 			$loggedIn = FALSE;
 			$userStr = "Guest";
 			$currentUserId = "";
+			date_default_timezone_set('America/Los_Angeles');
 		}
 		
 		if(isset($_GET['a'])) {
