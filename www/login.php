@@ -53,7 +53,7 @@
 				
 				if($a == TRUE) $_SESSION['isAdmin'] = TRUE;
 				else $_SESSION{'isAdmin'} = FALSE;
-				
+				$_SESSION['isClient'] = FALSE;
 				
 				$_SESSION['user'] = $user;
 				$_SESSION['userId'] = $row[0];
@@ -61,7 +61,6 @@
 				die();
 			} else {
 				//...or a client
-				//THIS CURRENTLY DOES NOT WORK
 				$sql = "SELECT uname, perm from clients WHERE uname='$user' AND pwd='$pass'";
 				//echo $sql;
 				$result = $worker->query($sql);
@@ -78,6 +77,7 @@
 					
 					if($a == TRUE) $_SESSION['isAdmin'] = TRUE;
 					else $_SESSION{'isAdmin'} = FALSE;
+					$_SESSION['isClient'] = TRUE;
 					
 					$_SESSION['user'] = $user;
 					$_SESSION['userId'] = $row[0];

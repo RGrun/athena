@@ -12,6 +12,9 @@
 	
 	$htmlUtils->makeHeader();
 	
+	$isAdmin = $_SESSION['isAdmin'];
+	if(!$isAdmin) header("Location: /athena/www/landing.php");
+	
 	if(isset($_GET['mtd'])){
 		$selectedMethod = $_GET['mtd'];
 		$_SESSION['selectedMethod'] = $selectedMethod;

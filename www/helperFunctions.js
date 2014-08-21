@@ -172,6 +172,7 @@
 			|| (divs[x].id == 'header' )
 			|| (divs[x].className == 'logView')
 			|| (divs[x].className == 'location')
+			|| (divs[x].className == 'instrumentView')
 			|| (divs[x].className == 'clickable')
 			|| (divs[x].className == 'pagetitle')
 			|| (divs[x].className == 'filterform')
@@ -235,9 +236,8 @@
 	
 	}
 	
-	function formatTimeSelect(loop) {
+	function formatTimeSelect() {
 	
-		loop = typeof loop !== 'undefined' ? loop : "";
 	
 		//used on pages with dateTime selectors
 		var d = new Date();
@@ -247,25 +247,22 @@
 		var currentHour = d.getHours();
 		var currentMin = d.getMinutes();
 		
-		//This first time through 
+		//This is the first time through 
 		//check month
 		for(x = 1; x <= 12; x++) {
 			var thisValue = "mo" + x.toString();
-			thisValue += loop;
 			if(O(thisValue).value == currentMonth) O(thisValue).selected = true;
 		}
 		
 		//check year
 		for(x = 14; x <= 31; x++) {
 			var thisValue = "y" + x.toString();
-			thisValue += loop;
 			if(O(thisValue).value == currentYear) O(thisValue).selected = true;
 		}
 		
 		//check day
 		for(x = 1; x <=31; x++) {
 			var thisValue = "d" + x.toString();
-			thisValue += loop;
 			if(O(thisValue).value == currentDay) O(thisValue).selected = true;
 		}
 		
@@ -278,14 +275,61 @@
 		//check minute
 		for(x = 1; x <=59; x++) {
 			var thisValue = "m" + x.toString();
-			thisValue += loop;
 			if(O(thisValue).value == currentMin) O(thisValue).selected = true;
 		}
 		
-		//loops only once
-		var secondLoop = 0;
-		if(loop === "") secondLoop = 2;
-		if(secondLoop == 2) formatTimeSelect(secondLoop);
+		
+		
+		//This is the second time through 
+		//check month
+		for(x = 1; x <= 12; x++) {
+			var thisValue = "mo" + x.toString() + "2";
+			if(O(thisValue).value == currentMonth) O(thisValue).selected = true;
+		}
+		
+		//check year
+		for(x = 14; x <= 31; x++) {
+			var thisValue = "y" + x.toString() + "2";
+			if(O(thisValue).value == currentYear) O(thisValue).selected = true;
+		}
+		
+		//check day
+		for(x = 1; x <=31; x++) {
+			var thisValue = "d" + x.toString() + "2";
+			if(O(thisValue).value == currentDay) O(thisValue).selected = true;
+		}
+		
+		//check hour
+		for(x = 0; x <=23; x++) {
+			var thisValue = "h" + x.toString() + "2";
+			if(O(thisValue).value == currentHour) O(thisValue).selected = true;
+		}
+	
+		//check minute
+		for(x = 1; x <=59; x++) {
+			var thisValue = "m" + x.toString() + "2";
+			if(O(thisValue).value == currentMin) O(thisValue).selected = true;
+		}
+		
+	}
+	
+	//used to check that passwords are the same
+	function checkPass() {
+	
+		var pw1 = O('pwd1').value;
+		var pw2 = O('pwd2').value;
+		var button = O('pwdSubmit');
+		var error = O('pwdError');
+		
+		if (pw1 != pw2) {
+			button.disabled = true;
+			error.innerHTML = "Passwords do not match.";
+		} else if (pw1 == pw2) {
+			button.disabled = false;
+			error.innerHTML = "";
+		}
+	
+	
 	}
 			
 			

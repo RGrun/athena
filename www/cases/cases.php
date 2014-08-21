@@ -9,16 +9,21 @@
 	
 	$htmlUtils->makeHeader();
 	
+	$isAdmin = $_SESSION['isAdmin'];
+	if(!$isAdmin) header("Location: /athena/www/landing.php");
+	
 	echo "<div class='adminTable'>";
 	
 	echo "<h2>Cases</h2>";
 	
 	echo "<em><a href='addNewCase.php'>Add New Case</a></em> <br/> <br/>";
 	
+	echo "<p>Recent cases are displayed here.</p><p>Completed cases over one week old are not displayed. To see older information, check the logs.</p><p>If you see a pending case over one week old, contact the client responsible for the case.</p>";
+	
 	echo "<table>" .
 	"<tr><th>Case ID</th><th>Current Team</th><th>Doctor</th><th>Procedure</th><th>Site</th><th>Status</th><th>Time</th><th>Comment</th></tr>";
 	
-	$sql = "SELECT * FROM cases";
+	$sql = "SELECT * FROM cases ORDER BY dttm DESC";
 	
 	if($result = $worker->query($sql)) {
 		
@@ -26,6 +31,12 @@
 		while($row = mysqli_fetch_assoc($result)) {
 			
 			extract($row);
+			
+
+			$timeToCheck = strtotime($dttm);
+			
+			//don't display completed cases more than one week old
+			if((time() - $timeToCheck >= 604800) && $status == "Complete") continue;
 			
 			$dttm = $worker->checkTime($dttm);
 			

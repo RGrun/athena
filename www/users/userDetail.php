@@ -9,6 +9,9 @@
 	
 	$htmlUtils->makeHeader();
 	
+	$isAdmin = $_SESSION['isAdmin'];
+	if(!$isAdmin) header("Location: /athena/www/landing.php");
+	
 	echo "<div class='adminTable'>";
 	
 	$currentUsrId = $_GET['uid'];
@@ -57,7 +60,7 @@
 		$table = "<table>" .
 		"<tr><td><em>Active User?</em></td><td>$activeUser</td><td><a href='editUserInfo.php?mtd=active'>Edit</a></td></tr>" .
 		"<tr><td><em>First Name</em></td><td>$fname</td><td><a href='editUserInfo.php?mtd=fname'>Edit</a></td></tr>" .
-		"<tr><td><em>Last Name</em></td><td>$lname</td><td><a href='editUserInfo.php?mtd=uname'>Edit</a></td></tr>" .
+		"<tr><td><em>Last Name</em></td><td>$lname</td><td><a href='editUserInfo.php?mtd=lname'>Edit</a></td></tr>" .
 		"<tr><td><em>Team ID</em></td><td>$team</td><td><a href='editUserInfo.php?mtd=team_id'>Edit</a></td></tr>" .
 		"<tr><td><em>Email</em></td><td>$email</td><td><a href='editUserInfo.php?mtd=email'>Edit</a></td></tr>" .
 		"<tr><td><em>Phone</em></td><td>$phone</td><td><a href='editUserInfo.php?mtd=phone'>Edit</a></td></tr>" .
@@ -65,7 +68,7 @@
 		"<tr><td><em>Permissions</em></td><td>$perm</td><td><a href='editUserInfo.php?mtd=perm'>Edit</a></td></tr>" .
 		"</table><br/><br/>";
 		
-		echo "<p>$table</p>";
+		echo "$table";
 		
 		//create user-company relation table
 		$sql = "SELECT * FROM usr_cmp WHERE usr_id='$currentUsrId'";
@@ -88,7 +91,7 @@
 			
 			$usr_cmp .= "</table>";
 			
-			echo "<p>$usr_cmp</p>";
+			echo "$usr_cmp";
 			
 		}
 	
@@ -103,7 +106,7 @@
 		"<option value='Other'>Other</option></select> <br />" .
 		"<input type='submit' value='Commit Changes' />  </form>";
 		
-		echo "<p>$companiesForm</p>";
+		echo "$companiesForm";
 		
 		echo "</div>";
 			

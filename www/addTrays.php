@@ -82,6 +82,7 @@
 		$company = $worker->findCompany($cmp_id, "name");
 		$team = $worker->findTeam($team_id, "name");
 		$site = $worker->findSite($site_id, "name");
+		if($site == null) $site = "Storage";
 		$loanTeam = $worker->findTeam($loan_team, "name");
 		$storage = $worker->findStorage($stor_id, "name");
 		
@@ -93,14 +94,14 @@
 		if($atnow == "unk") $status = "Unknown";
 		
 		$table = "<table>" .
-		"<tr><td><em>Tray ID</em></td><td>$tray_id</td></tr>" .
-		"<tr><td><em>Name</em></td><td>$name</td></tr>" .
+		"<tr><td><em>Tray ID:</em></td><td>$tray_id</td></tr>" .
+		"<tr><td><em>Name:</em></td><td>$name</td></tr>" .
 		"<tr><td><em>Belongs To:</em></td><td>$company</td></tr>" .
 		"<tr><td><em>Responsible Team:</em></td><td>$team</td></td></tr>" .
-		"<tr><td><em>Current Location</em></td><td>$site</td></tr>" .
-		"<tr><td><em>Loaned To</em></td><td>$loanTeam</td></tr>" .
+		"<tr><td><em>Current Location:</em></td><td>$site</td></tr>" .
+		"<tr><td><em>Loaned To:</em></td><td>$loanTeam</td></tr>" .
 		"<tr><td><em>Stored At: </em></td><td>$storage</td></tr>" .
-		"<tr><td><em>Status</em></td><td>$status</td></tr>" .
+		"<tr><td><em>Status:</em></td><td>$status</td></tr>" .
 		"<tr><td><a href='deleteTray.php?tid=$tray_id&cid=$currentCase'>Remove Tray</a></td></tt>" .
 		"</table>";
 		

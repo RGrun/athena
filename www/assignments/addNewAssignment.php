@@ -8,6 +8,9 @@
 	$worker = new dbWorker();
 	
 	$htmlUtils->makeScriptHeader();
+	
+	$isAdmin = $_SESSION['isAdmin'];
+	if(!$isAdmin) header("Location: /athena/www/landing.php");
 
 	if(isset($_POST['newcases'])) {
 	

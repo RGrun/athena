@@ -9,6 +9,9 @@
 	
 	$htmlUtils->makeHeader();
 	
+	$isAdmin = $_SESSION['isAdmin'];
+	if(!$isAdmin) header("Location: /athena/www/landing.php");
+	
 	$currentAssignment = $_GET['aid'];
 	
 	$_SESSION['currentAssignmentId'] = $currentAssignment;

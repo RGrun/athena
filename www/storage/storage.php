@@ -9,6 +9,9 @@
 	
 	$htmlUtils->makeHeader();
 	
+	$isAdmin = $_SESSION['isAdmin'];
+	if(!$isAdmin) header("Location: /athena/www/landing.php");
+	
 	echo "<div class='adminTable'>";
 	
 	echo "<h2>Storage Sites</h2>";

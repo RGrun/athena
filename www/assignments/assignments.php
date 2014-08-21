@@ -9,6 +9,9 @@
 	
 	$htmlUtils->makeHeader();
 	
+	$isAdmin = $_SESSION['isAdmin'];
+	if(!$isAdmin) header("Location: /athena/www/landing.php");
+	
 	echo "<div class='adminTable'>";
 	
 	echo "<h2>Assignments</h2>";
@@ -32,8 +35,9 @@
 			$DOdate = strtotime($do_dttm);
 			$PUdate = strtotime($pu_dttm);
 		
-			
-			if(strtotime("-1 week") >= $DOdate || strtotime("-1 week") >= $PUdate) continue;
+			//don't display completed assignments more than one week old
+			//$oneWeekAgo = time() - 604800;
+			if((time() - $DOdate >= 604800 || time() - $PUdate >= 604800) && $status == "Complete") continue;
 
 			//if(time() > strtotime($timeStamp)) return "<span class='error'>$timeStamp</span>"; // < 24 hours from now
 			//else if($date <= $oneDayFromNow && time() < $date) return "<span class='warning'>$timeStamp</span>";

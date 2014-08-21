@@ -21,7 +21,7 @@
 	
 		extract($_POST);
 		
-		$unixTime = time();
+		$unixTime = $unixTimeDO = mktime($newHour, $newMin, 0, $newMonth, $newDay, $newYear);
 		
 		$date = date("Y-m-d H:i:s", $unixTime);
 		
@@ -62,7 +62,7 @@
 	"<tr><td>New Case&#39;s Procedure: </td><td>$procedureSelector </td></tr>" .
 	"<tr><td>New Case&#39;s Site: </td><td>$siteSelector </td></tr>" .
 	"<tr><td>New Case&#39;s Status: </td><td>$statusSelector </td></tr>" .
-	"<br/>Trays are due at: <br/> $dateTime <br />" .
+	"<br/>Surgery is at: <br/> $dateTime <br />" .
 	"<tr><td>Comment: </td><td><input type='text' name='newComment' /> </td></tr>" .
 	"</table>" .	
 	"<input type='submit' value='Commit Changes' /> </form>";

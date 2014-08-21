@@ -12,6 +12,9 @@
 	
 	$currentUserId = $_SESSION['userId'];
 	
+	$isAdmin = $_SESSION['isAdmin'];
+	if(!$isAdmin) header("Location: /athena/www/landing.php");
+	
 	//page controls
 	if(isset($_GET['pageno'])) $pageNo = (int) $_GET['pageno'];
 	else $pageNo = 10;

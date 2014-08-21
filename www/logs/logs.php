@@ -11,6 +11,9 @@
 	
 	$htmlUtils->makeHeader();
 	
+	$isAdmin = $_SESSION['isAdmin'];
+	if(!$isAdmin) header("Location: /athena/www/landing.php");
+	
 	$pageTitle = "<div class='pagetitle'><div class='wrapper'><span id='titleicon'>&#x1f4d6;</span><span id='title'>VIEW LOGS</span></div></div>";
 	
 	echo $pageTitle;

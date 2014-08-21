@@ -60,14 +60,14 @@
 			} else {
 			
 				$sql = "UPDATE company SET $column='$newData' WHERE cmp_id='$id'";
-				$this->logSevent($userId, "change.company", $column, $oldData, $new); 
+				$this->logSevent($userId, "change.company", $column, $oldData, $newData); 
 
 				if($this->query($sql)) header( "Location: companyDetail.php?cid=$id" );
 				
 			}
 		}
 		
-		public function editUserDatabase($column, $id, $newData = null) {
+		public function editUserDatabase($column, $id, $newData = null, $settings = false) {
 		
 			//get old data so we can log it
 			$sql = "SELECT * FROM users WHERE usr_id='$id'";
@@ -108,8 +108,10 @@
 			} else {
 			
 				$sql = "UPDATE users SET $column='$newData' WHERE usr_id='$id'";
-				$this->logSevent($userId, "change.users", $column, $oldData, $new); 
-				if($this->query($sql)) header( "Location: userDetail.php?uid=$id" );
+				$this->logSevent($userId, "change.users", $column, $oldData, $newData); 
+				$this->query($sql);
+				if($settings) header("Location: settings.php");
+				else header( "Location: userDetail.php?uid=$id" );
 				
 			}
 		}
@@ -154,7 +156,7 @@
 			} else {
 			
 				$sql = "UPDATE storage SET $column='$newData' WHERE stor_id='$id'";
-				$this->logSevent($userId, "change.storage", $column, $oldData, $new); 
+				$this->logSevent($userId, "change.storage", $column, $oldData, $newData); 
 				if($this->query($sql)) header( "Location: storageDetail.php?sid=$id" );
 				
 			}
@@ -195,14 +197,14 @@
 			} else {
 			
 				$sql = "UPDATE sites SET $column='$newData' WHERE site_id='$id'";
-				$this->logSevent($userId, "change.sites", $column, $oldData, $new); 
+				$this->logSevent($userId, "change.sites", $column, $oldData, $newData); 
 
 				if($this->query($sql)) header( "Location: siteDetail.php?sid=$id" );
 				
 			}
 		}
 		
-		public function editClientDatabase($column, $id, $newData = null) {
+		public function editClientDatabase($column, $id, $newData = null, $settings = false) {
 		//get old data so we can log it
 			$sql = "SELECT * FROM clients WHERE cli_id='$id'";
 			$result = $this->query($sql);
@@ -232,14 +234,15 @@
 						$this->logSevent($userId, "change.clients", $column, $oldData, $new); 
 						if($this->query($sql)) header( "Location: clientDetail.php?cid=$id" );
 					}
-					
 				}
 			} else {
 			
 				$sql = "UPDATE clients SET $column='$newData' WHERE cli_id='$id'";
-				$this->logSevent($userId, "change.clients", $column, $oldData, $new); 
+				$this->query($sql);
+				$this->logSevent($userId, "change.clients", $column, $oldData, $newData); 
 
-				if($this->query($sql)) header( "Location: clientDetail.php?cid=$id" );
+				if($settings) header("Location: settings.php");
+				else header( "Location: clientDetail.php?cid=$id" );
 				
 			}
 		}
@@ -280,7 +283,7 @@
 			} else {
 			
 				$sql = "UPDATE doctors SET $column='$newData' WHERE doc_id='$id'";
-				$this->logSevent($userId, "change.doctors", $column, $oldData, $new); 
+				$this->logSevent($userId, "change.doctors", $column, $oldData, $newData); 
 				if($this->query($sql)) header( "Location: doctorDetail.php?did=$id" );
 				
 			}
@@ -305,6 +308,7 @@
 					$new = $this->findUser($newData, "uname");
 				} else {
 					$oldData = $old["$column"];
+					$new = $newData;
 				}
 				
 				if($old["$column"] == $newData) header( "Location: teamDetail.php?tid=$id" );
@@ -364,6 +368,7 @@
 					$new = $this->findSite($newData, "name");
 				} else {
 					$oldData = $old["$column"];
+					$new = $newData;
 				}
 				
 				if($old["$column"] == $newData) header( "Location: trayDetail.php?tid=$id" );
@@ -417,6 +422,7 @@
 					$new = $this->findUser($newData, "uname");
 				} else {
 					$oldData = $old["$column"];
+					$new = $newData;
 				}
 
 				if($old["$column"] == $newData) header("Location: assignmentDetail.php?aid=$id");
@@ -457,6 +463,7 @@
 					$new = $this->findSite($newData, "name");
 				} else {
 					$oldData = $old["$column"];
+					$new = $newData;
 				}
 
 				if($old["$column"] == $newData) header( "Location: caseDetail.php?cid=$id" );
@@ -1173,7 +1180,7 @@
 				
 			}
 			
-			$newView .= "<p><a href='/athena/www/addTrays.php?cid=$case_id'>Add Trays to Case</a></p>";
+			$newView .= "<p><a href='/athena/www/addTrays.php?cid=$case_id'>Add / Remove Trays from Case</a></p>";
 			
 			$newView .= "</div>$comment</div>";
 			echo $newView;
@@ -1569,7 +1576,7 @@
 			$yearSelect = "<select id='dateTime' name='newYear$salt'>";
 			
 			for($y = 14; $y <= 31; $y++) {
-				$yearSelect .= "<option id='y$y' value='20$y'>20$y</option>";
+				$yearSelect .= "<option id='y$y" . $salt . "' value='20$y'>20$y</option>";
 			}
 		
 			$yearSelect .= "</select>";
@@ -1577,7 +1584,7 @@
 			$monthSelect = "<select name='newMonth$salt'>";
 			
 			for($mo = 1; $mo <=12; $mo++) {
-				$monthSelect .= "<option id='mo$mo' value='$mo'>$mo</option>";
+				$monthSelect .= "<option id='mo$mo" . $salt . "' value='$mo'>$mo</option>";
 			}
 			
 			$monthSelect .= "</select>";
@@ -1585,7 +1592,7 @@
 			$daySelect = "<select name='newDay$salt'>";
 			
 			for($day = 1; $day <=31; $day++) {
-				$daySelect .="<option id='d$day' value='$day'>$day</option>";
+				$daySelect .="<option id='d$day". $salt . "' value='$day'>$day</option>";
 			}
 			
 			$daySelect .= "</select>";
@@ -1593,7 +1600,7 @@
 			$hourSelect = "<select name='newHour$salt'>";
 			
 			for($h = 0; $h <=23; $h++) {
-				$hourSelect .= "<option id='h$h' value='$h'>$h</option>";
+				$hourSelect .= "<option id='h$h". $salt ."' value='$h'>$h</option>";
 			}
 			
 			$hourSelect .= "</select>";
@@ -1601,7 +1608,7 @@
 			$minSelect = "<select name='newMin$salt'>";
 			
 			for($m = 0; $m <= 59; $m++) {
-				$minSelect .= "<option id='m$m' value='$m'>$m</option>";
+				$minSelect .= "<option id='m$m". $salt ."' value='$m'>$m</option>";
 			}
 			
 			$minSelect .= "</select>";
@@ -1654,7 +1661,6 @@
 		}
 		
 		//this function will generate an icon corresponding to the site
-		//INCOMPLETE
 		public function makeIcon($dest) {
 			
 			if($dest == "site") return "<img class='icon' src='/athena/www/utils/images/hospital_symbol.png' height='40' width='40' />";

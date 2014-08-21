@@ -37,17 +37,27 @@
 	
 		if($pickupDropoff == "pickup") {
 			$destId = $_POST['updatedSite'];
+			
+			$sql = "SELECT atnow FROM trays WHERE tray_id='$currentTrayId'";
+			$result = $worker->query($sql);
+			$row = mysqli_fetch_array($result);
+			
+			
+			$atStorageNow = ($row[0] == "stor") ? true : false;
+			
 			$sql = "UPDATE trays SET atnow='usr' , stor_id='0' , site_id='0' WHERE tray_id='$currentTrayId'";
 			$worker->query($sql);
 			//this is the mechanism for completing assignments. If the tray is being picked up from a site,
 			//the related assignment is marked as "complete". The user picking up the tray is then responsible for returning
 			//it to storage
-			$sql = "SELECT asgn_id, tray_id, pu_usr FROM assigns WHERE tray_id='$currentTrayId' AND (pu_usr='$userId' OR pu_usr='0')";
-			$result = $worker->query($sql);
-			while($row = mysqli_fetch_array($result)) {
-				if($row[1] == $currentTrayId && ($row[2] == $userId || $row[2] == 0)) {
-					$sql2 = "UPDATE assigns SET status='Complete' WHERE asgn_id='$row[0]'";
-					$worker->query($sql2);
+			if(!$atStorageNow) {
+				$sql = "SELECT asgn_id, tray_id, pu_usr FROM assigns WHERE tray_id='$currentTrayId' AND (pu_usr='$userId' OR pu_usr='0')";
+				$result = $worker->query($sql);
+				while($row = mysqli_fetch_array($result)) {
+					if($row[1] == $currentTrayId && ($row[2] == $userId || $row[2] == 0)) {
+						$sql2 = "UPDATE assigns SET status='Complete' WHERE asgn_id='$row[0]'";
+						$worker->query($sql2);
+					}
 				}
 			}
 			

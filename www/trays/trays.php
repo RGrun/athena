@@ -9,6 +9,9 @@
 	
 	$htmlUtils->makeHeader();
 	
+	$isAdmin = $_SESSION['isAdmin'];
+	if(!$isAdmin) header("Location: /athena/www/landing.php");
+	
 	echo "<h2>Athena Trays</h2>";
 	
 	echo "<em><a href='addNewTray.php'>Add New Tray</a></em>";

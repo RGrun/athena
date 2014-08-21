@@ -10,6 +10,9 @@
 	
 	$htmlUtils->makeHeader();
 	
+	$isAdmin = $_SESSION['isAdmin'];
+	if(!$isAdmin) header("Location: /athena/www/landing.php");
+	
 	$currentUserId = $_SESSION['userId'];
 	
 	//page controls

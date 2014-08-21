@@ -9,6 +9,9 @@
 	
 	$htmlUtils->makeHeader();
 	
+	$isAdmin = $_SESSION['isAdmin'];
+	if(!$isAdmin) header("Location: /athena/www/landing.php");
+	
 	echo "<div class='adminTable'>";
 	
 	$currentClientId = $_GET['cid'];
@@ -58,7 +61,7 @@
 		"<tr><td><em>Phone</em></td><td>$phone</td><td><a href='editClientInfo.php?mtd=phone'>Edit</a></td></tr>" .
 		"<tr><td><em>SMS</em></td><td>$sms</td><td><a href='editClientInfo.php?mtd=sms'>Edit</a></td></tr>" .
 		"<tr><td><em>Permissions</em></td><td>$perm</td><td><a href='editClientInfo.php?mtd=perm'>Edit</a></td></tr>" .
-		"</table>";
+		"</table><br/><br/>";
 		
 		echo $table;
 		
@@ -90,7 +93,7 @@
 		$siteSelector = $worker->createSelector("sites", "name", "site_id");
 		
 		$siteForm = "<form action='clientDetail.php?cid=$currentClientId' method='post'>" .
-		"Add Region: $siteSelector <br/>" .
+		"Add Site: $siteSelector <br/>" .
 		"<input type='submit' value='Commit Changes' />  </form>";
 		
 		echo "$siteForm";
