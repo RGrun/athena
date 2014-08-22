@@ -19,12 +19,12 @@
 	echo $pageTitle;
 	
 	$menu = 
-	"<ul>
-			<li><a href='/athena/www/logs/htraystor.php'>Tray Storage History</a></li>
-			<li><a href='/athena/www/logs/traytrans.php'>Tray Transfer History</a></li>
-			<li><a href='/athena/www/logs/htraycont.php'>Tray Content Changes</a></li>
-			<li><a href='/athena/www/logs/sevents.php'>System Events</a></li>
-		</ul>";
+	"<table>
+			<tr><td><a href='/athena/www/logs/htraystor.php'>Tray Storage History</a></td></tr>
+			<tr><td><a href='/athena/www/logs/traytrans.php'>Tray Transfer History</a></td></tr>
+			<tr><td><a href='/athena/www/logs/htraycont.php'>Tray Content Changes</a></td></tr>
+			<tr><td><a href='/athena/www/logs/sevents.php'>System Events</a></td></tr>
+		</table>";
 		
 	echo $menu;
 	
