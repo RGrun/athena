@@ -33,7 +33,9 @@
 	//these are for debugging javascript
 	//echo "<p id='js'></p>";
 	//echo "<p id='js2'></p>";
-	//echo "<p id='js3'></p>";
+	//echo "<p id='js3'></p>";\
+	
+	echo "<div class='multiselectmode'><a href='/athena/www/multiPickup.php'>Enter Multi-Select Mode</a></div>";
 	
 	echo "<div class='landingview'>";
 	

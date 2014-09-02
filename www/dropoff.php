@@ -35,6 +35,9 @@
 	//echo "<p id='js2'></p>";
 	//echo "<p id='js3'></p>";
 	
+	echo "<div class='multiselectmode'><a href='/athena/www/multiDropoff.php'>Enter Multi-Select Mode</a></div>";
+
+	
 	echo "<div class='landingview'>";
 	
 	//default display is "all" view

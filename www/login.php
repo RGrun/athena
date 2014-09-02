@@ -43,12 +43,12 @@
 			
 			if(mysqli_num_rows($result) != 0) {
 				//see if its a user
-				$sql = "SELECT usr_id, perm FROM users WHERE uname='$user'";
+				$sql = "SELECT usr_id, team_id, perm FROM users WHERE uname='$user'";
 				$result = $worker->query($sql);
 				$row = mysqli_fetch_array($result);
 				
 				//check admin permission
-				$a = preg_match("/admin/i", $row[1]);
+				$a = preg_match("/admin/i", $row[2]);
 				
 				
 				if($a == TRUE) $_SESSION['isAdmin'] = TRUE;
@@ -57,6 +57,7 @@
 				
 				$_SESSION['user'] = $user;
 				$_SESSION['userId'] = $row[0];
+				$_SESSION['teamId'] = $row[1];
 				header("Location: landing.php");
 				die();
 			} else {
