@@ -115,6 +115,7 @@ create table if not exists sites
 drop table if exists regions;
 create table if not exists regions 
 ( reg_id    int(10)      not null auto_increment,
+  cmp_id    int(10)      not null default 0, 
   name      varchar(255) not null,
   city      varchar(255) not null,
   state     varchar(2)   not null,
@@ -129,6 +130,7 @@ create table if not exists regions
 drop table if exists site_region;
 create table if not exists site_region
 ( site_id    int(10)      not null,
+  cmp_id     int(10)      not null default 0, 
   reg_id     int(10)      not null,
   unique index (site_id, reg_id)
 );
@@ -189,12 +191,24 @@ create table if not exists doctors
 );
 
 -- --------------------------------------------------------
+-- Doctor <> Company map
+-- A doctor uses trays from a company.
+-- --------------------------------------------------------
+drop table if exists doc_cmp;
+create table if not exists doc_cmp 
+( doc_id    int(10)      not null,
+  cmp_id    int(10)      not null default 0, 
+  unique index (doc_id, cmp_id)
+);
+
+-- --------------------------------------------------------
 -- Doctor <> Sites map
 -- A doctor can work at many sites
 -- --------------------------------------------------------
 drop table if exists doc_site;
 create table if not exists doc_site 
 ( doc_id    int(10)      not null,
+**  cmp_id    int(10)      not null default 0, 
   site_id   int(10)      not null,
   unique index (doc_id, site_id)
 );
@@ -205,6 +219,7 @@ create table if not exists doc_site
 drop table if exists instruments;
 create table if not exists instruments 
 ( inst_id   int(10)       not null auto_increment,
+  cmp_id    int(10)       not null default 0, 
   name      varchar(255)  not null,                          
   partno    varchar(255)  not null,
   unique index (partno),
@@ -234,6 +249,50 @@ create table if not exists trays
   -- status    varchar(25)  not null default '',        -- current status of the tray: open, scheduled, loaned, ???
   
   primary key (tray_id)
+);
+
+-- --------------------------------------------------------
+-- Tray Tags - set of tags that can be assinged to trays
+-- and procedures 
+-- --------------------------------------------------------
+drop table if exists tags;
+create table if not exists tags 
+( tag      varchar(80)  not null,                   -- tag
+  cmp_id   int(10)      not null default 0,         -- 0 if global
+  unique index (tag, cmp_id)
+);
+
+-- --------------------------------------------------------
+-- Tray tag map 
+-- --------------------------------------------------------
+drop table if exists tray_tag;
+create table if not exists tray_tag 
+( tray_id   int(10)      not null,
+  tag       varchar(80)  not null,
+  unique index (tray_id, tag)
+);
+
+-- --------------------------------------------------------
+-- Tray types, define an abstract tray type that is 
+-- a collection of tags. 
+-- --------------------------------------------------------
+drop table if exists ttyp;
+create table if not exists ttyp 
+( ttyp_id   int(10)      not null auto_increment,
+  name      varchar(255) not null,                   -- tray type name
+  cmp_id    int(10)      not null,                   -- are tray types by company or team
+  team_id   int(10)      not null,                   -- 
+  primary key (ttyp_id)
+);
+
+-- --------------------------------------------------------
+-- Tray type tag map 
+-- --------------------------------------------------------
+drop table if exists ttyp_tag;
+create table if not exists ttyp_tag 
+( ttyp_id   int(10)      not null,
+  tag       varchar(80)  not null,
+  unique index (ttyp_id, tag)
 );
 
 -- --------------------------------------------------------
@@ -312,6 +371,18 @@ create table if not exists cases
 );
 
 -- --------------------------------------------------------
+-- 
+-- --------------------------------------------------------
+drop table if exists case_ttyp;
+create table if not exists case_ttyp 
+( case_id   int(10)      not null,
+  ttyp_id   int(10)      not null, 
+  cmt       varchar(255) not null default '',
+  tray_id   int(10)      not null default 0,          -- tray that satisfies this type, used to signal that a tray is assigned.
+  unique index (case_id, ttyp_id)
+);
+
+-- --------------------------------------------------------
 -- A case requires a set of 1 or more of trays
 -- Every instance of a tray being loadned to a client,
 -- actual or pending
@@ -335,6 +406,21 @@ create table if not exists assigns
 );
 
 -- --------------------------------------------------------
+-- stores the history of assigning users to assignments
+-- --------------------------------------------------------
+drop table if exists h_assigns;
+create table if not exists h_assigns 
+( h_asgn_id int(10)      not null auto_increment,
+  asgn_id   int(10)      not null,
+  action    varchar(20)  not null,                  --  "do", "pu"
+  status    varchar(20)  not null default 'pending' --  "pending", "accepted", "rejected", "relinquished"
+  from_usr  int(10)      not null,                  -- user initiating this action
+  to_usr    int(10)      not null,                  -- user targeted (given)
+  dttm      datetime     not null,                  -- dttm when action initiated
+  primary key (h_asgn_id)
+);
+
+-- --------------------------------------------------------
 -- a medical procedure requiring a set of instruments
 -- a user defines procs based on the instruments and
 -- surgeries needed for their sites and doctors.
@@ -344,19 +430,46 @@ create table if not exists assigns
 drop table if exists procs;
 create table if not exists procs 
 ( proc_id   int(10)       not null auto_increment,
+  cmp_id    int(10)       not null default 0,         -- 0 if global
   name      varchar(255)  not null,
   primary key (proc_id)
 );
 
 -- --------------------------------------------------------
+-- Procedure tag map 
+-- --------------------------------------------------------
+drop table if exists proc_tag;
+create table if not exists proc_tag 
+( proc_id   int(10)      not null,
+  tag       varchar(80)  not null,
+  unique index (tag, proc_id)
+);
+
+-- --------------------------------------------------------
+DELETE THIS TABLE
 -- maps the instruments required for a proc
 -- --------------------------------------------------------
-drop table if exists procinsts;
-create table if not exists procinsts 
+drop table if exists proc_inst;
+create table if not exists proc_inst 
 ( proc_id   int(10)      not null,
   inst_id   int(10)      not null,
   quant     int(4)       not null default 1,
   unique index (proc_id, inst_id)
+);
+
+-- --------------------------------------------------------
+-- Notifications for the user. 
+-- --------------------------------------------------------
+drop table if exists unotifs;
+create table if not exis ts unotifs 
+( un_id     int(10)       not null auto_increment
+  usr_id    int(10)       not null,
+  hidden    int(10)       not null default 0,     -- set to 1 after the notification should be hidden
+  msg       varchar(255)  not null,                
+  dttm      datetime      not null,               -- the dttm the notification was generated
+  evdttm    datetime      not null,               -- the dttm of the event related to the notification
+  vwdttm    datetime      not null,               -- the last dttm the notification was viewed
+  primary key(un_id)
 );
 
 -- --------------------------------------------------------
@@ -390,8 +503,8 @@ create table if not exists sevents
   u_id      int(10)        not null,                  -- the primary key of the user typ
   name      varchar(20)    not null,                  -- which event happened
   item      varchar(512)   not null,                  -- information for each event
-  was      varchar(512)   not null,                  -- information for each event
-  now        varchar(512)   not null,                  -- information for each event
+  was       varchar(512)   not null,                  -- information for each event
+  now       varchar(512)   not null,                  -- information for each event
   dttm      datetime       not null,                  -- the dttm that the event happened
   primary key (evt_id)
 );
