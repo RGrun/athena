@@ -8,6 +8,8 @@
 		
 		private $connection;
 		
+		//private static $TIMEZONE = 'America/Los_Angeles'; //does not work in php for some stupid reason
+		
 		public function __construct() {
 		
 			//establish connection to database
@@ -1668,6 +1670,218 @@
 			else if($dest == "storage") return "<img class='icon' src='/athena/www/utils/images/warehouse.png' height='40' width='40' />";
 			else if($dest == "user") return "<img class='icon' src='/athena/www/utils/images/truck.png' height='40' width='40' />";
 			
+		}
+		
+		//this function makes the caleandar on the landing page
+		
+		public function makeCalendar($userId, $teamId) {
+			//displays cases and assignments from the next seven days
+			date_default_timezone_set('America/Los_Angeles');
+			
+			$currentTime = time();
+			$oneDayFromNow = time() + (60 * 60 * 24);
+			$twoDaysFromNow = time() + (60 * 60 * 24 * 2);
+			$threeDaysFromNow = time() + (60 * 60 * 24 * 3);
+			$fourDaysFromNow = time() + (60 * 60 * 24 * 4);
+			$fiveDaysFromNow = time() + (60 * 60 * 24 * 5);
+			$sixDaysFromNow = time() + (60 * 60 * 24 * 6);
+			$oneWeekFromNow = time() + (7 * 24 * 60 * 60);
+			
+			$currentDate = date("l M j, 'y", $currentTime);
+			$oneDayFromNowDate = date("l M j, 'y", $oneDayFromNow);
+			$twoDaysFromNowDate = date("l M j, 'y", $twoDaysFromNow);
+			$threeDaysFromNowDate = date("l M j, 'y", $threeDaysFromNow);
+			$fourDaysFromNowDate = date("l M j, 'y", $fourDaysFromNow);
+			$fiveDaysFromNowDate = date("l M j, 'y", $fiveDaysFromNow);
+			$sixDaysFromNowDate = date("l M j, 'y", $sixDaysFromNow);
+			$oneWeekFromNowDate = date("l M j, 'y", $oneWeekFromNow);
+			
+			$times = array($currentTime, $oneDayFromNow, $twoDaysFromNow, $threeDaysFromNow, $fourDaysFromNow, $fiveDaysFromNow,
+			$sixDaysFromNow, $oneWeekFromNow);
+			
+			$dates = array($currentDate, $oneDayFromNowDate, $twoDaysFromNowDate, $threeDaysFromNowDate, $fourDaysFromNowDate,
+			$fiveDaysFromNowDate, $sixDaysFromNowDate, $oneWeekFromNowDate);
+			
+			$timeViews = "<div class='trayclassholder'>"; //open tray class holder
+			
+			for ($i = 0; $i < count($dates); $i++) {
+			
+				$timeViews .= "<h4>$dates[$i]</h4>";
+				
+				
+				$timeViews .= "<h5>Cases: </h5>";
+				
+					
+				/********************************
+				* print case tables for each case
+				*********************************/
+				$sql = "SELECT * FROM cases WHERE (team_id='$teamId' OR team_id='0')";
+		
+				$result = $this->query($sql);	
+				
+				
+				while($row = mysqli_fetch_assoc($result)) {
+						
+						if($row['status'] == "Complete") continue;
+
+						if($i + 1 == count($dates)) $x = 6;
+						else $x = $i;
+						
+						//check to make sure time is within range
+						if($this->dateIsBetween($times[$x], $times[$x + 1], $row['dttm'])) {
+						
+							$case = $row['case_id'];
+						
+							$timeViews .= "<div id='" . $case . "_class' class='trayclass'>"; //open trayclass
+						
+							$team = $this->findTeam($row['team_id'], "name");
+							$doc = $this->findDoctor($row['doc_id'], "name");
+							$procedure = $this->findProcedure($row['proc_id'], "name");
+							$site = $this->findSite($row['site_id'], "name");
+							$case = $row['case_id'];
+							
+							
+							//this stuff is always visible
+							$timeViews .= "<div class='clickable' onclick='expandCase($case)'>"; //open clickable
+							$timeViews .= "<h2>Case No: $case</h2>";
+							
+							//figure out how many assignments are pending or complete
+							$noOfCompleteAssignments = 0;
+							$noOfPendingAssignments = 0;
+							$noOfAssignments = 0;
+							
+							$sql2 = "SELECT asgn_id, tray_id, status FROM assigns WHERE case_id='$case' AND (do_usr='$userId' OR pu_usr='$userId' OR do_usr='0' OR pu_usr='0')";
+							
+							$result2 = $this->query($sql2);
+							
+							while($row2 = mysqli_fetch_array($result2)) {		
+								if($row2[2] == "Complete") $noOfCompleteAssignments++;
+								if($row2[2] == "Pending") $noOfPendingAssignments++;
+					
+								$noOfAssignments++;
+							}
+							
+							//assignment dots added here
+							$timeViews .= "<div class='assignmentDots'>"; //open dots
+							
+								for($k = 0; $k <= $noOfPendingAssignments; $k++) {
+									$timeViews .= "<img src='/athena/www/utils/images/closedCircle.png' height='18' width='18' />";
+								}
+								for($k = 0; $k <= $noOfCompleteAssignments; $k++) {
+									$timeViews .= "<img src='/athena/www/utils/images/openCircle.png' height='18' width='18' />";
+								}
+							
+							$timeViews .= "</div>"; //close dots
+	
+							$timeViews .= "<div class='docSite'>$doc @ $site</div>";
+							$timeViews .= "<div class='caseProc'>$procedure</div>";
+							$timeViews .= "<em class='trayarrow' id='arrow$case'>&#x25bc;</em>";
+							$timeViews .= "</div>"; //close clickable
+							
+							//this stuff is hidden at first, revealed by click
+							//open expandedtrayview
+							$timeViews .=  "<div id='" . $case . "_class_expanded' class='expandedtrayview' style='display: none;'>";
+							
+							$timeViews .= "<h4 class='assignmentsLabel'>Trays assigned to this case: </h4>";
+							
+							
+							//generate trays associated with this case
+							$sql3 = "SELECT tray_id FROM assigns INNER JOIN cases ON cases.case_id=assigns.case_id " .
+							"WHERE (cases.case_id='$case' AND assigns.case_id='$case')";
+							$result3 = $this->query($sql3);
+
+							while($row3 = mysqli_fetch_assoc($result3)) {
+					
+								$tray = $row3['tray_id'];
+			
+								$sql6 = "SELECT * FROM trays WHERE tray_id='$tray'";
+								
+								$result6 = $this->query($sql6);
+								
+								$row6 = mysqli_fetch_assoc($result6);
+								
+								extract($row6);
+								
+								$company = $this->findCompany($cmp_id, "name");
+								$team = $this->findTeam($team_id, "name");
+								$site = $this->findSite($site_id, "name");
+								$loanTeam = $this->findTeam($loan_team, "name");
+								$storage = $this->findStorage($stor_id, "name");
+								
+								if($loanTeam == null) $loanTeam = "None";
+								
+								if($atnow == "usr") $status = "With user";
+								if($atnow == "site") $status = "At site";
+								if($atnow == "stor") $status = "In storage";
+								if($atnow == "unk") $status = "Unknown";
+								
+								//figure out next avalibale time
+								$sql7 = "SELECT do_dttm, pu_dttm FROM assigns INNER JOIN trays ON trays.tray_id=assigns.tray_id" .
+								" WHERE trays.tray_id='$tray_id' AND assigns.tray_id='$tray_id' ORDER BY do_dttm DESC, pu_dttm DESC";
+								
+								//echo $sql5;
+								
+								$result7 = $this->query($sql7);
+								
+								$closestTime = 0;
+								while($row7 = mysqli_fetch_array($result7)) {
+									
+									$doDTTM = strtotime($row7[0]);
+									$puDTTM = strtotime($row7[1]);
+									
+									$closestTime = $row7[0];
+									if ($closestTime < time() && time() > $doDTTM) $closestTime = $row7[1];
+								
+								}
+								
+								$avalibleTime = $this->checkTime($closestTime);
+								
+								
+								$timeViews .= "<div class='traysInCase'>" .
+								"<div class='assignLink'><a href='/athena/www/trays/trayDetail.php?tid=$tray'>Details</a></div>" .
+								"<div class='trayName'>Name: $name</div>" .
+								"<div class='trayTeam'>Team: $team For: $doc</div>" .
+								//"<div class='trayTime'>Busy Until: $avalibleTime</div>" .
+								"<div class='trayStatus'>Status: $status</div>" .
+								"</div>";
+								
+							}
+							
+						
+							$timeViews .= "</div>"; //close expanded tray view
+						
+							$timeViews .= "</div>"; //close trayclass
+							
+						}
+					
+					
+				}
+				
+				/********************************
+				* print tray tables for each day
+				*********************************/
+				$timeViews .= "<h5>Trays: </h5>";
+				
+				
+				
+				//divider here
+				$timeViews .= "<div class='divider'></div>";
+			} 
+				
+			$timeViews .= "</div>"; //end trayclassholder
+			
+			echo $timeViews;
+
+		}
+			
+	
+		
+		public function dateIsBetween($from, $to, $date = null) {
+			if($date == null) $date = time();
+			$date = is_int($date) ? $date : strtotime($date); // convert non timestamps
+			$from = is_int($from) ? $from : strtotime($from); // ..
+			$to = is_int($to) ? $to : strtotime($to);         // ..
+			return ($date >= $from) && ($date <= $to); // extra parens for clarity
 		}
 	}
 				

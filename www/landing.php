@@ -10,14 +10,24 @@
 	
 	$htmlUtils->makeHeader();
 	
-	
 	$userStr = $_SESSION['user'];
 	$userId = $_SESSION['userId'];
+	if(isset($_SESSION['teamId'])) $teamId = $_SESSION['teamId'];
+	else $teamId = null;
 	
-//	echo "<a href='/athena/www/trayInspector.php?mtd=dropoff'><h2>Drop off Trays</h2></a>";
+	echo "<h1>My Calendar</h1>";
 	
-	//echo "<a href='/athena/www/trayInspector.php?mtd=pickup'><h2>Pick up Trays</h2></a>";
-
+	echo "<a href='/athena/www/teamCalendar.php'>View Team Calendar</a>";
+	
+	echo "<div class='landingview'>";
+	
+	
+	$worker->makeCalendar($userId, $teamId);
+	
+	
+	
+	
+	echo "</div>";
 	
 	$htmlUtils->makeFooter();
 
