@@ -476,7 +476,7 @@
 				
 		}
 				
-		public function editTrayContents($column, $iid, $newData = null, $tid, $method) {
+		public function editTrayContents($column, $iid, $newData = null, $tid, $method, $link = true) {
 		
 				//get old data so we can log it
 				$sql = "SELECT * FROM traycont WHERE inst_id='$iid' AND tray_id='$tid'";
@@ -493,8 +493,9 @@
 				if($old["$column"] == $newData) return null;
 
 				$this->logSevent($userId, "change.trayContents", $item, $old["$column"], $newData); 
+				
 
-				header( "Location: /athena/www/trays/editTrayContents.php?iid=$iid&mtd=$method" );
+				if($link == true) header( "Location: /athena/www/trays/editTrayContents.php?iid=$iid&mtd=$method" );
 		}
 		
 		public function logSevent($userId, $name, $item, $from, $to) {
@@ -504,7 +505,7 @@
 		
 			$sql = "INSERT INTO sevents (u_id, name, item, was, now, dttm) VALUES ('$userId', '$name', '$item', '$from', '$to', '$time')";
 			
-			echo $sql;
+			//echo $sql;
 			
 			$this->query($sql);
 		
@@ -647,7 +648,7 @@
 			$closestTime = $row[0];
 			
 			if($closestTime != null) $closestTime = $this->checkTime($closestTime);
-			else $closestTime = "None Scheduled";
+			else $closestTime = "None Scheduled, return to storage.";
 			
 			$forIcon = "site";
 			if($site_id == 0 && $stor_id == 0) {  $site = "With $user";  $forIcon = "user";  }
@@ -1170,7 +1171,7 @@
 				"<div class='assignLink'><a href='/athena/www/trays/trayDetail.php?tid=$tray'>Details</a></div>" .
 				"<div class='trayName'>Name: $name</div>" .
 				"<div class='trayTeam'>Team: $team For: $doc</div>" .
-				"<div class='trayTime'>Busy Until: $avalibleTime</div>" .
+				//"<div class='trayTime'>Busy Until: $avalibleTime</div>" .
 				"<div class='trayStatus'>Status: $status</div>" .
 				"</div>";
 				

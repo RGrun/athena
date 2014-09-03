@@ -11,22 +11,41 @@
 	$htmlUtils = new htmlUtils();
 	$worker = new dbWorker();
 	
-	$htmlUtils->makeScriptHeader();
-	
+	$htmlUtils->makeHeader();
 	$pickupDropoff = $_SESSION['mtd'];
+	$userId = $_SESSION['userId'];
 	
-	if(isset($_POST['storage'])) {
+	//$trayDB = $_SESSION['tray'];
+	//print_r($trayDB);
+	
+	if(isset($_SESSION['storage'])) {
 		$destIsStorage = true;
-		$storId = (int) $_POST['storage'];
+		$destIsSite = false;
+		$storId = (int) $_SESSION['storage'];
 	
 	} else {
 	
 		$destIsStorage = false;
+		$destIsSite = false;
 		$storId = "";
-		$destId; //FIX
 	}
 	
+	if(isset($_SESSION['site'])) {
+		$destIsSite = true;
+		$siteId = (int) $_SESSION['site'];
+		$destIsStorage = false;
+	
+	} else  {
+		$destIsSite = false;
+		$siteId = 0;
+		$destIsStorage = false;
+	
+	}
+	
+	
 	if(isset($_POST['confirm'])) {
+	
+		echo $pickupDropoff;
 	
 		$trays = $_SESSION['tray'];
 	
@@ -47,48 +66,46 @@
 			//the related assignment is marked as "complete". The user picking up the tray is then responsible for returning
 			//it to storage
 			if(!$atStorageNow) {
-				$sql = "SELECT asgn_id, tray_id, pu_usr FROM assigns WHERE tray_id='$currentTrayId' AND (pu_usr='$userId' OR pu_usr='0')";
+				$sql = "SELECT asgn_id, tray_id, pu_usr FROM assigns WHERE tray_id='$currentTray' AND (pu_usr='$userId' OR pu_usr='0')";
 				$result = $worker->query($sql);
 				while($row = mysqli_fetch_array($result)) {
-					if($row[1] == $currentTrayId && ($row[2] == $userId || $row[2] == 0)) {
+					if($row[1] == $currentTray && ($row[2] == $userId || $row[2] == 0)) {
 						$sql2 = "UPDATE assigns SET status='Complete' WHERE asgn_id='$row[0]'";
 						$worker->query($sql2);
 					}
 				}
 			}
 			
-			$tray = $worker->findTray($currentTrayId, "name");
+			$tray = $worker->findTray($currentTray, "name");
 			$user = $worker->findUser($userId, "uname");
 			$worker->logSevent($userId, "pickup.site", $tray , "At site", "With $user"); 
-			
-			
-			//echo $sql;
 
-		
 			}
 			
 		$_SESSION['tray'] = null;
 		$_SESSION['mtd'] = null;
 		header("Location: pickup.php");
 		die();
-		} else if ($pickupDropoff == "dropoff" && $destIsStorage) {
+		} else if ($pickupDropoff == "dropoff" && isset($_SESSION['storage'])) {
 		
 			foreach($trays as $currentTray) {
-			$sql = "UPDATE trays SET atnow='stor' , site_id='0' , stor_id='$storId' WHERE tray_id='$currentTrayId'";
+			$sql = "UPDATE trays SET atnow='stor' , site_id='0' , stor_id='$storId' WHERE tray_id='$currentTray'";
 			$worker->query($sql);
 			$currentTime = time();
 			$currentTime = date("Y-m-d H:i:s", $currentTime);
-			$sql = "INSERT INTO h_traystor (tray_id, stor_id, usr_id, dttm) VALUES ('$currentTrayId', '$storId', '$userId', '$currentTime')";
+			$sql = "INSERT INTO h_traystor (tray_id, stor_id, usr_id, dttm) VALUES ('$currentTray', '$storId', '$userId', '$currentTime')";
 			$worker->query($sql);
 			//echo $sql;
 			
-			$tray = $worker->findTray($currentTrayId, "name");
+			$tray = $worker->findTray($currentTray, "name");
 			$user = $worker->findUser($userId, "uname");
 			$dest = $worker->findStorage($storId, "name");
 			$worker->logSevent($userId, "dropoff.storage", $tray , "With $user", $dest); 
 		}
 			$_SESSION['tray'] = null;
 			$_SESSION['mtd'] = null;
+			$_SESSION['storage'] = null;
+			$_SESSION['site'] = null;
 			header("Location: dropoff.php");
 			die();
 		
@@ -96,37 +113,37 @@
 			
 			foreach($trays as $currentTray) {
 			
-			$sql = "UPDATE trays SET atnow='site' , stor_id='0' , site_id='$destId' WHERE tray_id='$currentTray'";
-			$worker->query($sql);
-			//log signature name in database
-			$name = $_POST['newName'];
-			$time = time();
-			$time = date("Y-m-d H:i:s", $time);
-			//figure out case related to assignment
-			$sql = "SELECT case_id, pu_usr FROM assigns WHERE do_usr='$userId' AND tray_id='$currentTrayId' ORDER BY do_dttm DESC";
-			$result = $worker->query($sql);
-			//system assumes closest do_dttm is the current case
-			$row = mysqli_fetch_array($result);
-			$sql = "INSERT INTO traytrans (tray_id, signer, site_id, from_usr, to_usr, case_id, dttm) VALUES ('$currentTrayId', '$name','$destId', '$userId', '$row[1]', '$row[0]', '$time')";
-			//echo $sql;
-			$worker->query($sql);
-			
-			$tray = $worker->findTray($currentTrayId, "name");
-			$user = $worker->findUser($userId, "uname");
-			$dest = $worker->findSite($destId, "name");
-			$worker->logSevent($userId, "dropoff.site", $tray , "With $user", $dest); 
+				$sql = "UPDATE trays SET atnow='site' , stor_id='0' , site_id='$siteId' WHERE tray_id='$currentTray'";
+				$worker->query($sql);
+				//log signature name in database
+				$name = $_POST['newName'];
+				$time = time();
+				$time = date("Y-m-d H:i:s", $time);
+				//figure out case related to assignment
+				$sql = "SELECT case_id, pu_usr FROM assigns WHERE do_usr='$userId' AND tray_id='$currentTray' ORDER BY do_dttm DESC";
+				$result = $worker->query($sql);
+				//system assumes closest do_dttm is the current case
+				$row = mysqli_fetch_array($result);
+				$sql = "INSERT INTO traytrans (tray_id, signer, site_id, from_usr, to_usr, case_id, dttm) VALUES ('$currentTray', '$name','$siteId', '$userId', '$row[1]', '$row[0]', '$time')";
+				//echo $sql;
+				$worker->query($sql);
+				
+				$tray = $worker->findTray($currentTray, "name");
+				$user = $worker->findUser($userId, "uname");
+				$dest = $worker->findSite($siteId, "name");
+				$worker->logSevent($userId, "dropoff.site", $tray , "With $user", $dest); 
 
-		}
-			$_SESSION['tray'] = null;
-			$_SESSION['mtd'] = null;
-			header("Location: dropoff.php");
-			die();
+			}
+				$_SESSION['tray'] = null;
+				$_SESSION['mtd'] = null;
+				$_SESSION['storage'] = null;
+				$_SESSION['site'] = null;
+				header("Location: dropoff.php");
+				die();
 		
 		}
 	
 	}
-	
-	
 	
 	$trays = $_SESSION['tray'];
 	
@@ -196,12 +213,30 @@
 		}
 	}
 	
+	echo $destIsStorage;
+	
 	$pickupForm = "<form action='multiSignatureConfirm.php' method='post'>" .
 	"Accept: <input type='checkbox' name='accept'  onchange='signature()'/> <br/>" .
 	"<input type='hidden' name='confirm' value='1' />" .
 	"<input id='proceed' type='submit' value='Proceed' disabled /> </form>";
+	
+	$storageForm = "<form action='multiSignatureConfirm.php' method='post'>" .
+	"Accept: <input type='checkbox' name='accept'  onchange='signature()'/> <br/>" .
+	"<input type='hidden' name='confirm' value='1' />" .
+	"<input type='hidden' name='updatedSite' value='$storId' />" .
+	"<input id='proceed' type='submit' value='Proceed' disabled /> </form>";
+			
+	
+	$dropoffForm = "<form action='multiSignatureConfirm.php' method='post'>" .
+	"Enter your full name here: <br/> <input type='text' name='newName' /><br/>" .
+	"Accept: <input type='checkbox' name='accept'  onchange='signature()'/> <br/>" .
+	"<input type='hidden' name='confirm' value='1' />" .
+	"<input type='hidden' name='updatedSite' value='$siteId' />" .
+	"<input id='proceed' type='submit' value='Proceed' disabled /> </form>";
 			
 	if ($pickupDropoff == "pickup") echo $pickupForm;
+	if ($pickupDropoff == "dropoff" && isset($_SESSION['storage'])) echo $storageForm;
+	if ($pickupDropoff == "dropoff" && isset($_SESSION['site'])) echo $dropoffForm; 
 	
 	$htmlUtils->makeFooter();
 	

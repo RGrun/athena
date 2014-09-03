@@ -11,7 +11,7 @@
 	$htmlUtils = new htmlUtils();
 	$worker = new dbWorker();
 	
-	$htmlUtils->makeScriptHeader();
+	$htmlUtils->makeHeader();
 	
 	$pickupDropoff = "";
 	
@@ -26,6 +26,13 @@
 		//echo $trayIndex;
 		$pickupDropoff = $_SESSION['mtd'];
 	}
+	
+	if(isset($_GET['index'])) {
+	// this is for a backlink from an edit tray contents page
+		$trayIndex = $_GET['index'];
+	
+	}
+	
 	
 	if($trayIndex == count($trays)) {
 		//if we reach here, all the trays have been confirmed. This is like a signature.
@@ -102,8 +109,10 @@
 				
 				$instrument = $worker->findInstrument($inst_id, "name");
 				
+				$thisTray2 = $trays["$trayIndex"];
+				
 				$traycont .=  "<tr><td>$instrument</td>" .
-				"<td>$quant</td><td>$state</td><td>$cmt</td><td class='mod'><a href='/athena/www/trays/editTrayContents.php?iid=$inst_id&mtd=pickup'>Modify</a></td></tr>";
+				"<td>$quant</td><td>$state</td><td>$cmt</td><td class='mod'><a href='/athena/www/editMultiSelectContents.php?iid=$inst_id&tid=$thisTray2&mtd=$pickupDropoff&source=multi&index=$trayIndex'>Modify</a></td></tr>";
 				
 			}
 			
@@ -119,7 +128,7 @@
 			echo "Are the contents of the tray consistent with what is displayed here? $confirmSelector<br/>";
 			
 			$proceedButton = "<form action='multiSignature.php' method='post'>" .
-			"<input id='proceedButton' type='submit' value='Next Tray' /> </form>";
+			"<input id='proceedButton' type='submit' value='Next' /> </form>";
 			
 			echo $proceedButton;
 			

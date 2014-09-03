@@ -29,7 +29,7 @@
 		
 		$sql = "SELECT tray_id, name FROM trays WHERE team_id='$usersTeamId' AND atnow='usr'";
 		
-		//echo $sourceId;
+		//echo $siteIsStorage;
 
 		$result = $worker->query($sql);
 		if($result->num_rows > 0) {
@@ -45,9 +45,13 @@
 			
 			if($siteIsStorage) {
 				$multiSelectForm .= "<input type='hidden' name='storage' value='$siteId' />";
+				$_SESSION['storage'] = $siteId;
+				$_SESSION['site'] = null;
 			}
 			if(!$siteIsStorage) {
 				$multiSelectForm .= "<input type='hidden' name='site' value='$siteId' />";
+				$_SESSION['site'] = $siteId;
+				$_SESSION['storage'] = null;
 			
 			}
 			
