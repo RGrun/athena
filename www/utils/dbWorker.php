@@ -2105,7 +2105,7 @@
 				
 				
 			}
-			print_r($alreadyPrinted);
+			//print_r($alreadyPrinted);
 			
 			return $timeViews;
 
