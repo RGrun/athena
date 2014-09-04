@@ -2009,9 +2009,9 @@
 							//check if assignment is a pickup or dropoff
 							$destLocation = $getCaseRow['site_id'];
 							if($atnow == "stor" || ($atnow == "site" && $destLocation == $site_id)) {
-								$stateIcon = "<div class='stateIcon'><img src='/athena/www/utils/images/upArrow.png' width='40' height='40' /></div>";
+								$stateIcon = "<div class='stateIcon'><img src='/athena/www/utils/images/uparrow.png' width='40' height='40' /></div>";
 							} else {
-								$stateIcon = "<div class='stateIcon'><img src='/athena/www/utils/images/downArrow.png' width='40' height='40' /></div>";
+								$stateIcon = "<div class='stateIcon'><img src='/athena/www/utils/images/downarrow.png' width='40' height='40' /></div>";
 							
 							}
 							
