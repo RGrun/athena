@@ -2084,7 +2084,7 @@
 							
 							$timeViews .= "</div>"; //close trayclass
 							
-							echo $salt;
+							//echo $salt;
 							
 							if(!in_array($tray, $alreadyPrinted)) array_push($alreadyPrinted, $tray);
 							
