@@ -22,9 +22,9 @@
 	echo "<div class='landingview'>";
 	
 	
-	$worker->makeCalendar($userId, $teamId);
+	$calendar = $worker->makeCalendar($userId, $teamId);
 	
-	
+	echo $calendar;
 	
 	
 	echo "</div>";

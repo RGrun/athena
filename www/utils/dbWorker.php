@@ -1678,6 +1678,7 @@
 			//displays cases and assignments from the next seven days
 			date_default_timezone_set('America/Los_Angeles');
 			
+			$oneDayAgo = time() - (60 * 60 * 24);
 			$currentTime = time();
 			$oneDayFromNow = time() + (60 * 60 * 24);
 			$twoDaysFromNow = time() + (60 * 60 * 24 * 2);
@@ -1687,6 +1688,7 @@
 			$sixDaysFromNow = time() + (60 * 60 * 24 * 6);
 			$oneWeekFromNow = time() + (7 * 24 * 60 * 60);
 			
+			$oneDayAgoDate = date("l M j, 'y", $oneDayAgo);
 			$currentDate = date("l M j, 'y", $currentTime);
 			$oneDayFromNowDate = date("l M j, 'y", $oneDayFromNow);
 			$twoDaysFromNowDate = date("l M j, 'y", $twoDaysFromNow);
@@ -1701,6 +1703,10 @@
 			
 			$dates = array($currentDate, $oneDayFromNowDate, $twoDaysFromNowDate, $threeDaysFromNowDate, $fourDaysFromNowDate,
 			$fiveDaysFromNowDate, $sixDaysFromNowDate, $oneWeekFromNowDate);
+			
+			$alreadyPrinted = array();
+			
+			$salt = "";
 			
 			$timeViews = "<div class='trayclassholder'>"; //open tray class holder
 			
@@ -1722,17 +1728,38 @@
 				
 				while($row = mysqli_fetch_assoc($result)) {
 						
-						if($row['status'] == "Complete") continue;
+						//if($row['status'] == "Complete") continue;
 
 						if($i + 1 == count($dates)) $x = 6;
 						else $x = $i;
+						
 						
 						//check to make sure time is within range
 						if($this->dateIsBetween($times[$x], $times[$x + 1], $row['dttm'])) {
 						
 							$case = $row['case_id'];
 						
-							$timeViews .= "<div id='" . $case . "_class' class='trayclass'>"; //open trayclass
+							//figure out how many assignments are pending or complete
+							$noOfCompleteAssignments = 0;
+							$noOfPendingAssignments = 0;
+							$noOfAssignments = 0;
+							
+							$sql2 = "SELECT asgn_id, tray_id, status FROM assigns WHERE case_id='$case' AND (do_usr='$userId' OR pu_usr='$userId' OR do_usr='0' OR pu_usr='0')";
+							
+							//echo $sql2;
+							
+							$result2 = $this->query($sql2);
+							
+							while($row2 = mysqli_fetch_array($result2)) {		
+								if($row2[2] == "Complete") $noOfCompleteAssignments++;
+								if($row2[2] == "Pending") $noOfPendingAssignments++;
+					
+								$noOfAssignments++;
+							}
+
+							//is case complete?
+							if($row['status'] == "Pending") $timeViews .= "<div id='" . $case . "_class' class='warningtrayclass'>"; //warning trayclass
+							else $timeViews .= "<div id='" . $case . "_class' class='trayclass'>"; //open trayclass
 						
 							$team = $this->findTeam($row['team_id'], "name");
 							$doc = $this->findDoctor($row['doc_id'], "name");
@@ -1744,39 +1771,43 @@
 							//this stuff is always visible
 							$timeViews .= "<div class='clickable' onclick='expandCase($case)'>"; //open clickable
 							$timeViews .= "<h2>Case No: $case</h2>";
+
 							
-							//figure out how many assignments are pending or complete
-							$noOfCompleteAssignments = 0;
-							$noOfPendingAssignments = 0;
-							$noOfAssignments = 0;
-							
-							$sql2 = "SELECT asgn_id, tray_id, status FROM assigns WHERE case_id='$case' AND (do_usr='$userId' OR pu_usr='$userId' OR do_usr='0' OR pu_usr='0')";
-							
-							$result2 = $this->query($sql2);
-							
-							while($row2 = mysqli_fetch_array($result2)) {		
-								if($row2[2] == "Complete") $noOfCompleteAssignments++;
-								if($row2[2] == "Pending") $noOfPendingAssignments++;
-					
-								$noOfAssignments++;
+							if($noOfAssignments == $noOfCompleteAssignments) {
+								$timeViews .= "<div class='assignmentDots'>";
+								$timeViews .= "<img src='/athena/www/utils/images/check.png' height='40' width='40' />";
+								$timeViews .= "</div>";
+								
+								//mark case as complete if there are no pending assignments associated with it
+								$completeSql = "UPDATE cases SET status='Complete' WHERE case_id='$case'";
+								$this->query($completeSql);
+							} else if($noOfAssignments > 0) { 
+								//assignment dots added here
+								$timeViews .= "<div class='assignmentDots'>"; //open dots
+								
+								if($noOfCompleteAssignments > 0) {
+									for($v = 1; $v <= $noOfCompleteAssignments; $v++) {
+										$timeViews .= "<img src='/athena/www/utils/images/closedCircle.png' height='18' width='18' />";
+									}
+								}
+									
+								if($noOfPendingAssignments > 0) {
+									for($k = 1; $k <= $noOfPendingAssignments; $k++) {
+											$timeViews .= "<img src='/athena/www/utils/images/openCircle.png' height='18'width='18' />";
+									}
+								}
+								$timeViews .= "</div>"; //close dots
 							}
 							
-							//assignment dots added here
-							$timeViews .= "<div class='assignmentDots'>"; //open dots
 							
-								for($k = 0; $k <= $noOfPendingAssignments; $k++) {
-									$timeViews .= "<img src='/athena/www/utils/images/closedCircle.png' height='18' width='18' />";
-								}
-								for($k = 0; $k <= $noOfCompleteAssignments; $k++) {
-									$timeViews .= "<img src='/athena/www/utils/images/openCircle.png' height='18' width='18' />";
-								}
 							
-							$timeViews .= "</div>"; //close dots
-	
-							$timeViews .= "<div class='docSite'>$doc @ $site</div>";
+							
 							$timeViews .= "<div class='caseProc'>$procedure</div>";
+							$timeViews .= "<div class='docSite'>$doc @ $site</div>";
 							$timeViews .= "<em class='trayarrow' id='arrow$case'>&#x25bc;</em>";
 							$timeViews .= "</div>"; //close clickable
+							
+							
 							
 							//this stuff is hidden at first, revealed by click
 							//open expandedtrayview
@@ -1817,7 +1848,7 @@
 								
 								//figure out next avalibale time
 								$sql7 = "SELECT do_dttm, pu_dttm FROM assigns INNER JOIN trays ON trays.tray_id=assigns.tray_id" .
-								" WHERE trays.tray_id='$tray_id' AND assigns.tray_id='$tray_id' ORDER BY do_dttm DESC, pu_dttm DESC";
+								" WHERE trays.tray_id='$tray' AND assigns.tray_id='$tray' ORDER BY do_dttm DESC, pu_dttm DESC";
 								
 								//echo $sql5;
 								
@@ -1848,14 +1879,12 @@
 							}
 							
 						
-							$timeViews .= "</div>"; //close expanded tray view
-						
-							$timeViews .= "</div>"; //close trayclass
-							
+							$timeViews .= "</div>"; //close expanded case view
+							$timeViews .= "</div>"; 
 						}
 					
 					
-				}
+				} // end case stuff
 				
 				/********************************
 				* print tray tables for each day
@@ -1863,18 +1892,227 @@
 				$timeViews .= "<h5>Trays: </h5>";
 				
 				
+				$getCaseSql = "SELECT case_id, site_id FROM cases WHERE (team_id='$teamId' OR team_id='0')";
+		
+				$getCaseResult = $this->query($getCaseSql);
+				
+				while($getCaseRow = mysqli_fetch_assoc($getCaseResult)) {
+				
+					$case = $getCaseRow['case_id'];
+				
+					$traySql = "SELECT tray_id, do_dttm, pu_dttm, assigns.status FROM assigns INNER JOIN cases ON cases.case_id=assigns.case_id " .
+								"WHERE (cases.case_id='$case' AND assigns.case_id='$case')";
+								
+								
+					
+					$trayResult = $this->query($traySql);
+					
+					while($trayRow = mysqli_fetch_assoc($trayResult)) {
+					
+						//ignore trays from completed assignments
+						if($trayRow['status'] == "Complete") continue;
+					
+						if($i + 1 == count($dates)) $x = 6;
+						else $x = $i;
+						
+						//check to make sure time is within range
+						if($this->dateIsBetween($times[$x], $times[$x + 1], $trayRow['do_dttm']) || 
+						$this->dateIsBetween($times[$x], $times[$x + 1], $trayRow['pu_dttm'])) {
+						
+							
+							$tray = $trayRow['tray_id'];
+				
+							$sql9 = "SELECT * FROM trays WHERE tray_id='$tray'";
+									
+							$result9 = $this->query($sql9);
+									
+							$row9 = mysqli_fetch_assoc($result9);
+					
+							$company = $this->findCompany($row9['cmp_id'], "name");
+							$team = $this->findTeam($row9['team_id'], "name");
+							$name = $this->findTray($tray, "name");
+							$site_id = $row9['site_id'];
+							if ($row9['site_id'] == 0) $site = 0;
+							else $site = $this->findSite($row9['site_id'], "name");
+							$loanTeam = $this->findTeam($row9['loan_team'], "name");
+							$storage = $this->findStorage($row9['stor_id'], "name");
+							$stor_id = $row9['stor_id'];
+							
+							$atnow = $row9['atnow'];
+							
+							if($loanTeam == null) $loanTeam = "None";
+			
+							if($atnow == "usr") $status = "With user";
+							if($atnow == "site") $status = "At site";
+							if($atnow == "stor") $status = "In storage";
+							if($atnow == "unk") $status = "Unknown";
+							
+							
+							
+							//figure out time of next pending dropoff event
+							$sql10 = "SELECT do_dttm, pu_dttm, do_usr, pu_usr FROM assigns INNER JOIN trays ON trays.tray_id=assigns.tray_id" .
+							" WHERE trays.tray_id='$tray' AND assigns.tray_id='$tray' AND assigns.status!='Complete' ORDER BY do_dttm DESC, pu_dttm DESC";
+							//echo $sql10;
+							
+							$result10 = $this->query($sql10);
+							
+							//figure out closest assignment
+							$row10 = mysqli_fetch_array($result10);
+							
+							$closestDOTime = $row10[0];
+							$closestPUTime = $row10[1];
+								
+							$assignedToDO = $this->findUser($row10[2], "uname");
+							$assignedToPU = $this->findUser($row10[3], "uname");
+							
+							
+							
+							if($assignedToDO == null)
+								$assignedToDO = "<div class='assignedToDO'>Dropoff: Unassigned</div>";
+							else
+								$assignedToDO = "<div class='assignedToDO'>Dropoff Assigned To: $assignedToDO</div>";
+							
+							if($assignedToPU == null)
+								$assignedToPU = "<div class='assignedToPU'>Pickup: Unassigned</div>";
+							else
+								$assignedToPU = "<div class='assignedToPU'>Pickup Assigned To: $assignedToPU</div>";
+								
+							$userAssignments = "<div class='userAssignments'>$assignedToDO <br/> $assignedToPU</div>";
+				
+							if($closestDOTime != null) $closestDOTime = $this->checkTime($closestDOTime);
+							else $closestDOTime = "No Dropoff Scheduled";
+							
+							if($closestPUTime != null) $closestPUTime = $this->checkTime($closestPUTime);
+							else $closestPUTime = "No Pickup Scheduled";
+							
+							//check to see if this tray was already printed earlier
+							//this is needed to make the javascript work correctly
+							if(in_array($tray, $alreadyPrinted)) {
+								if($salt == "") $salt = 0;
+								$salt++;
+							}
+									
+							//trayview building begins here
+							//is assignment due within one day?, or is there still no dropoff user assigned?
+							if(($this->dateIsBetween(time() - (60 * 60 * 24), time() + (60 * 60 * 24), $closestDOTime) || ($row10['do_usr'] == 0) || $row10['pu_usr'] == 0)) $timeViews .= "<div id='Tray " . $tray . $salt . "_class' class='warningtrayclass'>"; //warning trayclass
+							else $timeViews .= "<div id=' Tray " . $tray . $salt . "_class' class='trayclass'>"; //open trayclass
+							
+							$forIcon = "site";
+							if($site_id == 0 && $stor_id == 0) {  $site = "With User";  $forIcon = "user";  }
+							else if($site_id == 0 && $stor_id != 0) { $site = "In Storage"; $forIcon = "storage"; }
+								
+							//generate icon/location
+							$icon = $this->makeIcon($forIcon);
+							if($forIcon != "storage") $loc = "<div class='location'>$icon Current Location: $site <br/> Until: $closestDOTime</div>";
+							else $loc = "<div class='location'>$icon Current Location: $site <br/> </div>";
+							
+							//check if assignment is a pickup or dropoff
+							$destLocation = $getCaseRow['site_id'];
+							if($atnow == "stor" || ($atnow == "site" && $destLocation == $site_id)) {
+								$stateIcon = "<div class='stateIcon'><img src='/athena/www/utils/images/upArrow.png' width='40' height='40' /></div>";
+							} else {
+								$stateIcon = "<div class='stateIcon'><img src='/athena/www/utils/images/downArrow.png' width='40' height='40' /></div>";
+							
+							}
+							
+							//figure out next pending event
+							$nextSql = "SELECT do_dttm, do_usr FROM assigns INNER JOIN trays ON trays.tray_id=assigns.tray_id" .
+							" WHERE trays.tray_id='$tray' AND assigns.tray_id='$tray' AND assigns.status!='Complete' ORDER BY do_dttm DESC";
+							
+							$nextResult = $this->query($nextSql);
+							
+							$nextRow = mysqli_fetch_array($nextResult);
+			
+							$closestTime = $nextRow[0];
+							$dropoffUser = $nextRow[1];
+			
+							if($closestTime != null) { 
+								$closestTime = $this->checkTime($closestTime);
+								
+							} else  {
+								$closestTime = "";
+							}
+							$timeViews .= "<div class='clickable' onclick='expand($tray". $salt . ")'>"; //open clickable
+							$timeViews .= "<h2>$name</h2>";
+							$timeViews .= $userAssignments;
+							$timeViews .= $stateIcon;
+							$timeViews .= $loc;
+							$timeViews .= "<em class='trayarrow' id='arrow$tray" . $salt ."'>&#x25bc;</em>";
+							$timeViews .= "</div>"; //close clickable
+							
+							//this stuff is hidden at first, revealed by click
+							$timeViews .=  "<div id='Tray " . $tray . $salt . "_class_expanded' class='expandedtrayview' style='display: none;'>";
+							
+							
+							$timeViews .= "<br/><span class='companydata'>Belongs To: $company.$team </span>";
+							
+							$sql11 = "SELECT * FROM assigns WHERE tray_id='$tray' AND (do_usr='$userId' OR pu_usr='$userId' OR do_usr='0' OR pu_usr='0') AND  (status='Pending' OR status='Overdue')";
+							
+							$result11 = $this->query($sql11);
+							
+							$timeViews .= "<br/><br/><h4 class='assignmentsLabel'>Upcoming assignments:</h4>";
+
+							while($row11 = mysqli_fetch_assoc($result11)) {
+					
+								$timeViews .= $this->makeTrayAssignments($row11, $userId);
+								
+							}
+							
+							//create traycont table (tray contents)
+							$sql12 = "SELECT * FROM traycont WHERE tray_id='$tray'";
+							
+							$timeViews .= "<h4>Tray contents: </h4>";
+
+							if($result12 = $this->query($sql12)) {
+								
+								while ($row12 = mysqli_fetch_assoc($result12)) {
+									
+									extract($row12);
+									
+									$instrument = $this->findInstrument($inst_id, "name");
+									
+									$timeViews .= "<div class='instrumentView'>"; //open instrument view
+									$timeViews .= "$quant x $instrument";
+									$timeViews .= "</div>"; //close instrument view
+								}
+											
+								
+					
+							}
+							
+							$timeViews .= "</div>"; //close expanded tray view 
+							
+							$timeViews .= "</div>"; //close trayclass
+							
+							echo $salt;
+							
+							if(!in_array($tray, $alreadyPrinted)) array_push($alreadyPrinted, $tray);
+							
+							//$timeViews .= "</div>";
+						}
+						
+						//$timeViews .= "</div>";
+					
+					} 
+
+					
+					
+				} // end tray stuff
 				
 				//divider here
 				$timeViews .= "<div class='divider'></div>";
-			} 
+				//$timeViews .= "</div>"; //end trayclassholder
 				
-			$timeViews .= "</div>"; //end trayclassholder
+				
+			}
+			print_r($alreadyPrinted);
 			
-			echo $timeViews;
+			return $timeViews;
 
+			
 		}
 			
-	
+		
 		
 		public function dateIsBetween($from, $to, $date = null) {
 			if($date == null) $date = time();
