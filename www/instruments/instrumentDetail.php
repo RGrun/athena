@@ -27,13 +27,17 @@
 		
 		echo "<h2>Instrument Detail for $name</h2>";
 		
+		$company = $worker->findCompany($cmp_id, "name");
+		if($company == null) $company = "Pending";
+		
 		$table = "<table>" .
 		"<tr><td><em>Instrument ID: </em></td><td>$inst_id</td>".
 		"<tr><td><em>Name</em></td><td>$name</td><td><a href='editInstrumentInfo.php?mtd=name'>Edit</a></td></tr>" .
 		"<tr><td><em>Part No: </em></td><td>$partno</td><td><a href='editInstrumentInfo.php?mtd=partno'>Edit</a></td></tr>" .
+		"<tr><td><em>Company: </em></td><td>$company</td><td><a href='editInstrumentInfo.php?mtd=company'>Edit</a></td></tr>" .
 		"</table>";
 		
-		echo "<p>$table</p>";
+		echo "$table";
 		
 		echo "</div>";
 		

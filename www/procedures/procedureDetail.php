@@ -22,7 +22,7 @@
 	if(isset($_GET['del'])) {
 	
 		$toDelete = $_GET['del'];
-		$sql = "DELETE FROM procinsts WHERE inst_id='$toDelete' AND proc_id='$currentProcedure'";
+		$sql = "DELETE FROM proc_inst WHERE inst_id='$toDelete' AND proc_id='$currentProcedure'";
 		
 		$worker->query($sql);
 		
@@ -37,7 +37,7 @@
 		//map id to region name
 		$quant = $_POST['newQuant'];
 		
-		$sql = "INSERT INTO procinsts (proc_id, inst_id, quant)" .
+		$sql = "INSERT INTO proc_inst (proc_id, inst_id, quant)" .
 		"VALUES ('$currentProcedure', '$instrument', '$quant')";
 		
 		
@@ -57,14 +57,18 @@
 	
 		echo "<h2>Procedure Detail for $name</h2>";
 		
+		$company = $worker->findCompany($cmp_id, "name");
+		if($company == null) $company = "Pending";
+		
 		$table = "<table>" .
-		"<tr><td><em>Name</em></td><td>$name</td><td><a href='editProcedureInfo.php?mtd=name'>Edit</a></td></tr>" .
+		"<tr><td><em>Name:</em></td><td>$name</td><td><a href='editProcedureInfo.php?mtd=name'>Edit</a></td></tr>" .
+		"<tr><td><em>Company:</em></td><td>$company</td><td><a href='editProcedureInfo.php?mtd=company'>Edit</a></td></tr>" .
 		"</table>";
 		
-		echo "<p>$table</p>";
+		echo "$table";
 		
 		//create procinsts table
-		$sql = "SELECT * FROM procinsts WHERE proc_id='$currentProcedure'";
+		$sql = "SELECT * FROM proc_inst WHERE proc_id='$currentProcedure'";
 
 		if($result = $worker->query($sql)) {
 		

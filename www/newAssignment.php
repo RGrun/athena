@@ -29,12 +29,30 @@
 		if($puDate == "1999-11-30 00:00:00") $puDate = "0000-00-00 00:00:00";
 		
 		$sql = "INSERT INTO assigns (case_id, tray_id, do_usr, pu_usr, do_dttm, pu_dttm, status, cmt)" .
-		"VALUES ('$currentCase', '$newtrays', '$newusers', '$newusers2', '$doDate', '$puDate', '$newStatus', '$newComment')";
+		" VALUES ('$currentCase', '$newtrays', '$newusers', '$newusers2', '$doDate', '$puDate', '$newStatus', '$newComment')";
 
 		$worker->query($sql);
-		$worker->closeConnection();
 		
-		//echo $sql;
+		//log
+		//get new asgn_id
+		$sql = "SELECT asgn_id FROM assigns WHERE case_id='$currentCase' AND do_dttm='$doDate' AND pu_dttm='$puDate'";
+		$result = $worker->query($sql);
+		$row = mysqli_fetch_array($result);
+		
+		$newAssignId = $row[0];
+		
+		$now = time();
+		$now = date("Y-m-d H:i:s", $now);
+		
+		$sql = "INSERT INTO h_assigns (asgn_id, action, status, from_usr, to_usr, dttm)" .
+		" VALUES ('$newAssignId', 'Dropoff', 'Pending', '$userId', '$newusers', '$now')";
+		
+		$sql2 = "INSERT INTO h_assigns (asgn_id, action, status, from_usr, to_usr, dttm)" .
+		" VALUES ('$newAssignId', 'Pickup', 'Pending', '$userId', '$newusers2', '$now')";
+		
+		$worker->query($sql);
+		$worker->query($sql2);
+		
 		
 		
 		header( "Location: addTrays.php?cid=$currentCase" );

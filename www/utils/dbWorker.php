@@ -344,6 +344,30 @@
 				header( "Location: instrumentDetail.php?iid=$id" );
 		}
 		
+		public function editProcedureDatabase($column, $id, $newData = null) {
+			//get old data so we can log it
+				$sql = "SELECT * FROM procs WHERE proc_id='$id'";
+				$result = $this->query($sql);
+				$old = mysqli_fetch_assoc($result);
+				
+				if($old["$column"] == $newData) header( "Location: procedureDetail.php?pid=$id" );
+				
+				$userId = $_SESSION['userId'];
+				
+				$oldData = $old["$column"];
+				
+				$this->logSevent($userId, "change.procedure", $column, $oldData, $newData); 
+				
+		
+				$sql = "UPDATE procs SET $column='$newData' WHERE proc_id='$id'";
+				//echo $sql;
+				$this->query($sql); 
+				header( "Location: procedureDetail.php?pid=$id" );
+		
+		
+		
+		}
+		
 		public function editTrayDatabase($column, $id, $newData = null) {
 				//get old data so we can log it
 				$sql = "SELECT * FROM trays WHERE tray_id='$id'";

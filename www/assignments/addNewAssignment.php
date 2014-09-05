@@ -9,6 +9,8 @@
 	
 	$htmlUtils->makeScriptHeader();
 	
+	$userId = $_SESSION['userId'];
+	
 	$isAdmin = $_SESSION['isAdmin'];
 	if(!$isAdmin) header("Location: /athena/www/landing.php");
 
@@ -28,7 +30,26 @@
 		"VALUES ('$newcases', '$newtrays', '$newusers', '$newusers2', '$doDate', '$puDate', '$newStatus', '$newComment')";
 
 		$worker->query($sql);
-		$worker->closeConnection();
+		
+		//log
+		//get new asgn_id
+		$sql = "SELECT asgn_id FROM assigns WHERE case_id='$currentCase' AND do_dttm='$doDate' AND pu_dttm='$puDate'";
+		$result = $worker->query($sql);
+		$row = mysqli_fetch_array($result);
+		
+		$newAssignId = $row[0];
+		
+		$now = time();
+		$now = date("Y-m-d H:i:s", $now);
+		
+		$sql = "INSERT INTO h_assigns (asgn_id, action, status, from_usr, to_usr, dttm)" .
+		" VALUES ('$newAssignId', 'Dropoff', 'Pending', '$userId', '$newusers', '$now')";
+		
+		$sql2 = "INSERT INTO h_assigns (asgn_id, action, status, from_usr, to_usr, dttm)" .
+		" VALUES ('$newAssignId', 'Pickup', 'Pending', '$userId', '$newusers2', '$now')";
+		
+		$worker->query($sql);
+		$worker->query($sql2);
 		
 		//echo $sql;
 		header( "Location: assignments.php" );
