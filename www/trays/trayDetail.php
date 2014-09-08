@@ -15,6 +15,8 @@
 	
 	$_SESSION['currentTrayId'] = $currentTrayId;
 	
+	$userCompanies = $_SESSION['userCompanies'];
+	
 	//delete relationship
 	if(isset($_GET['del'])) {
 	
@@ -98,7 +100,7 @@
 		"<tr><td><em>Status:</em></td><td>$status</td><td><a href='editTrayInfo.php?mtd=atnow'>Edit</a></td></tr>" .
 		"</table>";
 		
-		echo "<p>$table</p>";
+		echo "$table";
 		
 		//create traycont table (tray contents)
 		$sql = "SELECT * FROM traycont WHERE tray_id='$currentTrayId'";
@@ -124,7 +126,7 @@
 			
 			$traycont .= "</table>";
 			
-			echo "<p>$traycont</p>";
+			echo "$traycont";
 			
 		}
 		
@@ -145,9 +147,61 @@
 		"Comment: <textarea rows='4' cols='50' name = 'newComment'></textarea><br/>" .
 		"<input type='submit' value='Commit Changes' />  </form>";
 		
-		echo "<p>$trayForm</p>";
+		echo "$trayForm";
 		
-		echo "</div>";
+		echo "</div>"; //end adminTable
+		
+		echo "<div class='landingview'>"; //open landingview
+		
+		//add tags here
+		
+		$tagSql = "SELECT tag FROM tray_tag WHERE tray_id='$currentTrayId'";
+		//echo $tagSql;
+		$tagResult = $worker->query($tagSql);
+		$tagTable = "<div class='tagTable'>"; //open tagTable
+		$tagTable .= "<div class='tagsView'>"; //open tagsView
+		$tagTable .= "<h2>Tags: </h2><br/>";
+		
+		while ($tagRow = mysqli_fetch_array($tagResult)) {
+		
+			$tagName = $tagRow[0];
+			$tagTable .= "<div class='tag'>";
+			$tagTable .= "<div class='tagName'>$tagName</div><div class='tagX'><a href='deleteTags.php?del=1&cmp_id=$cmp_id&tag=$tagName'><img src='/athena/www/utils/images/blackX.png' height='16' width='16' /></a></div></div>";
+		
+		
+		}
+		
+		$tagTable .= "</div>"; //close tagsView
+		
+		//add tags form
+		$tagSql = "SELECT tag, cmp_id FROM tags";
+		$tagResult = $worker->query($tagSql);
+		
+		$tagSelector = "<select name='newTag' size='1'>";
+		while($tagRow = mysqli_fetch_array($tagResult)) {
+
+		
+			if(in_array($tagRow[1], $userCompanies) || $tagRow[1] == "0")
+				$tagSelector .= "<option value='$tagRow[0]'>$tagRow[0]</option>";
+
+		}
+		
+		$tagSelector .= "</select>";
+		
+		$tagTable .= "<p>Select new tags: </p>";
+		
+		$tagForm = "<form method='post' action='/athena/www/tags/addTags.php'>$tagSelector <br/> <input type='submit' value='Add Tag' /><input type='hidden' name='tray' value='$tray_id' /></form>";
+		
+		
+		$tagTable .= $tagForm;
+		
+		$tagTable .= "</div>"; //close tagTable
+		
+		echo $tagTable;
+	
+		
+		echo "</div>"; //close landingview
+		
 		
 		
 	} else {
