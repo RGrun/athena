@@ -93,7 +93,7 @@
 	"</table>" .
 	"<input type='submit' value='Commit Changes' /> </form>";
 	
-	echo "<p>$form</p>";
+	echo "$form";
 	$worker->closeConnection();
 	$htmlUtils->makeFooter();
 	
