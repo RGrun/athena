@@ -31,6 +31,8 @@
 			<tr><td><a href='/athena/www/procedures/procedures.php'>Procedures</a></td></tr>
 			<tr><td><a href='/athena/www/cases/cases.php'>Cases</a></td></tr>
 			<tr><td><a href='/athena/www/assignments/assignments.php'>Assignments</a></td></tr>
+			<tr><td><a href='/athena/www/tags/newTags.php'>Add / Modify Tags</a></td></tr>
+			<tr><td><a href='/athena/www/tags/trayTypes.php'>Tray Types</a></td></tr>
 		</table>";
 		
 	echo $menu;

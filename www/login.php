@@ -49,8 +49,7 @@
 				
 				//check admin permission
 				$a = preg_match("/admin/i", $row[2]);
-				
-				
+
 				if($a == TRUE) $_SESSION['isAdmin'] = TRUE;
 				else $_SESSION{'isAdmin'} = FALSE;
 				$_SESSION['isClient'] = FALSE;
@@ -58,6 +57,28 @@
 				$_SESSION['user'] = $user;
 				$_SESSION['userId'] = $row[0];
 				$_SESSION['teamId'] = $row[1];
+				
+				//figure out user's companies, to be stored in array, needed for tagging info
+				$companySql = "SELECT * FROM usr_cmp WHERE usr_id='$row[0]'";
+				
+				//echo $companySql;
+				
+				$companyResult = $worker->query($companySql);
+				if(mysqli_num_rows($companyResult) != 0) {
+					$userCompanies = array();
+					while($companyRow = mysqli_fetch_assoc($companyResult)) {
+						
+						array_push($userCompanies, $companyRow['cmp_id']);
+
+					}
+					
+					$_SESSION['userCompanies'] = $userCompanies;
+				
+				} else {
+					$_SESSION['userCompanies'] = 0;
+				
+				}
+				
 				header("Location: landing.php");
 				die();
 			} else {
@@ -82,6 +103,11 @@
 					
 					$_SESSION['user'] = $user;
 					$_SESSION['userId'] = $row[0];
+					$_SESSION['teamId'] = 0
+					
+					//there is currently no way to map clients to companies, clients will be able to see global tags only
+					$_SESSION['userCompanies'] = 0;
+					
 					header("Location: landing.php");
 					die();
 				} else {

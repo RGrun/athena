@@ -208,7 +208,7 @@ create table if not exists doc_cmp
 drop table if exists doc_site;
 create table if not exists doc_site 
 ( doc_id    int(10)      not null,
-**  cmp_id    int(10)      not null default 0, 
+  cmp_id    int(10)      not null default 0, 
   site_id   int(10)      not null,
   unique index (doc_id, site_id)
 );
@@ -443,7 +443,7 @@ create table if not exists h_assigns
 ( h_asgn_id int(10)      not null auto_increment,
   asgn_id   int(10)      not null,
   action    varchar(20)  not null,                  --  "do", "pu"
-  status    varchar(20)  not null default 'pending' --  "pending", "accepted", "rejected", "relinquished"
+  status    varchar(20)  not null default 'Pending', --  "pending", "accepted", "rejected", "relinquished"
   from_usr  int(10)      not null,                  -- user initiating this action
   to_usr    int(10)      not null,                  -- user targeted (given)
   dttm      datetime     not null,                  -- dttm when action initiated
@@ -503,7 +503,7 @@ create table if not exists proc_inst
 -- --------------------------------------------------------
 drop table if exists unotifs;
 create table if not exis ts unotifs 
-( un_id     int(10)       not null auto_increment
+( un_id     int(10)       not null auto_increment,
   usr_id    int(10)       not null,
   
   not_id    int(10)       not null default 0,     -- what kind of notice

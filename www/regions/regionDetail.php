@@ -47,17 +47,21 @@
 		
 		echo "<h2>Region Detail for $name</h2>";
 		
+		$cName = $worker->findCompany($cmp_id, "name");
+		if($cName == null) $cName = "Pending";
+		
 		$table = "<table>" .
-		"<tr><td><em>Region ID</em></td><td>$reg_id</td>" .
-		"<tr><td><em>City</em></td><td>$city</td><td><a href='editRegionInfo.php?mtd=city'>Edit</a></td></tr>" .
-		"<tr><td><em>State</em></td><td>$state</td><td><a href='editRegionInfo.php?mtd=state'>Edit</a></td></tr>" .
+		"<tr><td><em>Region ID:</em></td><td>$reg_id</td>" .
+		"<tr><td><em>City:</em></td><td>$city</td><td><a href='editRegionInfo.php?mtd=city'>Edit</a></td></tr>" .
+		"<tr><td><em>Primary Company:</em><td>$cName</td><td><a href='editRegionInfo.php?mtd=company'>Edit</a></td></tr>" .
+		"<tr><td><em>State:</em></td><td>$state</td><td><a href='editRegionInfo.php?mtd=state'>Edit</a></td></tr>" .
 		"</table>";
 		
 		echo "<p>$table</p>";
 		
 		//create site-region relation table
 		$sql = "SELECT * FROM site_region WHERE reg_id='$currentRegion'";
-		
+
 		if($result = $worker->query($sql)) {
 		
 			$site_region = "<table>" .
@@ -76,12 +80,38 @@
 			
 			$site_region .= "</table>";
 			
+			//I honestly don't think we should use cmp_id in site_region, so I'm disabling this code
+			
+			/******************************************************************************************
+			if($result = $worker->query($sql)) {
+			
+				$site_region .= "<table>" .
+				"<tr><th>Companies Servicing Region:</th></tr>";
+				
+				while ($row = mysqli_fetch_assoc($result)) {
+					
+					extract($row);
+					
+					$company = $worker->findCompany($cmp_id, "name");
+					if($company == null) $company = "Pending";
+					
+					$site_region .= "<tr><td>$company</td>" .
+					"</tr>";
+					
+				}
+			
+				$site_region .= "</table>";
+			}	
+			******************************************************************************************/
 			echo "<p>$site_region</p>";
 			
 		}
+		
+		
 	
 	
 		$sitesSelector = $worker->createSelector("sites", "name", "site_id");
+		$companySelector = $worker->createSelector("company", "name", "cmp_id", true);
 		
 		$sitesForm = "<form action='regionDetail.php?rid=$reg_id' method='post'>" .
 		"Add Site: $sitesSelector <br/>" .

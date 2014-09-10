@@ -21,9 +21,11 @@
 	
 	//delete relationship
 	if(isset($_GET['del'])) {
-	
+		
 		$toDelete = $_GET['del'];
-		$sql = "DELETE FROM doc_site WHERE site_id='$toDelete' AND doc_id='$currentDoctorId'";
+		
+		if(!isset($_GET['mtd'])) $sql = "DELETE FROM doc_site WHERE site_id='$toDelete' AND doc_id='$currentDoctorId'";
+		else $sql = "DELETE FROM doc_cmp WHERE cmp_id='$toDelete' AND doc_id='$currentDoctorId'";
 		
 		$worker->query($sql);
 		
@@ -41,6 +43,18 @@
 		$worker->query($sql);
 		
 		echo "Data successfully updated";
+	}
+	
+	if(isset($_POST['newcompany'])) {
+	
+		$company = $_POST['newcompany'];
+		
+		$sql = "INSERT INTO doc_cmp (doc_id, cmp_id) VALUES ('$currentDoctorId', '$company')";
+	
+		$worker->query($sql);
+		
+		echo "Data successfully updated";
+	
 	}
 	
 	$sql = "SELECT * FROM doctors WHERE doc_id='$currentDoctorId'";
@@ -83,7 +97,31 @@
 			
 			$doc_site .= "</table>";
 			
-			echo "<p>$doc_site</p>";
+			
+		}
+		
+		//create doctor-company relation table
+		$sql = "SELECT * FROM doc_cmp WHERE doc_id='$currentDoctorId'";
+
+		if($result = $worker->query($sql)) {
+		
+			$doc_site .= "<table>" .
+			"<tr><th>Works For:</th></tr>";
+			
+			while ($row = mysqli_fetch_assoc($result)) {
+				
+				extract($row);
+				
+				$company = $worker->findCompany($cmp_id, "name");
+				
+				$doc_site .= "<tr><td>$company</td>" .
+				"<td><a href='doctorDetail.php?del=$cmp_id&mtd=company&did=$currentDoctorId'>Remove</a></td></tr>";
+				
+			}
+			
+			$doc_site .= "</table>";
+			
+			echo "$doc_site";
 			
 		}
 		
@@ -93,7 +131,16 @@
 		"Add Site: $siteSelector <br/>" .
 		"<input type='submit' value='Commit Changes' />  </form>";
 		
-		echo "<p>$siteForm</p>";
+		$companySelector = $worker->createSelector("company", "name", "cmp_id");
+		
+		$companyForm = "<form action='doctorDetail.php?did=$currentDoctorId' method='post'>" .
+		"Add Company: $companySelector <br/>" .
+		"<input type='submit' value='Commit Changes' />  </form>";
+		
+		
+		echo "<div style='margin-bottom: 10px;'>$siteForm</div>";
+		
+		echo "<div style='margin-bottom: 10px;'>$companyForm</div>";
 		
 		echo "</div>";
 		

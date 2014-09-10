@@ -23,20 +23,23 @@
 	if($result = $worker->query($sql)) {
 	
 		$table = "<table>" .
-		"<tr><th>Instrument ID</th><th>Name</th><th>Part No</th></tr>"; 
+		"<tr><th>Instrument ID</th><th>Name</th><th>Part No</th><th>Comapny</th></tr>"; 
 		
 		while($row = mysqli_fetch_assoc($result)) {			
 			
 			extract($row);
+			
+			$company = $worker->findCompany($cmp_id, "name");
+			if($company == null) $company = "Pending";
 	
-			$table .= ("<tr><td>$inst_id</td><td>$name</td><td>$partno</td>" .
+			$table .= ("<tr><td>$inst_id</td><td>$name</td><td>$partno</td><td>$company</td>" .
 			"<td><a href='instrumentDetail.php?iid=$inst_id'>Detail</a></td><td><a href='deleteInstrument.php?iid=$inst_id'>Delete</a></td>");
 
 		}
 		
 		$table .= "</table>";
 		
-		echo "<p>$table</p>";
+		echo "$table";
 		
 		echo "</div>";
 		

@@ -23,20 +23,24 @@
 	if($result = $worker->query($sql)) {
 	
 		$table = "<table>" .
-		"<tr><th>Procedure ID</th><th>Name</th></tr>"; 
+		"<tr><th>Procedure ID</th><th>Name</th><th>Company</th></tr>"; 
 		
 		while($row = mysqli_fetch_assoc($result)) {			
 			
 			extract($row);
+			
+			$company = $worker->findCompany($cmp_id, "name");
+			if($company == null) $company = "Pending";
+			
 	
-			$table .= ("<tr><td>$proc_id</td><td>$name</td>" .
+			$table .= ("<tr><td>$proc_id</td><td>$name</td><td>$company</td>" .
 			"<td><a href='procedureDetail.php?pid=$proc_id'>Detail</a></td><td><a href='deleteProcedure.php?pid=$proc_id'>Delete</a></td>");
 
 		}
 		
 		$table .= "</table>";
 		
-		echo "<p>$table</p>";
+		echo "$table";
 		
 		echo "</div>";
 		

@@ -19,7 +19,7 @@
 	echo "<em><a href='addNewRegion.php'>Add New Region</a></em> <br/> <br/>";
 	
 	echo "<table>" .
-	"<tr><th>Region ID</th><th>Name</th><th>City</th><th>State</th></tr>";
+	"<tr><th>Region ID</th><th>Name</th><th>City</th><th>Primary Company</th><th>State</th></tr>";
 	
 	$sql = "SELECT * FROM regions";
 	
@@ -34,8 +34,13 @@
 			
 			echo "<td>$reg_id</td>";
 			
+			$cName = $worker->findCompany($cmp_id, "name");
+			if($cName == null) $cName = "Pending";
+			
+			
 			echo "<td>$name</td>";
 			echo "<td>$city</td>";
+			echo "<td>$cName</td>";
 			echo "<td>$state</td>";
 			echo "<td><a href='regionDetail.php?rid=$reg_id'>Detail</a></td>";
 			echo "<td><a href='deleteRegion.php?rid=$reg_id'>Delete</a></td></tr>";

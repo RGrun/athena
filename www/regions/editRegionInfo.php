@@ -27,6 +27,12 @@
 	if(isset($_POST['newData'])) {
 		$worker->editRegionDatabase($selectedMethod, $currentRegion, $_POST['newData']);
 		$worker->closeConnection();
+	} else if(isset($_POST['newcompany'])) { 
+	
+		
+	
+		$worker->editRegionDatabase("cmp_id", $currentRegion, $_POST['newcompany']); 
+		$worker->closeConnection();
 	} else {
 
 
@@ -35,7 +41,17 @@
 		"<input type='text' name='newData' maxLength='2' /><br />" .
 		"<input type='submit' value='Commit Changes' /></form> <br/>";
 		
+		$companySelector = $worker->createSelector("company", "name", "cmp_id", true);
+		
+		$companyChangeForm = "<form method='post' action='editRegionInfo.php'>" .
+		"$companySelector  <br/>"  .
+		"<input type='submit' value='Commit Changes' /></form> <br/>";
+		
+		if($selectedMethod == "company") $selectedMethod = "cmp_id";
+		
 		$sql = "SELECT $selectedMethod FROM regions WHERE reg_id='$currentRegion'";
+		
+		if($selectedMethod == "cmp_id") $selectedMethod = "company";
 		
 		if($result = $worker->query($sql)) {
 			
@@ -48,8 +64,12 @@
 			"<input type='submit' value='Commit Changes' /></form> <br/>";
 			
 			if($selectedMethod == "state") {
-				echo "<p>$currentData</p>";
+				echo "$currentData";
 				echo $stateChangeForm;
+			} else if($selectedMethod == "company") { 
+				if($currentData == 0) $currentData = "Pending";
+				echo "$currentData";
+				echo $companyChangeForm;
 			} else {
 				echo $form;
 			}

@@ -94,27 +94,6 @@
 		}
 	}
 	
-	/*
-	function showCaseElements() {
-		
-		showAllElements();
-		
-		//get am array of all divs in the page
-		var divs = document.getElementsByTagName("DIV");
-		
-		for(x = 0; x < divs.length; x++) {
-			if(divs[x].className == 'caseelement') continue;
-			if(divs[x].className == 'caseTray') continue;
-			if((divs[x].className == 'header') 
-			|| (divs[x].className == 'main') 
-			|| (divs[x].className == 'headernav')
-			|| (divs[x].className == 'filterform' )
-			|| (divs[x].className == 'landingview')
-			|| (divs[x].className == 'footer')) continue;
-			
-			S(divs[x]).display = 'none';
-		}
-	} */
 	
 	function expand(trayId) {
 		
@@ -224,6 +203,14 @@
 				button.disabled = true;
 			}
 		}
+	}
+	
+	//used in newTags page
+	function disableSelect() {
+		
+		if(document.frm.newCompany.disabled == true) document.frm.newCompany.disabled = false;
+		else document.frm.newCompany.disabled = true;
+	
 	}
 	
 	//used in signature page

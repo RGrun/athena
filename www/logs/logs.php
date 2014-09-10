@@ -23,6 +23,7 @@
 			<tr><td><a href='/athena/www/logs/htraystor.php'>Tray Storage History</a></td></tr>
 			<tr><td><a href='/athena/www/logs/traytrans.php'>Tray Transfer History</a></td></tr>
 			<tr><td><a href='/athena/www/logs/htraycont.php'>Tray Content Changes</a></td></tr>
+			<tr><td><a href='/athena/www/logs/hassigns.php'>Assignment History</a></td></tr>
 			<tr><td><a href='/athena/www/logs/sevents.php'>System Events</a></td></tr>
 		</table>";
 		
