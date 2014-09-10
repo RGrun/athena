@@ -17,7 +17,7 @@
 	
 	echo "<h1>My Calendar</h1>";
 	
-	echo "<p><a href='/athena/www/teamCalendar.php'>View Team Calendar</a></p>";
+	//echo "<p><a href='/athena/www/teamCalendar.php'>View Team Calendar</a></p>";
 	
 	echo "<p><a href='/athena/www/calendarLegend.php'>View Calendar Legend</a></p>";
 	

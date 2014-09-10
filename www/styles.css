@@ -363,7 +363,7 @@
 			}
 			
 			
-			.main > div {
+			.main  div {
 				margin-left: auto;
 				margin-right: auto;
 			
@@ -659,7 +659,7 @@
 			
 			.divider {
 				border: 1px solid black;
-				width: 600px;
+				
 			
 			}
 			
@@ -732,5 +732,35 @@
 			.tagX {
 				position: relative;
 				text-align: right;
+			
+			}
+			
+			/* Tray type-related */
+			
+			.ttypUnfulfilled {
+				border: 1px solid black;
+				width: 500px;
+				padding: 10px;
+				margin: 5px;
+				border-radius: 25px;
+				
+				background: #FFBFC3;
+			
+			
+			}
+			
+			.ttypUnfulfilled select {
+				background: white;
+			
+			}
+			
+			.ttypFulfilled {
+				border: 1px solid black;
+				width: 500px;
+				padding: 10px;
+				margin: 5px;
+				border-radius: 25px;
+				
+				background: rgba(213, 213, 213, 0.44);
 			
 			}

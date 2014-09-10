@@ -1113,7 +1113,7 @@
 			
 			//date
 			$date = $this->checkTime($dttm);
-			$date = "<div class='caseTime'>Due: $date</div>";
+			$date = "<div class='caseTime'>Surgery Date: $date</div>";
 			
 			//doctor
 			$doc = $this->findDoctor($doc_id, "name");
@@ -1125,7 +1125,7 @@
 			
 			//stuff here always visible
 			$newView = "<div id='$trayNameClass' class='trayclass'>";
-			$newView .= "<div class='linkToComplete'><a href='/athena/www/reservations.php?complete=1&cid=$case_id'>Mark as Complete</a></div>";
+			//$newView .= "<div class='linkToComplete'><a href='/athena/www/reservations.php?complete=1&cid=$case_id'>Mark as Complete</a></div>";
 			$newView .= "<div class='clickable' onclick='expandCase($case_id)'>"; //open clickable
 			$newView .= "<h2>Case No: $case_id</h2>";
 			$newView .= $date;
@@ -1137,6 +1137,24 @@
 			//This stuff is revealed by clicking, its in the dropdown
 			
 			$newView .=  "<div id='$trayNameClass" . "_expanded' class='expandedtrayview' style='display: none;'>";
+			
+			$newView .= "<div class='ttypRecords'>"; //open ttyp records
+			$newView .= "<h4 class='assignmentsLabel'>Unfulfilled tray types: </h4>";
+			//get unfuffiled tray type records
+			$ttypSql = "SELECT * FROM case_ttyp WHERE case_id='$case_id' AND tray_id='0'"; 
+			$ttypResult = $this->query($ttypSql);
+			while($ttypRow = mysqli_fetch_assoc($ttypResult)) {
+				$name = $this->findTrayType($ttypRow['ttyp_id'], "name");
+				
+				$newView .= "<div class='ttypNeeded'>" . //open ttypNeeded
+				"<div class='trayName'><em>Needed: </em> $name Tray</div>" .
+				"</div>"; //close ttypNeeded
+			
+			}
+			
+			
+			$newView .= "</div>"; //close ttyp records
+			$newView .= "";
 			
 			$newView .= "<h4 class='assignmentsLabel'>Trays assigned to this case: </h4>";
 			
@@ -1200,20 +1218,18 @@
 				//"<div class='trayTime'>Busy Until: $avalibleTime</div>" .
 				"<div class='trayStatus'>Status: $status</div>" .
 				"</div>";
-				
-			
-				
-			
+
 				
 			}
 			
-			$newView .= "<p><a href='/athena/www/addTrays.php?cid=$case_id'>Add / Remove Trays from Case</a></p>";
+			$newView .= "</div>";
 			
-			$newView .= "</div>$comment</div>";
+			$newView .= "<p><a href='/athena/www/addTrays.php?cid=$case_id'>ADD / REMOVE TRAYS</a></p>";
+			
+			$newView .= "$comment</div>";
 			echo $newView;
 		}
 		
-
 		
 		public function makeCompletedCasesTable($userId, $caseId) {
 				
@@ -1395,7 +1411,20 @@
 			$row = mysqli_fetch_assoc($result);
 			
 			return $row["$requestedField"];
-		}	
+		}
+		
+		public function findTrayType($ttypId, $requestedField) {
+		
+			//$requestedField MUST match the name of a database column
+			
+			$sql = "SELECT * FROM ttyp WHERE ttyp_id='$ttypId'";
+			$result = $this->query($sql);
+			$row = mysqli_fetch_assoc($result);
+			
+			return $row["$requestedField"];
+		
+		
+		}
 		
 		//Other functions
 		
@@ -1797,7 +1826,7 @@
 							$timeViews .= "<h2>Case No: $case</h2>";
 
 							
-							if($noOfAssignments == $noOfCompleteAssignments) {
+							if($noOfAssignments == $noOfCompleteAssignments && ($noOfAssignments != 0 || $noOfAssignments != null)) {
 								$timeViews .= "<div class='assignmentDots'>";
 								$timeViews .= "<img src='/athena/www/utils/images/check.png' height='40' width='40' />";
 								$timeViews .= "</div>";
@@ -1935,13 +1964,18 @@
 					
 						//ignore trays from completed assignments
 						if($trayRow['status'] == "Complete") continue;
+						
+						
 					
+					
+						//this is time-related, bug?
 						if($i + 1 == count($dates)) $x = 6;
 						else $x = $i;
 						
 						//tray is a dropoff
 						if($this->dateIsBetween($times[$x], $times[$x + 1], $trayRow['do_dttm'])) {
 						
+							
 							
 							$tray = $trayRow['tray_id'];
 				
@@ -1950,6 +1984,8 @@
 							$result9 = $this->query($sql9);
 									
 							$row9 = mysqli_fetch_assoc($result9);
+							
+							
 					
 							$company = $this->findCompany($row9['cmp_id'], "name");
 							$team = $this->findTeam($row9['team_id'], "name");
@@ -1962,6 +1998,28 @@
 							$stor_id = $row9['stor_id'];
 							
 							$atnow = $row9['atnow'];
+							
+							
+							//figure out next pending event
+								$nextSql = "SELECT do_dttm, do_usr FROM assigns INNER JOIN trays ON trays.tray_id=assigns.tray_id" .
+								" WHERE trays.tray_id='$tray' AND assigns.tray_id='$tray' AND assigns.status!='Complete' ORDER BY do_dttm DESC";
+
+								
+								
+							
+							$nextResult = $this->query($nextSql);
+							
+							$nextRow = mysqli_fetch_array($nextResult);
+			
+							$closestTime = $nextRow[0];
+							$assignedUser = $nextRow[1];
+													
+							
+							//ignore non-pending and trays assigned to other users
+							if($assignedUser != 0 && $assignedUser != $userId) {
+								continue;
+							
+							}
 							
 							if($loanTeam == null) $loanTeam = "None";
 			
@@ -2034,13 +2092,10 @@
 								$loc = "<div class='location'>$icon Destination: $dest </div>";
 							
 							//figure out next pending event
-							if($atnow == "site") 
+
 								$nextSql = "SELECT do_dttm, do_usr FROM assigns INNER JOIN trays ON trays.tray_id=assigns.tray_id" .
 								" WHERE trays.tray_id='$tray' AND assigns.tray_id='$tray' AND assigns.status!='Complete' ORDER BY do_dttm DESC";
-							else 
-								$nextSql = "SELECT pu_dttm, pu_usr FROM assigns INNER JOIN trays ON trays.tray_id=assigns.tray_id" .
-								" WHERE trays.tray_id='$tray' AND assigns.tray_id='$tray' AND assigns.status!='Complete' ORDER BY pu_dttm DESC";
-								
+							
 								//echo $nextSql;
 							
 							$nextResult = $this->query($nextSql);
@@ -2049,6 +2104,8 @@
 			
 							$closestTime = $nextRow[0];
 							$assignedUser = $nextRow[1];
+							
+							
 			
 							if($closestTime != null) { 
 								$closestTime = $this->checkTime($closestTime);
@@ -2138,6 +2195,27 @@
 							
 							$atnow = $row9['atnow'];
 							
+							
+							//figure out next pending event
+								$nextSql = "SELECT pu_dttm, pu_usr FROM assigns INNER JOIN trays ON trays.tray_id=assigns.tray_id" .
+								" WHERE trays.tray_id='$tray' AND assigns.tray_id='$tray' AND assigns.status!='Complete' ORDER BY pu_dttm DESC";
+								
+								
+							
+							$nextResult = $this->query($nextSql);
+							
+							$nextRow = mysqli_fetch_array($nextResult);
+			
+							$closestTime = $nextRow[0];
+							$assignedUser = $nextRow[1];
+							echo $assignedUser;
+							
+							//ignore non-pending and trays assigned to other users
+							if($assignedUser != 0 && $assignedUser != $userId) {
+								continue;
+							
+							}
+							
 							if($loanTeam == null) $loanTeam = "None";
 			
 							if($atnow == "usr") $status = "With user";
@@ -2197,15 +2275,11 @@
 							//generate icon/location
 							$icon = $this->makeIcon($forIcon);
 							if ($forIcon != "storage" && $atnow == "site") 
-								$loc = "<div class='location'>$icon Current Location: $site <br/> Until: $closestPUTime</div>";
+								$loc = "<div class='location'>$icon Pickup Location: $site <br/> Until: $closestPUTime</div>";
 							else
-								$loc = "<div class='location'>$icon Location: $dest <br/> Until: $closestPUTime </div>";
+								$loc = "<div class='location'>$icon Pickup Location: $dest <br/> Until: $closestPUTime </div>";
 							
 							//figure out next pending event
-							if($atnow == "site") 
-								$nextSql = "SELECT do_dttm, do_usr FROM assigns INNER JOIN trays ON trays.tray_id=assigns.tray_id" .
-								" WHERE trays.tray_id='$tray' AND assigns.tray_id='$tray' AND assigns.status!='Complete' ORDER BY do_dttm DESC";
-							else 
 								$nextSql = "SELECT pu_dttm, pu_usr FROM assigns INNER JOIN trays ON trays.tray_id=assigns.tray_id" .
 								" WHERE trays.tray_id='$tray' AND assigns.tray_id='$tray' AND assigns.status!='Complete' ORDER BY pu_dttm DESC";
 								

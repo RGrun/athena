@@ -151,39 +151,6 @@
 		
 		echo "</div>"; //end adminTable
 		
-		echo "<div class='landingview'>"; //open landingview
-		
-		
-		//*************************************UNFINISHED *********************************************************
-		//display tray types here
-		$whereClause = "";
-		foreach($userCompanies as $current) {
-			$whereClause .= " OR cmp_id='$current'"; 
-		
-		}
-		
-		$typeSql = "SELECT name FROM ttyp WHERE cmp_id='0'" . $whereClause;
-		
-		$typeResult = $worker->query($sql);
-		$typeTable = "<div class='tagTable'>"; //open tagTable
-		$typeTable .= "<div class='tagsView'>"; //open tagsView
-		$typetable .= "<h2>Satisifies these types: </h2>";
-		
-		while($typeRow = mysqli_fetch_array($typeResult)) {
-			$tagName = $tagRow[0];
-			$tagTable .= "<div class='typeTag'>";
-			$tagTable .= "<div class='tagName'>$tagName</div><div class='tagX'><a href='/athena/www/tags/deleteTrayTypeTags.php?del=1&tray_id=$tray_id&tag=$tagName'><img src='/athena/www/utils/images/blackX.png' height='16' width='16' /></a></div></div>";
-		}
-		
-		$typeTable .= "</div>"; //close tagsView
-		
-		//ADD TRAY TYPES FORM HERE
-		
-			
-		$typeTable .= "</div>"; //close tagTable
-		
-		
-		// ******************************************************************************
 		
 		//display tags here
 		

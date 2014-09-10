@@ -14,6 +14,12 @@
 		
 		$deleteSql = "DELETE FROM tags WHERE tag='$tagToDelete' AND cmp_id='$companyTag'";
 		$worker->query($deleteSql);
+		
+		$deleteSql = "DELETE FROM tray_tag WHERE tag='$tagToDelete'";
+		$worker->query($deleteSql);
+		
+		$deleteSql = "DELETE FROM ttyp_tag WHERE tag='$tagToDelete'";
+		$worker->query($deleteSql);
 	
 		$last_page = $_SERVER['HTTP_REFERER'];
 	

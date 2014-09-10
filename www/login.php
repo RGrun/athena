@@ -103,7 +103,7 @@
 					
 					$_SESSION['user'] = $user;
 					$_SESSION['userId'] = $row[0];
-					$_SESSION['teamId'] = 0
+					$_SESSION['teamId'] = 0;
 					
 					//there is currently no way to map clients to companies, clients will be able to see global tags only
 					$_SESSION['userCompanies'] = 0;

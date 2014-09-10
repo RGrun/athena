@@ -35,7 +35,7 @@
 		$proc = $worker->findProcedure($newprocs, "name");
 		$worker->logSevent($userId, "create.case", $proc , "", ""); 
 		
-		header( "Location: reservations.php" );
+		header( "Location: addTrayTypes.php?noTrays=$noTrays" );
 		die();
 	}
 	
@@ -64,6 +64,7 @@
 	"<tr><td>New Case&#39;s Status: </td><td>$statusSelector </td></tr>" .
 	"<br/>Surgery is at: <br/> $dateTime <br />" .
 	"<tr><td>Comment: </td><td><input type='text' name='newComment' /> </td></tr>" .
+	"<tr><td>Number of trays needed: </td><td><input type='text' name='noTrays' size='2' maxLength='2' /> </td></tr>" .
 	"</table>" .	
 	"<input type='submit' value='Commit Changes' /> </form>";
 	

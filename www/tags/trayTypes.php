@@ -22,7 +22,7 @@
 	echo "<p>This page is a list of the tray types that have been created.</p><p>Tray types are a collection of tags used to auto-assign trays to cases.</p><p>Click 'Detail' to add or modify tags in tray types.</p>";
 	
 	echo "<table>" .
-	"<tr><th>Tray Type ID</th><th>Name</th><th>Tray</th><th>Company</th><th>Team</th></tr>";
+	"<tr><th>Tray Type ID</th><th>Name</th><th>Company</th><th>Team</th></tr>";
 	
 	$sql = "SELECT * FROM ttyp";
 	

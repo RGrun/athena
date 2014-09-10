@@ -29,7 +29,8 @@
 			$sql = "INSERT INTO tags (tag, cmp_id) VALUES ('$tag', '0')";
 		}
 		
-		$worker->query($sql);
+		//no blank tags
+		if($tag != "") $worker->query($sql);
 	}
 	
 	
@@ -43,7 +44,7 @@
 	$tagCreator .= "<h3>Enter New Tag: </h3><br/>";
 	$tagCreator .= "<form method='post' name='frm' action='newTags.php'>";
 	$tagCreator .= "<input type='hidden' name='creation' value='1' />" .
-	"<input type='text' name='newTag' size='30' /><br/>";
+	"<input type='text' name='newTag' size='21' /><br/>";
 	
 	if($isAdmin) $tagCreator .= "<label>Global Tag<input type='checkbox' name='isGlobal' value='1' onchange='disableSelect()' /></label><br/>";
 	
