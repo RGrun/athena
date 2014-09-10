@@ -320,6 +320,36 @@ create table if not exists traycont
 );
 
 -- --------------------------------------------------------
+-- Tray loan requsts...
+-- --------------------------------------------------------
+drop table if exists trayreq
+create table if not exists trayreq
+( req_id    int(10)      not null auto_increment,
+  ttyp_id   int(10)      not null,   -- desired tray type
+  usr_id    int(10)      not null,   -- requesting user
+  team_id   int(10)      not null,   -- requesting team
+  start     datetime     not null,   -- time the tray is needed
+  end       datetime     not null,   -- time the tray will be returned
+  dttm      datetime     not null,   -- time the request was made
+  status    varchar(10)  not null default 'pending',
+  primary key(req_id)
+);
+
+-- --------------------------------------------------------
+-- Tray loan responses..
+-- --------------------------------------------------------
+drop table if exists trayresp
+create table if not exists trayresp
+( req_id    int(10)      not null,
+  usr_id    int(10)      not null,                         -- responding user
+  team_id   int(10)      not null,                         -- responding team
+  tray_id   int(10)      not null default 0,               -- if yes, tray to lend
+  status    varchar(10)  not null default 'sent',          -- sent, yes, no
+  dttm      datetime     not null default '0/0/0',,        -- dttm the user responded
+  unique index (req_id, usr_id)
+);
+
+-- --------------------------------------------------------
 -- History of tray transfers to another team. Assumes
 -- that the tray is returned when it's picked up
 -- at the end of a case. 
@@ -329,7 +359,7 @@ create table if not exists traytrans
 ( tran_id   int(10)      not null auto_increment,
   tray_id   int(10)      not null,
   signer    varchar(25)  not null,                   -- name of person who signed for tray during dropoff
-  site_id   int(10)      not null,					 -- where tray was dropped off
+  site_id   int(10)      not null,			   -- where tray was dropped off
   from_usr  int(10)      not null default 0,         -- User dropping off tray
   to_usr    int(10)      not null default 0,         -- User assigned to pick up tray
   case_id   int(10)      not null,                   -- the case that requires the tray
@@ -459,12 +489,28 @@ create table if not exists proc_inst
 
 -- --------------------------------------------------------
 -- Notifications for the user. 
+--  not_id - Title              - item  - behavior
+-- --------------------------------------------------------
+--  1      - Loan Request       - req   - resolved  -
+--  2      - Loan Reply         - req   - dismiss   -
+--  3      - Tray Picked up     - tray  - dismiss   -
+--  4      - Case Reminder      - case  - expired   -
+--  5      - Tray Relinquished  - tray  - resolved  -
+--  6      - Tray Unassigned    - tray  - resolved  -
+--  7      - New Case Created   - case  - dismiss   -
+--  8      - Tray Late          - tray  - resolved  -
+--
 -- --------------------------------------------------------
 drop table if exists unotifs;
 create table if not exis ts unotifs 
 ( un_id     int(10)       not null auto_increment
   usr_id    int(10)       not null,
+  
+  not_id    int(10)       not null default 0,     -- what kind of notice
+  item_id   int(10)       not null default 0,     -- ID of thing
+  
   hidden    int(10)       not null default 0,     -- set to 1 after the notification should be hidden
+                                                  -- messages get resolved
   msg       varchar(255)  not null,                
   dttm      datetime      not null,               -- the dttm the notification was generated
   evdttm    datetime      not null,               -- the dttm of the event related to the notification
