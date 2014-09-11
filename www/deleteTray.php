@@ -17,6 +17,11 @@
 		
 		$sql = "DELETE FROM assigns WHERE (case_id='$case' AND tray_id='$trayToDelete')";
 		$worker->query($sql);
+		
+		//is tray fulfilling a tray type assignment?
+		$sql2 = "UPDATE case_ttyp SET tray_id='0' WHERE case_id='33' AND tray_id='$trayToDelete'";
+		$worker->query($sql2);
+		
 		header("Location: addTrays.php?cid=$case");
 
 	}

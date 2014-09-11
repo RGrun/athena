@@ -27,6 +27,10 @@
 				$addSql = "UPDATE case_ttyp SET tray_id='$thisTray' WHERE case_id='$currentCase' AND ttyp_id='$thisTtyp'";
 				//echo $addSql;
 				$worker->query($addSql);
+				
+				//add new assignments here
+				
+				
 			}
 		}
 	
@@ -63,6 +67,8 @@
 	"<tr><td><em>Comment:</em></td><td>$cmt</td></tr>" .
 	"</table>";
 	
+	echo "<p>Here you can add and remove trays from the currently selected case. </p><p> If any of the tray type boxes are highlighted in red, they still need trays assigned.</p>";
+	
 	echo $caseTable;
 	
 	//create tray types
@@ -83,6 +89,8 @@
 		
 		//tray is unfulfilled
 		if($tray_id == 0) {
+			
+			/************* MOVED TO NEWASSIGNMENT.PHP *********************
 			$ttypRows .= "<div class='ttypUnfulfilled'>";
 			$ttypRows .= "<div class='ttypName'><h3>$trayType</h3></div>";
 			
@@ -133,6 +141,17 @@
 			}
 			
 			$ttypRows .= "</select></div>";
+			
+			************************************************************************/
+			
+			$ttypRows .= "<div class='ttypUnfulfilled'>";
+			$ttypRows .= "<div class='ttypName'><h3>$trayType</h3></div>";
+			$ttypRows .= "<p>No tray is assigned to this tray type.</p>";
+			
+			$ttypRows .= "<a href='newAssignmentTTYP.php?ttyp_id=$ttyp_id&cid=$case_id'>SELECT TRAY</a>";
+			
+			$ttypRows .= "</div>";
+			
 		
 		
 		
@@ -145,7 +164,7 @@
 			//which tray was assigned?
 			$trayName = $worker->findTray($tray_id, "name");
 			
-			$ttypRows .= "<p>Currently Assigned: <h5>$trayName</h5>. To replace, <a href='replaceTray.php?tid=$tray_id&cid=$case_id&ttyp=$ttyp_id'>click here</a>.</p>";
+			$ttypRows .= "<p>Currently Assigned: <h5>$trayName</h5>. To remove, <a href='deleteTray.php?tid=$tray_id&cid=$case_id&ttyp=$ttyp_id'>click here</a>.</p>";
 			
 			$ttypRows .= "</div>";
 		

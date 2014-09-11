@@ -1170,6 +1170,7 @@
 			
 				$sql2 = "SELECT * FROM trays WHERE tray_id='$tray'";
 				
+				
 				$result2 = $this->query($sql2);
 				
 				$row4 = mysqli_fetch_assoc($result2);
