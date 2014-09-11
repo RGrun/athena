@@ -21,6 +21,7 @@
 			$userStr = $currentUser;
 			$currentUserId = $_SESSION['userId'];
 			date_default_timezone_set('America/Los_Angeles');
+			
 		} else {
 			$loggedIn = FALSE;
 			$userStr = "Guest";
@@ -52,6 +53,9 @@
 				<a href="/athena/www/landing.php">
 					<img id='logo' src="/athena/www/utils/images/athena-logo.png"/>
 				</a>
+				<div id='notifications'>
+					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: 999999</span></a>
+				</div>
 				<div class='username'>
 					<span id='username'>User: $userStr</span>
 				</div>
@@ -100,6 +104,9 @@ _END;
 				<a href="/athena/www/landing.php">
 					<img id='logo' src="/athena/www/utils/images/athena-logo.png"/>
 				</a>
+				<div id='notifications'>
+					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: 999999</span></a>
+				</div>
 				<div class='username'>
 					<span id='username'>Client: $userStr</span>
 				</div>
@@ -142,6 +149,9 @@ _END;
 				<a href="/athena/www/landing.php">
 					<img id='logo' src="/athena/www/utils/images/athena-logo.png"/>
 				</a>
+				<div id='notifications'>
+					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: 999999</span></a>
+				</div>
 				<div class='username'>
 					<span id='username'>User: $userStr</span>
 				</div>
@@ -283,6 +293,9 @@ _END;
 				<a href="/athena/www/landing.php">
 					<img id='logo' src="/athena/www/utils/images/athena-logo.png"/>
 				</a>
+				<div id='notifications'>
+					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: 999999</span></a>
+				</div>
 				<div class='username'>
 					<span id='username'>User: $userStr</span>
 				</div>
@@ -331,6 +344,9 @@ _END;
 				<a href="/athena/www/landing.php">
 					<img id='logo' src="/athena/www/utils/images/athena-logo.png"/>
 				</a>
+				<div id='notifications'>
+					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: 999999</span></a>
+				</div>
 				<div class='username'>
 					<span id='username'>Client: $userStr</span>
 				</div>
@@ -373,6 +389,9 @@ _END;
 				<a href="/athena/www/landing.php">
 					<img id='logo' src="/athena/www/utils/images/athena-logo.png"/>
 				</a>
+				<div id='notifications'>
+					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: 999999</span></a>
+				</div>
 				<div class='username'>
 					<span id='username'>User: $userStr</span>
 				</div>
