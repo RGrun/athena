@@ -9,6 +9,8 @@
 	
 	$htmlUtils->makeScriptHeader();
 	
+	$userName = $_SESSION['user'];
+	
 	$isAdmin = $_SESSION['isAdmin'];
 	if(!$isAdmin) header("Location: /athena/www/landing.php");
 
@@ -25,7 +27,8 @@
 		"VALUES ('$newteams', '$newdoctors', '$newprocs', '$newsites', '$newStatus', '$date', '$newComment')";
 
 		$worker->query($sql);
-		$worker->closeConnection();
+		
+		$worker->makeNotification($newteams, $worker->_NEW_CASE_CREATED, $worker->_CASE, "Case created by: $userName", date("Y-m-d H:i:s", time()))
 		
 		header( "Location: cases.php" );
 		die();

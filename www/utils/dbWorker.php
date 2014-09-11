@@ -8,6 +8,20 @@
 		
 		private $connection;
 		
+		//these constants are for notifications
+		  public $_LOAN_REQUEST = 1;
+		  public $_LOAN_REPLY = 2;
+		  public $_TRAY_PICKED_UP = 3;
+		  public $_CASE_REMINDER = 4;
+		  public $_TRAY_RELINQUISHED = 5;
+		  public $_TRAY_UNASSIGNED = 6;
+		  public $_NEW_CASE_CREATED = 7;
+		  public $_TRAY_LATE = 8;
+		  
+		  public $_REQUEST = 1;
+		  public $_TRAY = 2;
+		  public $_CASE = 3;
+		
 		//private static $TIMEZONE = 'America/Los_Angeles'; //does not work in php for some stupid reason
 		
 		public function __construct() {
@@ -540,7 +554,7 @@
 				
 		//creative functions
 		
-		public function createSelector($requestTable, $field, $nameOfId, $pending = false, $alt = false, $storage = false) {
+		public function createSelector($requestTable, $field, $nameOfId, $pending = false, $alt = false, $storage = false, $noPending = false) {
 		
 			$salt = "";
 			if($alt == true) $salt = "2";
@@ -552,7 +566,7 @@
 			$selector = "<select name='new$requestTable" . $salt . "' size='1'>";
 			
 			if($pending == true) $selector .= "<option value='0'>Pending</option>";
-			if($requestTable == "teams") $selector .= "<option value='0'>None</option>";
+			if($requestTable == "teams" && $noPending != true) $selector .= "<option value='0'>None</option>";
 			
 			if($storage != false) {
 			
@@ -1729,6 +1743,7 @@
 		//this function makes the caleandar on the landing page
 		
 		public function makeCalendar($userId, $teamId) {
+			//WARNING: this function is terrifying
 			//displays cases and assignments from the next seven days
 			date_default_timezone_set('America/Los_Angeles');
 			
@@ -2357,26 +2372,16 @@
 							
 							
 							if(!in_array($tray, $alreadyPrinted)) array_push($alreadyPrinted, $tray);
-						
-						
-						
-						
-						
-						
-						}
-						
-						
-					
-					} 
 
-					
+						}
+
+					} 
 					
 				} // end tray stuff
 				
 				//divider here
 				$timeViews .= "<div class='divider'></div>";
 				//$timeViews .= "</div>"; //end trayclassholder
-				
 				
 			}
 			//print_r($alreadyPrinted);
@@ -2385,8 +2390,6 @@
 
 			
 		}
-			
-		
 		
 		public function dateIsBetween($from, $to, $date = null) {
 			if($date == null) $date = time();
@@ -2394,6 +2397,63 @@
 			$from = is_int($from) ? $from : strtotime($from); // ..
 			$to = is_int($to) ? $to : strtotime($to);         // ..
 			return ($date >= $from) && ($date <= $to); // extra parens for clarity
+		}
+		
+		public function makeNotification($userId, $notId, $itemId, $msg, $evDttm) {
+			//database cols are: 
+			/*****************************************
+			  not_id - Title              - item  - behavior
+
+			+-- -------------------------------------------------------
+			+--  1      - Loan Request       - req   - resolved  -
+			+--  2      - Loan Reply         - req   - dismiss   -
+			+--  3      - Tray Picked up     - tray  - dismiss   -
+			+--  4      - Case Reminder      - case  - expired   -
+			+--  5      - Tray Relinquished  - tray  - resolved  -
+			+--  6      - Tray Unassigned    - tray  - resolved  -
+			+--  7      - New Case Created   - case  - dismiss   -
+			+--  8      - Tray Late          - tray  - resolved  -
+		
+			un_id     int(10)       not null auto_increment,
+			usr_id    int(10)       not null,
+  
+			not_id    int(10)       not null default 0,     -- what kind of notice
+			item_id   int(10)       not null default 0,     -- ID of thing
+  
+			hidden    int(10)       not null default 0,     -- set to 1 after the notification should be hidden
+                                                  
+			msg       varchar(255)  not null,               -- messages get resolved
+			dttm      datetime      not null,               -- the dttm the notification was generated
+			evdttm    datetime      not null,               -- the dttm of the event related to the notification
+			vwdttm    datetime      not null,               -- the last dttm the notification was viewed
+			primary key(un_id)
+			******************************************/
+			
+			$dttm =  date("Y-m-d H:i:s", time());
+			$vwDttm = "0000-00-00 00:00:00";
+			
+			$sql = "INSERT INTO unotifs (usr_id, not_id, item_id, msg, dttm, evdttm, vwdttm) " .
+			"VALUES ('$userId', '$notId', '$itemId', '$msg', '$dttm', '$evDttm', '$vwDttm')";
+			
+			//echo $sql;
+			
+			$this->query($sql);
+		
+		
+		}
+		
+		public function setNotificationHidden($un_id) {
+			$sql = "UPDATE unotifs SET hidden='1' WHERE un_id='$un_id'";
+			$this->query($sql);
+		}
+		
+		public function setNotificationViewed($un_id) {
+		
+			$vwDttm = date("l M j, 'y", time());
+		
+			$sql = "UPDATE unotifs SET vwdttm='$vwDttm' WHERE un_id='$un_id'";
+			$this->query($sql);
+		
 		}
 	}
 				

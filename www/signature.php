@@ -20,6 +20,7 @@
 	$_SESSION['currentTrayId'] = $currentTrayId;
 	
 	$userId = $_SESSION['userId'];
+	$userName = $_SESSION['user'];
 	
 	$destIsStorage = false;
 	
@@ -64,6 +65,9 @@
 			$tray = $worker->findTray($currentTrayId, "name");
 			$user = $worker->findUser($userId, "uname");
 			$worker->logSevent($userId, "pickup.site", $tray , "At site", "With $user"); 
+			
+			$teamId = $_SESSION['teamId'];
+			$worker->makeNotification($teamId, $worker->_TRAY_PICKED_UP, $worker->_TRAY, "$tray picked up by: $userName", date("Y-m-d H:i:s", time())); 
 			
 			
 			//echo $sql;

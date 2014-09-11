@@ -21,19 +21,29 @@
 	
 		extract($_POST);
 		
+		//print_r($_POST);
+		
+		if($newComment == null) $newComment = "";
+		
 		$unixTime = $unixTimeDO = mktime($newHour, $newMin, 0, $newMonth, $newDay, $newYear);
 		
 		$date = date("Y-m-d H:i:s", $unixTime);
 		
 		
 		$sql = "INSERT INTO cases (team_id, doc_id, proc_id, site_id, status, dttm, cmt)" .
-		"VALUES ('$usersTeam', '$newdoctors', '$newprocs', '$newsites', '$newStatus', '$date', '$newComment')";
+		"VALUES ('$newteams', '$newdoctors', '$newprocs', '$newsites', '$newStatus', '$date', '$newComment')";
 
+		//echo $sql;
+		
 		$worker->query($sql);
-		$worker->closeConnection();
 		
 		$proc = $worker->findProcedure($newprocs, "name");
-		$worker->logSevent($userId, "create.case", $proc , "", ""); 
+		$worker->logSevent($currentUserId, "create.case", $proc , "", ""); 
+		
+		//create notification
+		$userName = $worker->findUser($currentUserId, "uname");
+		$worker->makeNotification($newteams, $worker->_NEW_CASE_CREATED, $worker->_CASE, "Case created by: $userName", date("Y-m-d H:i:s", time()));   
+		
 		
 		header( "Location: addTrayTypes.php?noTrays=$noTrays" );
 		die();
@@ -43,7 +53,7 @@
 	
 	echo "<h2>Input new case data:</h2>";
 	
-	$teamSelector = $worker->createSelector("teams", "name", "team_id");
+	$teamSelector = $worker->createSelector("teams", "name", "team_id", false, false, false, true);
 	$doctorSelector = $worker->createSelector("doctors", "name", "doc_id");
 	$procedureSelector = $worker->createSelector("procs", "name", "proc_id");
 	$siteSelector = $worker->createSelector("sites", "name", "site_id");
@@ -57,14 +67,14 @@
 	
 	$form = "<form action='createNewCase.php' method='post'>" .
 	"<table>" .
-	"<tr><td>New Case&#39;s Team: </td><td>$usersTeamName </td></tr>" .
+	"<tr><td>New Case&#39;s Team: </td><td>$teamSelector </td></tr>" .
 	"<tr><td>New Case&#39;s Doctor: </td><td>$doctorSelector </td></tr>" .
 	"<tr><td>New Case&#39;s Procedure: </td><td>$procedureSelector </td></tr>" .
 	"<tr><td>New Case&#39;s Site: </td><td>$siteSelector </td></tr>" .
 	"<tr><td>New Case&#39;s Status: </td><td>$statusSelector </td></tr>" .
 	"<br/>Surgery is at: <br/> $dateTime <br />" .
 	"<tr><td>Comment: </td><td><input type='text' name='newComment' /> </td></tr>" .
-	"<tr><td>Number of trays needed: </td><td><input type='text' name='noTrays' size='2' maxLength='2' /> </td></tr>" .
+	"<tr><td>Number of trays needed: </td><td><input type='text' value='1' name='noTrays' size='2' maxLength='2' /> </td></tr>" .
 	"</table>" .	
 	"<input type='submit' value='Commit Changes' /> </form>";
 	

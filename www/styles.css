@@ -17,6 +17,11 @@
 				overflow-x:hidden;
 			}
 			
+			select {
+				background: white;
+			
+			}
+			
 			.welcomeArea {
 				
 				position: relative;
@@ -172,7 +177,8 @@
 			
 			.adminTable th {
 				background: #EBEBEB;
-				max-width: 500px;
+				min-width: 100px;
+				max-width: 400px;
 			
 			}
 			

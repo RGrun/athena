@@ -14,6 +14,7 @@
 	$htmlUtils->makeHeader();
 	$pickupDropoff = $_SESSION['mtd'];
 	$userId = $_SESSION['userId'];
+	$teamId = $_SESSION['teamId'];
 	
 	//$trayDB = $_SESSION['tray'];
 	//print_r($trayDB);
@@ -52,33 +53,36 @@
 		if($pickupDropoff == "pickup") {
 		
 			foreach($trays as $currentTray) {
-			$sql = "SELECT atnow FROM trays WHERE tray_id='$currentTray'";
-			$result = $worker->query($sql);
-			$row = mysqli_fetch_array($result);
-			
-			
-			$atStorageNow = ($row[0] == "stor") ? true : false;
-			
-			$sql = "UPDATE trays SET atnow='usr' , stor_id='0' , site_id='0' WHERE tray_id='$currentTray'";
-			echo $sql;
-			$worker->query($sql);
-			//this is the mechanism for completing assignments. If the tray is being picked up from a site,
-			//the related assignment is marked as "complete". The user picking up the tray is then responsible for returning
-			//it to storage
-			if(!$atStorageNow) {
-				$sql = "SELECT asgn_id, tray_id, pu_usr FROM assigns WHERE tray_id='$currentTray' AND (pu_usr='$userId' OR pu_usr='0')";
+				$sql = "SELECT atnow FROM trays WHERE tray_id='$currentTray'";
 				$result = $worker->query($sql);
-				while($row = mysqli_fetch_array($result)) {
-					if($row[1] == $currentTray && ($row[2] == $userId || $row[2] == 0)) {
-						$sql2 = "UPDATE assigns SET status='Complete' WHERE asgn_id='$row[0]'";
-						$worker->query($sql2);
+				$row = mysqli_fetch_array($result);
+				
+				
+				$atStorageNow = ($row[0] == "stor") ? true : false;
+				
+				$sql = "UPDATE trays SET atnow='usr' , stor_id='0' , site_id='0' WHERE tray_id='$currentTray'";
+				echo $sql;
+				$worker->query($sql);
+				//this is the mechanism for completing assignments. If the tray is being picked up from a site,
+				//the related assignment is marked as "complete". The user picking up the tray is then responsible for returning
+				//it to storage
+				if(!$atStorageNow) {
+					$sql = "SELECT asgn_id, tray_id, pu_usr FROM assigns WHERE tray_id='$currentTray' AND (pu_usr='$userId' OR pu_usr='0')";
+					$result = $worker->query($sql);
+					while($row = mysqli_fetch_array($result)) {
+						if($row[1] == $currentTray && ($row[2] == $userId || $row[2] == 0)) {
+							$sql2 = "UPDATE assigns SET status='Complete' WHERE asgn_id='$row[0]'";
+							$worker->query($sql2);
+						}
 					}
 				}
-			}
-			
-			$tray = $worker->findTray($currentTray, "name");
-			$user = $worker->findUser($userId, "uname");
-			$worker->logSevent($userId, "pickup.site", $tray , "At site", "With $user"); 
+				
+				$tray = $worker->findTray($currentTray, "name");
+				$user = $worker->findUser($userId, "uname");
+				$worker->logSevent($userId, "pickup.site", $tray , "At site", "With $user"); 
+				
+				$userName = $worker->findUser($currentUserId, "uname");
+				$worker->makeNotification($teamId, $worker->_NEW_CASE_CREATED, $worker->_CASE, "$tray picked up by: $userName", date("Y-m-d H:i:s", time()));   
 
 			}
 			

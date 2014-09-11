@@ -20,12 +20,26 @@
 			$loggedIn = TRUE;
 			$userStr = $currentUser;
 			$currentUserId = $_SESSION['userId'];
+			
+			$teamId = $_SESSION['teamId'];
+			
+			//figure out number of notifications
+			$notiSql = "SELECT COUNT(un_id) FROM unotifs WHERE usr_id='$teamId' AND hidden='0'";
+			$quickWorker = new dbWorker();
+			$notiResult = $quickWorker->query($notiSql);
+			$notiRow = mysqli_fetch_array($notiResult);
+			$noOfNotifications = $notiRow[0];
+			
+			$quickWorker->closeConnection();
+			$quickWorker = null;
+			
 			date_default_timezone_set('America/Los_Angeles');
 			
 		} else {
 			$loggedIn = FALSE;
 			$userStr = "Guest";
 			$currentUserId = "";
+			$noOfNotifications =  "";
 			date_default_timezone_set('America/Los_Angeles');
 		}
 		
@@ -54,7 +68,7 @@
 					<img id='logo' src="/athena/www/utils/images/athena-logo.png"/>
 				</a>
 				<div id='notifications'>
-					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: 999999</span></a>
+					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: $noOfNotifications</span></a>
 				</div>
 				<div class='username'>
 					<span id='username'>User: $userStr</span>
@@ -105,7 +119,7 @@ _END;
 					<img id='logo' src="/athena/www/utils/images/athena-logo.png"/>
 				</a>
 				<div id='notifications'>
-					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: 999999</span></a>
+					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: $noOfNotifications</span></a>
 				</div>
 				<div class='username'>
 					<span id='username'>Client: $userStr</span>
@@ -150,7 +164,7 @@ _END;
 					<img id='logo' src="/athena/www/utils/images/athena-logo.png"/>
 				</a>
 				<div id='notifications'>
-					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: 999999</span></a>
+					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: $noOfNotifications</span></a>
 				</div>
 				<div class='username'>
 					<span id='username'>User: $userStr</span>
@@ -260,11 +274,25 @@ _END;
 			$loggedIn = TRUE;
 			$userStr = $currentUser;
 			$currentUserId = $_SESSION['userId'];
+			
+			$teamId = $_SESSION['teamId'];
+			
+			//figure out number of notifications
+			$notiSql = "SELECT COUNT(un_id) FROM unotifs WHERE usr_id='$teamId' AND hidden='0'";
+			$quickWorker = new dbWorker();
+			$notiResult = $quickWorker->query($notiSql);
+			$notiRow = mysqli_fetch_array($notiResult);
+			$noOfNotifications = $notiRow[0];
+			
+			$quickWorker->closeConnection();
+			$quickWorker = null;
+			
 			date_default_timezone_set('America/Los_Angeles');
 		} else {
 			$loggedIn = FALSE;
 			$userStr = "Guest";
 			$currentUserId = "";
+			$noOfNotifications =  "";
 			date_default_timezone_set('America/Los_Angeles');
 		}
 		
@@ -294,7 +322,7 @@ _END;
 					<img id='logo' src="/athena/www/utils/images/athena-logo.png"/>
 				</a>
 				<div id='notifications'>
-					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: 999999</span></a>
+					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: $noOfNotifications</span></a>
 				</div>
 				<div class='username'>
 					<span id='username'>User: $userStr</span>
@@ -345,7 +373,7 @@ _END;
 					<img id='logo' src="/athena/www/utils/images/athena-logo.png"/>
 				</a>
 				<div id='notifications'>
-					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: 999999</span></a>
+					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: $noOfNotifications</span></a>
 				</div>
 				<div class='username'>
 					<span id='username'>Client: $userStr</span>
@@ -390,7 +418,7 @@ _END;
 					<img id='logo' src="/athena/www/utils/images/athena-logo.png"/>
 				</a>
 				<div id='notifications'>
-					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: 999999</span></a>
+					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: $noOfNotifications</span></a>
 				</div>
 				<div class='username'>
 					<span id='username'>User: $userStr</span>
