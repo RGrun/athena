@@ -53,7 +53,15 @@
 		$worker->query($sql);
 		$worker->query($sql2);
 		
+		$userName = $worker->findUser($currentUserId, "uname");
+		$trayName = $worker->findtray($newtrays, "name");
 		
+		$teamId = 0; //NEEDS CHANGING
+		
+		if($newusers == 0)
+			$worker->makeNotification($teamId, $worker->_TRAY_UNASSIGNED, $worker->_TRAY, "Dropoff for $trayName is unassigned.", date("Y-m-d H:i:s", time()));   
+		if($newusers2 == 0)
+			$worker->makeNotification($teamId, $worker->_TRAY_UNASSIGNED, $worker->_TRAY, "Pickup for $trayName is unassigned.", date("Y-m-d H:i:s", time()));  
 		
 		header( "Location: addTrays.php?cid=$currentCase" );
 		die();

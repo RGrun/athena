@@ -2407,11 +2407,11 @@
 			+-- -------------------------------------------------------
 			+--  1      - Loan Request       - req   - resolved  -
 			+--  2      - Loan Reply         - req   - dismiss   -
-			+--  3      - Tray Picked up     - tray  - dismiss   -
-			+--  4      - Case Reminder      - case  - expired   -
+			+--  3  *    - Tray Picked up     - tray  - dismiss   -
+			+--  4 xxx   - Case Reminder      - case  - expired   -
 			+--  5      - Tray Relinquished  - tray  - resolved  -
-			+--  6      - Tray Unassigned    - tray  - resolved  -
-			+--  7      - New Case Created   - case  - dismiss   -
+			+--  6  *    - Tray Unassigned    - tray  - resolved  -
+			+--  7  *    - New Case Created   - case  - dismiss   -
 			+--  8      - Tray Late          - tray  - resolved  -
 		
 			un_id     int(10)       not null auto_increment,

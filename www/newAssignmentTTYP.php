@@ -55,13 +55,21 @@
 		
 		$addSql = "UPDATE case_ttyp SET tray_id='$newTray' WHERE case_id='$currentCase' AND ttyp_id='$ttyp_id'";
 		
-		echo $addSql;
+		//echo $addSql;
 		
 		$worker->query($sql);
 		$worker->query($sql2);
 		$worker->query($addSql);
 		
+		$trayName = $worker->findtray($newTray, "name");
 		
+		$teamId = 0; //NEEDS CHANGING
+		
+		if($newusers == 0)
+			$worker->makeNotification($teamId, $worker->_TRAY_UNASSIGNED, $worker->_TRAY, "Dropoff for $trayName is unassigned.", date("Y-m-d H:i:s", time()));   
+		if($newusers2 == 0)
+			$worker->makeNotification($teamId, $worker->_TRAY_UNASSIGNED, $worker->_TRAY, "Pickup for $trayName is unassigned.", date("Y-m-d H:i:s", time()));  
+
 		
 		header( "Location: addTrays.php?cid=$currentCase" );
 		die();
