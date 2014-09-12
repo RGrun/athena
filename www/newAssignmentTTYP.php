@@ -114,7 +114,7 @@
 		$alreadyPrintedTrays = array();
 		//$possibleTrays is now an array that contains only tray_ids that fufill the user's company requirements
 		foreach($possibleTrays as $tray) {
-			if(!in_array($tray, $alreadyPrintedTrays) {
+			if(!in_array($tray, $alreadyPrintedTrays)) {
 				$tName = $worker->findTray($tray, "name");
 				$ttypSelect .= "<option value='$tray'>$tName</option>";
 				array_push($alreadyPrintedTrays, $tray);
