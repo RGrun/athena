@@ -63,7 +63,7 @@
 		
 		$trayName = $worker->findtray($newTray, "name");
 		
-		$teamId = 0; //NEEDS CHANGING
+		$teamId = $userId; //NEEDS CHANGING
 		
 		if($newusers == 0)
 			$worker->makeNotification($teamId, $worker->_TRAY_UNASSIGNED, $worker->_TRAY, "Dropoff for $trayName is unassigned.", date("Y-m-d H:i:s", time()));   

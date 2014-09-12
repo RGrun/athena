@@ -2224,7 +2224,7 @@
 			
 							$closestTime = $nextRow[0];
 							$assignedUser = $nextRow[1];
-							echo $assignedUser;
+							//echo $assignedUser;
 							
 							//ignore non-pending and trays assigned to other users
 							if($assignedUser != 0 && $assignedUser != $userId) {
