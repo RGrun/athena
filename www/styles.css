@@ -143,8 +143,6 @@
 			
 				background: linear-gradient(to bottom, #67C2E7 0%, #27A7DA 1%, #252661 100%) repeat scroll 0% 0% transparent;
 			
-			
-			
 			}
 			
 			
@@ -792,3 +790,44 @@
 				background: rgba(213, 213, 213, 0.44);
 			
 			}
+			
+			/*Tray-Loan Interface-Related */
+			#trayLoanInterface {
+				position: absolute;
+				font-size: 12px;
+				font-weight: bold;
+				top: -20px;
+				left: 290px;
+				padding: 10px;
+				height: 20px;
+				border-radius: 0px 0px 10px 10px;
+			
+				background: linear-gradient(to bottom, #67C2E7 0%, #27A7DA 1%, #252661 100%) repeat scroll 0% 0% transparent;
+			
+			}
+			
+			.trayRequest {
+				width: 500px;
+				margin-left: auto;
+				margin-right: auto;
+				margin-bottom: 10px;
+				
+				
+				border-radius: 25px;
+				border: 5px solid rgba(213, 213, 213, 0.44);
+				
+				background: none repeat scroll 0% 0% #EBEBEB;
+				
+				padding-left: 10px;
+				padding-right: 10px;
+				padding-bottom: 10px;
+				padding-top: 10px;
+			}
+			
+			.trayRequest div {
+				padding: 5px;
+			
+			
+			}
+			
+	

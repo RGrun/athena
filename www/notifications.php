@@ -30,7 +30,7 @@
 	echo "<p>These are events that require your attention.</p><p>Click 'Hide' to remove an event from this list.</p>";
 	
 	
-	$sql = "SELECT * FROM unotifs WHERE usr_id='$teamId' AND hidden='0'";
+	$sql = "SELECT * FROM unotifs WHERE usr_id='$teamId' OR usr_id='0' AND hidden='0'";
 	
 	$result = $worker->query($sql);
 	

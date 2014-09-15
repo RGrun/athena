@@ -331,7 +331,8 @@ create table if not exists trayreq
   start     datetime     not null,   -- time the tray is needed
   end       datetime     not null,   -- time the tray will be returned
   dttm      datetime     not null,   -- time the request was made
-  status    varchar(10)  not null default 'pending',
+  cmt		varchar(1024) not null default '',
+  status    varchar(10)  not null default 'Pending',
   primary key(req_id)
 );
 
@@ -344,8 +345,9 @@ create table if not exists trayresp
   usr_id    int(10)      not null,                         -- responding user
   team_id   int(10)      not null,                         -- responding team
   tray_id   int(10)      not null default 0,               -- if yes, tray to lend
-  status    varchar(10)  not null default 'sent',          -- sent, yes, no
+  status    varchar(10)  not null default 'Sent',          -- sent, yes, no
   dttm      datetime     not null default '0/0/0',,        -- dttm the user responded
+  cmt		varchar(1024) not null default '',
   unique index (req_id, usr_id)
 );
 

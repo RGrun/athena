@@ -14,24 +14,35 @@
 		session_start();
 		
 		if(isset($_SESSION['user'])) {
+			$worker = new dbWorker();
 			$currentUser = $_SESSION['user'];
 			$userIsAdmin = $_SESSION['isAdmin']; //admin permission
-			$userIsClient = $_SESSION['isClient']; //check to see if client
+			$userIsClient = $_SESSION['isClient']; //check if client
 			$loggedIn = TRUE;
 			$userStr = $currentUser;
 			$currentUserId = $_SESSION['userId'];
 			
 			$teamId = $_SESSION['teamId'];
 			
+			//is user a team leader? session variable will be zero if not
+			$teamLeaderId = $_SESSION['leaderOf'];
+			$trayLoanInterface = "";
+			if($teamLeaderId != 0) {
+				//figure out number of notifications
+				$loanSql = "SELECT COUNT(req_id) FROM trayreq WHERE status='Pending'";
+				$loanResult = $worker->query($loanSql);
+				$loanRow = mysqli_fetch_array($loanResult);
+				$noOfRequests = $loanRow[0];
+				//only team leaders can see the tray loan requests and responses pages
+				$trayLoanInterface = "<div id='trayLoanInterface'><a href='/athena/www/trayLoan.php'>Loan Requests: $noOfRequests</a></div>";
+			
+			} 
+			
 			//figure out number of notifications
-			$notiSql = "SELECT COUNT(un_id) FROM unotifs WHERE usr_id='$teamId' AND hidden='0'";
-			$quickWorker = new dbWorker();
-			$notiResult = $quickWorker->query($notiSql);
+			$notiSql = "SELECT COUNT(un_id) FROM unotifs WHERE usr_id='$teamId' OR usr_id='0' AND hidden='0'";
+			$notiResult = $worker->query($notiSql);
 			$notiRow = mysqli_fetch_array($notiResult);
 			$noOfNotifications = $notiRow[0];
-			
-			$quickWorker->closeConnection();
-			$quickWorker = null;
 			
 			date_default_timezone_set('America/Los_Angeles');
 			
@@ -40,6 +51,7 @@
 			$userStr = "Guest";
 			$currentUserId = "";
 			$noOfNotifications =  "";
+			$trayLoanInterface = "";
 			date_default_timezone_set('America/Los_Angeles');
 		}
 		
@@ -70,6 +82,7 @@
 				<div id='notifications'>
 					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: $noOfNotifications</span></a>
 				</div>
+				$trayLoanInterface
 				<div class='username'>
 					<span id='username'>User: $userStr</span>
 				</div>
@@ -166,6 +179,7 @@ _END;
 				<div id='notifications'>
 					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: $noOfNotifications</span></a>
 				</div>
+				$trayLoanInterface
 				<div class='username'>
 					<span id='username'>User: $userStr</span>
 				</div>
@@ -268,6 +282,7 @@ _END;
 		session_start();
 		
 		if(isset($_SESSION['user'])) {
+			$worker = new dbWorker();
 			$currentUser = $_SESSION['user'];
 			$userIsAdmin = $_SESSION['isAdmin']; //admin permission
 			$userIsClient = $_SESSION['isClient']; //check if client
@@ -277,22 +292,33 @@ _END;
 			
 			$teamId = $_SESSION['teamId'];
 			
+			//is user a team leader? session variable will be zero if not
+			$teamLeaderId = $_SESSION['leaderOf'];
+			$trayLoanInterface = "";
+			if($teamLeaderId != 0) {
+				//figure out number of notifications
+				$loanSql = "SELECT COUNT(req_id) FROM trayreq WHERE status='Pending'";
+				$loanResult = $worker->query($loanSql);
+				$loanRow = mysqli_fetch_array($loanResult);
+				$noOfRequests = $loanRow[0];
+				//only team leaders can see the tray loan requests and responses pages
+				$trayLoanInterface = "<div id='trayLoanInterface'><a href='/athena/www/trayLoan.php'>Loan Requests: $noOfRequests</a></div>";
+			
+			} 
+			
 			//figure out number of notifications
-			$notiSql = "SELECT COUNT(un_id) FROM unotifs WHERE usr_id='$teamId' AND hidden='0'";
-			$quickWorker = new dbWorker();
-			$notiResult = $quickWorker->query($notiSql);
+			$notiSql = "SELECT COUNT(un_id) FROM unotifs WHERE usr_id='$teamId' OR usr_id='0' AND hidden='0'";
+			$notiResult = $worker->query($notiSql);
 			$notiRow = mysqli_fetch_array($notiResult);
 			$noOfNotifications = $notiRow[0];
-			
-			$quickWorker->closeConnection();
-			$quickWorker = null;
-			
+
 			date_default_timezone_set('America/Los_Angeles');
 		} else {
 			$loggedIn = FALSE;
 			$userStr = "Guest";
 			$currentUserId = "";
 			$noOfNotifications =  "";
+			$trayLoanInterface = "";
 			date_default_timezone_set('America/Los_Angeles');
 		}
 		
@@ -324,6 +350,7 @@ _END;
 				<div id='notifications'>
 					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: $noOfNotifications</span></a>
 				</div>
+				$trayLoanInterface
 				<div class='username'>
 					<span id='username'>User: $userStr</span>
 				</div>
@@ -420,6 +447,7 @@ _END;
 				<div id='notifications'>
 					<a href='/athena/www/notifications.php'><span id='notificationText'>Notifications: $noOfNotifications</span></a>
 				</div>
+				$trayLoanInterface
 				<div class='username'>
 					<span id='username'>User: $userStr</span>
 				</div>
@@ -500,7 +528,7 @@ _END;
 				
 				echo $adminHeader;
 				
-			} else if($loggedIN && $userIsClient) {
+			} else if($loggedIn && $userIsClient) {
 			
 				echo $clientHeader;
 				

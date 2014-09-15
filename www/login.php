@@ -79,6 +79,17 @@
 				
 				}
 				
+				//figure out if user is a team leader
+				$TLSql = "SELECT team_id FROM teams WHERE head_id='$row[0]'";
+				//echo $TLSql;
+				$TLResult = $worker->query($TLSql);
+				if(mysqli_num_rows($TLResult) != 0) {
+					$TLRow = mysqli_fetch_array($TLResult);
+					$_SESSION['leaderOf'] = $TLRow[0];
+				} else {
+					$_SESSION['leaderOf'] = 0; //this will be zero if user isnt a team leader
+				}
+				
 				header("Location: landing.php");
 				die();
 			} else {
