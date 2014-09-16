@@ -124,6 +124,8 @@
 			} else {
 			
 				$sql = "UPDATE users SET $column='$newData' WHERE usr_id='$id'";
+				$oldData = $this->findTeam($oldData, "name");
+				$newData = $this->findTeam($newData, "name");
 				$this->logSevent($userId, "change.users", $column, $oldData, $newData); 
 				$this->query($sql);
 				if($settings) header("Location: settings.php");
@@ -172,6 +174,8 @@
 			} else {
 			
 				$sql = "UPDATE storage SET $column='$newData' WHERE stor_id='$id'";
+				$oldData = $this->findStorage($oldData, "name");
+				$newData = $this->findStorage($newData, "name");
 				$this->logSevent($userId, "change.storage", $column, $oldData, $newData); 
 				if($this->query($sql)) header( "Location: storageDetail.php?sid=$id" );
 				
@@ -213,6 +217,8 @@
 			} else {
 			
 				$sql = "UPDATE sites SET $column='$newData' WHERE site_id='$id'";
+				$oldData = $this->findSite($oldData, "name");
+				$newData = $this->findSite($newData, "name");
 				$this->logSevent($userId, "change.sites", $column, $oldData, $newData); 
 
 				if($this->query($sql)) header( "Location: siteDetail.php?sid=$id" );
@@ -255,6 +261,8 @@
 			
 				$sql = "UPDATE clients SET $column='$newData' WHERE cli_id='$id'";
 				$this->query($sql);
+				$oldData->findClient($oldData, "uname");
+				$newData->findClient($newData, "uname");
 				$this->logSevent($userId, "change.clients", $column, $oldData, $newData); 
 
 				if($settings) header("Location: settings.php");
@@ -299,6 +307,8 @@
 			} else {
 			
 				$sql = "UPDATE doctors SET $column='$newData' WHERE doc_id='$id'";
+				$oldData = $this->findDoctor($oldData, "name");
+				$newData = $this->findDoctor($newData, "name");
 				$this->logSevent($userId, "change.doctors", $column, $oldData, $newData); 
 				if($this->query($sql)) header( "Location: doctorDetail.php?did=$id" );
 				
