@@ -478,7 +478,7 @@ create table if not exists proc_tag
 );
 
 -- --------------------------------------------------------
-DELETE THIS TABLE
+--DELETE THIS TABLE
 -- maps the instruments required for a proc
 -- --------------------------------------------------------
 drop table if exists proc_inst;
@@ -504,7 +504,7 @@ create table if not exists proc_inst
 --
 -- --------------------------------------------------------
 drop table if exists unotifs;
-create table if not exis ts unotifs 
+create table if not exists unotifs 
 ( un_id     int(10)       not null auto_increment,
   usr_id    int(10)       not null,
   
