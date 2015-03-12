@@ -2,9 +2,7 @@
 
 	#Notification.php
 	
-	function __autoload($class_name) {
-		include $class_name . '.php';
-	}
+	include_once "Gremlin.php";
 	
 	class Notification {
 	
@@ -57,7 +55,7 @@
 			#load notification's info from ID
 			$sql = "SELECT * FROM unotifs WHERE un_id='$notificationID'";
 			
-			$rawData = $gremlin->query($sql):
+			$rawData = $gremlin->query($sql);
 			
 			extract($rawData);
 			

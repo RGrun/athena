@@ -2,9 +2,8 @@
 
 	#Procedure.php
 	
-	function __autoload($class_name) {
-		include $class_name . '.php';
-	}
+	include_once "Gremlin.php";
+	include_once "Tag.php";
 	
 	class Procedure {
 	
@@ -24,7 +23,7 @@
 			#load proc's info from ID
 			$sql = "SELECT * FROM procs WHERE proc_id='$procedureID'";
 			
-			$rawData = $gremlin->query($sql):
+			$rawData = $gremlin->query($sql);
 			
 			extract($rawData);
 			
@@ -32,7 +31,7 @@
 			$this->companyID = $companyID;
 			$this->name = $name;
 		
-			loadTags()
+			loadTags();
 		
 		}
 		

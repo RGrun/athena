@@ -8,7 +8,7 @@
 		const HOST = "localhost"; 
 		const USER = "root";
 		const PW = "abcd1234";
-		const DBNAME = "athena2";
+		const DBNAME = "athena";
 		
 		public function doConnect();
 		

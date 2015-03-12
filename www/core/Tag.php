@@ -2,9 +2,7 @@
 	
 	#Tag.php
 	
-	function __autoload($class_name) {
-		include $class_name . '.php';
-	}
+	include_once "Gremlin.php";
 	
 	class Tag {
 	
@@ -21,7 +19,7 @@
 			#load tags's info from ID
 			$sql = "SELECT * FROM tags WHERE tag='$tag'";
 			
-			$rawData = $gremlin->query($sql):
+			$rawData = $gremlin->query($sql);
 			
 			extract($rawData);
 			

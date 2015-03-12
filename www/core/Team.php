@@ -1,9 +1,8 @@
 <?
 	#Team.php
 	
-	function __autoload($class_name) {
-		include $class_name . '.php';
-	}
+	include_once "Gremlin.php";
+	include_once "User.php";
 	
 	class Team {
 	

@@ -2,10 +2,9 @@
 
 	#AthenaCase.php
 	
-	function __autoload($class_name) {
-		include $class_name . '.php';
-	}
-	
+	include_once "Gremlin.php";
+	include_once "TrayType.php";
+	include_once "Assignment.php";
 	
 	class AthenaCase {
 	
@@ -33,7 +32,7 @@
 			#load case's info from ID
 			$sql = "SELECT * FROM cases WHERE case_id='$caseID'";
 			
-			$rawData = $gremlin->query($sql):
+			$rawData = $gremlin->query($sql);
 			
 			extract($rawData);
 			

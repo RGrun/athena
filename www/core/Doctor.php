@@ -2,9 +2,9 @@
 
 	#Doctor.php
 	
-	function __autoload($class_name) {
-		include $class_name . '.php';
-	}
+	include_once "Gremlin.php";
+	include_once "Company.php";
+	include_once "Site.php";
 	
 	class Doctor {
 	
@@ -27,7 +27,7 @@
 			#load doc's info from ID
 			$sql = "SELECT * FROM doctors WHERE doc_id='$docID'";
 			
-			$rawData = $gremlin->query($sql):
+			$rawData = $gremlin->query($sql);
 			
 			extract($rawData);
 		

@@ -2,9 +2,8 @@
 
 	#Region.php
 
-	function __autoload($class_name) {
-		include $class_name . '.php';
-	}
+	include_once "Gremlin.php";
+	include_once "Site.php";
 	
 	
 	class Region {
@@ -28,7 +27,7 @@
 			#load region's info from ID
 			$sql = "SELECT * FROM regions WHERE reg_id='$regionID'";
 			
-			$rawData = $gremlin->query($sql):
+			$rawData = $gremlin->query($sql);
 			
 			extract($rawData);
 			

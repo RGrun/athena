@@ -2,9 +2,9 @@
 
 	#Tray.php
 
-	function __autoload($class_name) {
-		include $class_name . '.php';
-	}
+	include_once "Gremlin.php";
+	include_once "Tag.php";
+	include_once "Instrument.php";
 	
 	class Tray {
 	
@@ -13,7 +13,7 @@
 		public $trayID;
 		public $name;
 		public $companyID;
-		public $teamID:
+		public $teamID;
 		public $atNow;
 		public $userID;
 		public $siteID;
@@ -34,7 +34,7 @@
 			#load tray's info from ID
 			$sql = "SELECT * FROM trays WHERE tray_id='$trayID'";
 			
-			$rawData = $gremlin->query($sql):
+			$rawData = $gremlin->query($sql);
 			
 			extract($rawData);
 			

@@ -2,9 +2,8 @@
 
 	#Assignment.php
 	
-	function __autoload($class_name) {
-		include $class_name . '.php';
-	}
+	include_once "Gremlin.php";
+	
 	
 	class Assignment {
 	
@@ -30,7 +29,7 @@
 			#load assignment's info from ID
 			$sql = "SELECT * FROM assigns WHERE asgn_id='$assignmentID'";
 			
-			$rawData = $gremlin->query($sql):
+			$rawData = $gremlin->query($sql);
 			
 			extract($rawData);
 			

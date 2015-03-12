@@ -2,16 +2,15 @@
 
 	#Company.php
 	
-	function __autoload($class_name) {
-		include $class_name . '.php';
-	}
+	include_once "Gremlin.php";
+	include_once "User.php";
 	
 	
 	class Company {
 	
 		private $gremlin;
 		
-		public $companyID:
+		public $companyID;
 		public $active;
 		public $name;
 		public $address;
@@ -33,7 +32,7 @@
 			#load company's info from ID
 			$sql = "SELECT * FROM company WHERE cmp_id='$companyID'";
 			
-			$rawData = $gremlin->query($sql):
+			$rawData = $gremlin->query($sql);
 			
 			extract($rawData);
 		
@@ -82,7 +81,7 @@
 			
 			foreach($rawResult as $newCont) {
 			
-				$newDist = new Distributor($newCont);
+				$newDist = new Company($newCont);
 			
 				$this->distributors[] = $newDist;
 			

@@ -27,7 +27,7 @@
 			#load sites's info from ID
 			$sql = "SELECT * FROM sites WHERE site_id='$siteID'";
 			
-			$rawData = $gremlin->query($sql):
+			$rawData = $gremlin->query($sql);
 			
 			extract($rawData);
 			

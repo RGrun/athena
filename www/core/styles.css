@@ -1,0 +1,95 @@
+/*Styles.css for Athena*/
+
+
+
+/*Site-Wide*/
+
+body {
+
+	margin: 5px 10%;
+
+}
+
+
+
+/*Nav-Menu stuff*/
+
+.navMenu {
+
+	margins: 0px auto;
+	height: 5%;
+	width: 60%
+	position: absolute;
+	
+	background: lightgrey;
+	
+	border-bottom: 1px solid black;
+	
+
+
+}
+
+.navMenu div {
+	
+	display: inline-block;
+	
+	text-decoration: none;
+	color: black;
+	
+	font-family: verdana;
+	font-size: 8pt;
+
+
+}
+
+.navMenuButtonLogo {
+
+	position: relative;
+	margin: 5px 5px;
+	padding 5px;
+	
+	
+	
+	top: 5px;
+}
+
+.navMenuButtonLeft {
+	
+	position: relative;
+	margin: 5px 10px;
+	padding: 10px;
+	
+	border: 1px solid lightgrey;
+	
+	bottom: 10px;
+}
+
+.navMenuButtonLeft:hover{
+	
+	transition: all 1s ease;
+	border: 1px solid black;
+	
+	
+}
+
+.navMenuButtonRight {
+
+	position: relative;
+	margin: 5px 10px;
+	padding: 10px;
+	float: right;
+	
+	border: 1px solid lightgrey;
+	
+	bottom: -10px;
+
+}
+
+.navMenuButtonRight:hover{
+	
+	transition: all 1s ease;
+	border: 1px solid black;
+	
+}
+
+
