@@ -1,31 +1,541 @@
 /*Styles.css for Athena*/
 
-
+@import url(http://fonts.googleapis.com/css?family=Oxygen:400,700);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700);
 
 /*Site-Wide*/
 
 body {
 
+	font-family: 'Oxygen', sans-serif;
+
+}
+
+#mainContentWrapper {
+
 	margin: 5px 10%;
 
 }
 
+/*Body organization on Home page */
 
+#homeCol1 {
+
+	float: left;
+
+}
+
+#homeCol2 {
+
+	float: right;
+	
+	width: 30%;
+
+	position: relative;
+	
+	top: -140px;
+	
+	left: 20px;
+}
+
+/* calendar header */
+.colTabRow {
+	
+	width: 70%;
+
+}
+
+.colTabRow div  {
+
+	display: inline-block;
+
+}
+
+.tabRowHeader {
+
+	margin: 0px 10px 0px 0px;
+	padding: 5px;
+	
+	font-size: 120%
+}
+
+#tab1Button, #tab2Button {
+
+	margin: 0px 10px;
+	padding: 10px;
+	
+	font-family: 'Open Sans', sans-serif;
+	font-weight: semi-bold;
+	
+	font-weight: bold;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+
+}
+
+.unselected {
+
+	background: #E8E8E6;
+
+}
+
+.selected {
+	background: #4DB84D;	
+	
+	color: white;
+}
+
+/*end calendar header*/
+
+/*date menu */
+
+.dateMenuBar {
+	
+	
+	width: 70%;
+	
+	height: 80px
+
+}
+
+.dateMenuBar div {
+
+	display: inline-block;
+	
+	padding: 5px;
+	
+	position: relative;
+}
+
+#todayButton  {
+
+	bottom: 10px;
+
+	font-family: 'Open Sans', sans-serif;
+	font-weight: semi-bold;
+	
+	font-weight: bold;
+	
+	padding: 5px 10px;
+	margin: 3px;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+
+}
+
+#arrowButtonsBox {
+
+	bottom: 10px;
+
+	position: relative;
+	left: 15px;
+	margin-left: 15px;
+
+}
+
+#arrowButtonLeft, #arrowButtonRight {
+
+	font-family: 'Open Sans', sans-serif;
+	font-weight: semi-bold;
+	
+	padding: 5px 20px;
+	margin: 3px;
+	
+	
+	font-weight: bold;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+
+}
+
+#dateBox {
+
+	font-family: 'Open Sans', sans-serif;
+	font-weight: semi-bold;
+
+	position: relative;
+	left: 20px;
+	margin: 0px 40px;
+	text-align: center;
+	
+	width: 250px;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	
+}
+
+#dateBox h3 {
+
+
+
+	margin: 5px 0px;
+
+}
+
+
+#calListBox {
+
+	bottom: 10px;
+
+	position: relative;
+	margin-left: 15px;
+	
+	font-weight: bold;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+
+}
+
+#calButton, #listButton  {
+
+	font-family: 'Open Sans', sans-serif;
+	font-weight: semi-bold;
+	
+	padding: 5px 10px;
+	margin: 1px;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+
+}
+
+#showFiltersButton {
+
+	bottom: 10px;
+	
+	font-family: 'Open Sans', sans-serif;
+	font-weight: semi-bold;
+	
+	left: 5px;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	
+
+}
+
+
+/* home menu Table */
+
+.eventsTable {
+	margin-top: 10px;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	
+	width: 145%;
+	
+	
+}
+
+.eventsTable a {
+
+	text-decoration: none;
+	
+	color: #4DB84D;
+	
+	font-weight: bold;
+
+}
+
+.headerRow {	
+	background: #4DB84D;
+	
+	color: white;
+	
+	font-size:20px;
+	
+	width: 720px;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	
+
+}
+
+.headerRow h5 {
+
+	margin: 0px;
+	padding: 5px;
+
+}
+
+.normalRow, .normalRowAlternate {
+
+	border: 3px solid #E8E8E6;
+	
+	position: relative;
+	left: 7px;
+	width: 700px;
+	
+	height: 90px;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	
+	
+}
+
+.normalRow .rowBox, .normalRowAlternate .rowBox {
+
+	border: 1px solid gray;
+	
+	float: left;
+	
+	position: relative;
+	
+	top: 10px;
+	
+	margin: 0px 10px;
+	
+	width: 50px;
+	height: 50px;
+
+}
+
+
+.normalRow .rowBox span, .normalRowAlternate .rowBox span  {
+
+	position: relative;
+	left: 12px;
+	
+	font-size: 12px;
+	font-weight: bold;
+
+}
+
+.normalRow .rowText, .normalRowAlternate .rowText {
+
+	position: relative;
+	
+	top: 20px;
+
+	
+}
+
+.normalRow .rowSelect, .normalRowAlternate .rowSelect {
+
+	position: relative;
+	
+	top: 40px;
+	
+	float: right;
+
+}
+
+.normalRow .rowSelectAlternate, .normalRowAlternate .rowSelectAlternate {
+
+	position: relative;
+	
+	clear: right;
+	
+	float: right;
+
+}
+
+
+.normalRow {
+
+	
+
+}
+
+.normalRowAlternate {
+
+	background: #E8E8E6;
+
+}
+
+.rowCircle {
+	border: 1px solid black;
+	
+	float: left;
+	
+	margin: 5px 5px 2px 5px;
+
+	height: 55px;
+	width: 55px;
+	
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+
+}
+
+.rowCircle h3 {
+
+	position: relative;
+	
+	top: 8px;
+	margin: 5px;
+
+}
+
+.trayNotOnSite {
+
+	position: relative;
+	float: right;
+	
+	right: 10px;
+	
+	font-weight: bold;
+	
+	color: red;
+
+}
+
+
+.rowTextScheduled {
+
+	float: left;
+	
+	position: relative;
+	
+	top: 20px;
+
+}
+
+.traysNeeded {
+
+	float: left;
+	clear: left;
+	
+	position: relative;
+	
+	left: 30px;
+
+}
+
+
+/*Notifications Table stuff */
+
+.notificationsTable {
+
+	
+
+}
+
+.notificationsTable h3 {
+
+	margin: 0px;
+	padding: 5px;
+	
+	background: #4DB84D;
+	
+	color: white;
+	
+	font-size:20px;
+	
+	width: 400px;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+
+}
+
+.notification  {
+
+	border: 5px solid #E8E8E6;
+	
+	position: relative;
+	
+	left: 5px;
+	
+	width: 380px;
+	
+	padding: 5px;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	
+	float: left;
+}
+
+.notificationsTableText {
+
+	position: relative;
+	
+	top: 1px;
+
+	
+	width: 350px;
+	
+	float: left;
+
+}
+
+.notificationsTableX {
+
+	position: relative;
+	
+	float: right;
+	
+	width: 20px;
+	
+	background: #E8E8E6;
+	
+	padding: 1px;
+	
+	text-align: center;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.notificationsTableGoToButton {
+
+	background: #E8E8E6;
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	
+	padding: 5px;
+	
+	margin-top: 5px;
+	
+	float: left;
+
+
+}
 
 /*Nav-Menu stuff*/
 
 .navMenu {
+
+	font-family: 'Open Sans', sans-serif;
+	font-weight: semi-bold;
+
 
 	margins: 0px auto;
 	height: 5%;
 	width: 60%
 	position: absolute;
 	
-	background: lightgrey;
+	background:  #E8E8E6;
 	
-	border-bottom: 1px solid black;
 	
-
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 
 }
 
@@ -34,11 +544,26 @@ body {
 	display: inline-block;
 	
 	text-decoration: none;
-	color: black;
 	
-	font-family: verdana;
-	font-size: 8pt;
+	font-size: 10pt;
+	
+	
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
 
+}
+
+.navSelected {
+
+	color: white;
+	
+	background: #4DB84D;
+
+}
+
+.navUnselected {
+	color: black;
 
 }
 
@@ -59,7 +584,6 @@ body {
 	margin: 5px 10px;
 	padding: 10px;
 	
-	border: 1px solid lightgrey;
 	
 	bottom: 10px;
 }
@@ -67,7 +591,6 @@ body {
 .navMenuButtonLeft:hover{
 	
 	transition: all 1s ease;
-	border: 1px solid black;
 	
 	
 }
@@ -79,9 +602,7 @@ body {
 	padding: 10px;
 	float: right;
 	
-	border: 1px solid lightgrey;
-	
-	bottom: -10px;
+	top: 8px;
 
 }
 
@@ -91,5 +612,7 @@ body {
 	border: 1px solid black;
 	
 }
+
+
 
 

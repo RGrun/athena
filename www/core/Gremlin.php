@@ -89,25 +89,29 @@
 			$menu .= "<a href='home.php'><div class='navMenuButtonLogo'><img height='42' width='133' class='navMenuLogo'
 			src='core/images/athena-logo.png'/> </div></a>";
 			
-			$menu .= "<a href='home.php'><div class='navMenuButtonLeft'><span class='navMenuText'><b>Calendar</b></span></div></a>";
+			
+			######DUMMY: calendar button is 'selected' for demo, rest are unselected
+			$menu .= "<a href='home.php'><div class='navMenuButtonLeft navSelected'><span class='navMenuText'><b>Calendar</b></span></div></a>";
 			
 			
-			$menu .= "<a href='trays.php'><div class='navMenuButtonLeft'><span class='navMenuText'><b>Trays</b></span></div></a>";
+			$menu .= "<a href='trays.php'><div class='navMenuButtonLeft navUnselected'><span class='navMenuText'><b>Trays</b></span></div></a>";
 			
-			$menu .= "<a href='notifications.php'><div class='navMenuButtonLeft'><span class='navMenuText'><b>Notifications</b></span></div></a>";
+			$menu .= "<a href='notifications.php'><div class='navMenuButtonLeft navUnselected'><span class='navMenuText'><b>Notifications</b></span></div></a>";
 			
-			$menu .= "<a href='teamActivity.php'><div class='navMenuButtonLeft'><span class='navMenuText'><b>Team Activity</b></span></div></a>";
+			$menu .= "<a href='teamActivity.php'><div class='navMenuButtonLeft navUnselected'><span class='navMenuText'><b>Team Activity</b></span></div></a>";
 			
-			$menu .= "<a href='newCase.php'><div class='navMenuButtonLeft'><span class='navMenuText'><b>New Case</b></span></div></a>";
+			$menu .= "<a href='newCase.php'><div class='navMenuButtonLeft navUnselected'><span class='navMenuText'><b>New Case</b></span></div></a>";
 			
 			
 			#right-aligned buttons
 			#add profile image?
-			$menu .= "<a href='settings.php'><div class='navMenuButtonRight'><span class='navMenuText'><b>Setttings</b></span></div></a>";
+			$menu .= "<a href='settings.php'><div class='navMenuButtonRight navUnselected'><span class='navMenuText'><b>Setttings</b></span></div></a>";
 			
-			$menu .= "<a href='help.php'><div class='navMenuButtonRight'><span class='navMenuText'><b>Help</b></span></div></a>";
+			$menu .= "<a href='help.php'><div class='navMenuButtonRight navUnselected'><span class='navMenuText'><b>Help</b></span></div></a>";
 			
 			$menu .= "</div>"; #end menu
+			
+			$menu .= "<div id='mainContentWrapper'>"; //open mainContentWrapper
 			
 			
 			#make Gremlin object availible on every page
@@ -119,7 +123,7 @@
 		
 		public function buildFooter() {
 		
-			return "</body></html>";
+			return "</div></body></html>";
 		
 		
 		
