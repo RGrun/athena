@@ -65,12 +65,10 @@ body {
 	padding: 10px;
 	
 	font-family: 'Open Sans', sans-serif;
-	font-weight: semi-bold;
 	
 	font-weight: bold;
 	
 	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
 	border-radius: 5px;
 
 }
@@ -114,7 +112,6 @@ body {
 	bottom: 10px;
 
 	font-family: 'Open Sans', sans-serif;
-	font-weight: semi-bold;
 	
 	font-weight: bold;
 	
@@ -122,7 +119,6 @@ body {
 	margin: 3px;
 	
 	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
 	border-radius: 5px;
 
 }
@@ -140,7 +136,6 @@ body {
 #arrowButtonLeft, #arrowButtonRight {
 
 	font-family: 'Open Sans', sans-serif;
-	font-weight: semi-bold;
 	
 	padding: 5px 20px;
 	margin: 3px;
@@ -149,7 +144,6 @@ body {
 	font-weight: bold;
 	
 	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
 	border-radius: 5px;
 
 }
@@ -157,7 +151,6 @@ body {
 #dateBox {
 
 	font-family: 'Open Sans', sans-serif;
-	font-weight: semi-bold;
 
 	position: relative;
 	left: 20px;
@@ -167,7 +160,6 @@ body {
 	width: 250px;
 	
 	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
 	border-radius: 5px;
 	
 }
@@ -191,7 +183,6 @@ body {
 	font-weight: bold;
 	
 	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
 	border-radius: 5px;
 
 }
@@ -199,13 +190,11 @@ body {
 #calButton, #listButton  {
 
 	font-family: 'Open Sans', sans-serif;
-	font-weight: semi-bold;
 	
 	padding: 5px 10px;
 	margin: 1px;
 	
 	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
 	border-radius: 5px;
 
 }
@@ -215,12 +204,11 @@ body {
 	bottom: 10px;
 	
 	font-family: 'Open Sans', sans-serif;
-	font-weight: semi-bold;
+
 	
 	left: 5px;
 	
 	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
 	border-radius: 5px;
 	
 
@@ -233,7 +221,7 @@ body {
 	margin-top: 10px;
 	
 	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
+
 	border-radius: 5px;
 	
 	width: 145%;
@@ -261,7 +249,7 @@ body {
 	width: 720px;
 	
 	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
+
 	border-radius: 5px;
 	
 
@@ -285,7 +273,7 @@ body {
 	height: 90px;
 	
 	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
+
 	border-radius: 5px;
 	
 	
@@ -372,7 +360,7 @@ body {
 	width: 55px;
 	
 	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
+
 	border-radius: 50%;
 
 }
@@ -444,7 +432,7 @@ body {
 	width: 400px;
 	
 	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
+
 	border-radius: 5px;
 
 }
@@ -462,7 +450,7 @@ body {
 	padding: 5px;
 	
 	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
+
 	border-radius: 5px;
 	
 	float: left;
@@ -496,7 +484,7 @@ body {
 	text-align: center;
 	
 	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
+
 	border-radius: 5px;
 }
 
@@ -505,7 +493,7 @@ body {
 	background: #E8E8E6;
 	
 	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
+
 	border-radius: 5px;
 	
 	padding: 5px;
@@ -522,19 +510,19 @@ body {
 .navMenu {
 
 	font-family: 'Open Sans', sans-serif;
-	font-weight: semi-bold;
 
 
-	margins: 0px auto;
-	height: 5%;
-	width: 60%
-	position: absolute;
+
+	margin: 0px auto;
+	
+	width: 100%;
+	position: relative;
 	
 	background:  #E8E8E6;
 	
 	
 	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
+
 	border-radius: 5px;
 
 }
@@ -549,7 +537,7 @@ body {
 	
 	
 	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
+
 	border-radius: 5px;
 
 }
@@ -571,7 +559,7 @@ body {
 
 	position: relative;
 	margin: 5px 5px;
-	padding 5px;
+	padding: 5px;
 	
 	
 	

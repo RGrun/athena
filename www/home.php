@@ -27,51 +27,86 @@
 	
 	$page .= $gremlin->buildMenu("$user->uname" . "'s Home");
 	
+	$script = "<script src='js/home.js'></script>";
 	
 	#build colTabRow
 	
 	$colTabRow = "<div class='colTabRow'>"; #open colTabRow
 	
-	########START DUMMY
 	
-	$dmyTabRow = "<div class='tabRowHeader'><h3>Calendar</h3></div>"; #dmyTabRow
+	$tabRow = "<div class='tabRowHeader'><h3>Calendar</h3></div>"; #tabRow
 	
-	$dmyTabRow .= "<div id='tab1Button' class='selected'>All Events</div><div id='tab2Button' class='unselected'>My Events</div>";
+	$tabRow .= "<div id='tab1Button' onclick='tab1Toggle()' class='selected'>All Events</div><div id='tab2Button' class='unselected' onclick='tab2Toggle()'>My Events</div>";
 	
-	$dmyTabRow .= "</div>"; #end dmyTabRow
+	$tabRow .= "</div>"; #end tabRow
 	
-	$colTabRow .= $dmyTabRow;
+	$colTabRow .= $tabRow;
 	
-	########END DUMMY	
-	
-	//$colTabRow .= "</div>"; #close colTabRow
 	
 	#menu bar with date selection stuff
 	
 	$dateMenuBar = "<div class='dateMenuBar'>"; #open dateMenuBar
 	
-	########START DUMMY
+	#this is where we figure out what date to show and display it in the date box
+	$timeOffset = 0;
 	
-	$dmyTodayButton = "<div id='todayButton' class='selected'><small>Today</small></div>";
+	#Here we check to see if there's a time offset. If there is, it will be added to 
+	#the current date
+	if(isset($_GET['offset'])) {
+	
+		$offset = $_GET['offset'];
+		
+		$timeOffset = ($offset * 24 * 60 * 60);
+		
+	}
+	
+	#figure out date
+	$unixTime = time() + $timeOffset;
+	
+	$todaySelected = "unselected";
+	
+	#current unixTime within one day? !!!UNTESTED!!!
+	if($unixTime >= (time() - (12 * 60 * 60)) &&
+		$unixTime <= (time() + (12 * 60 * 60))) {
+		
+			$todaySelected = "selected";
+		} 
+	
+	$todayButton = "<a href='home.php'><div id='todayButton' class='$todaySelected'><small>Today</small></div></a>";
 
-	$dmyArrowButtonsBox = "<div id='arrowButtonsBox'>";
+	$arrowButtonsBox = "<div id='arrowButtonsBox'>";
 	
-	$dmyArrowButtonLeft = "<div class='unselected' id='arrowButtonLeft'>&lt;</div>";
+	$arrowOffset = 0;
+	if(isset($_GET['offset'])) {
+		$arrowOffset = $_GET['offset'];
+		$leftArrowOffset = $arrowOffset - 1;
+		$rightArrowOffset = $arrowOffset + 1;
+		
+		$arrowButtonLeft = "<a href='home.php?offset=$leftArrowOffset'><div class='unselected' id='arrowButtonLeft'>&lt;</div></a>";
+		$arrowButtonRight = "<a href='home.php?offset=$rightArrowOffset'><div class='unselected' id='arrowButtonLeft'>&gt;</div></a>";
+		
+	} else {
+		$arrowButtonLeft = "<a href='home.php?offset=-1'><div class='unselected' id='arrowButtonLeft'>&lt;</div></a>";
+		$arrowButtonRight = "<a href='home.php?offset=1'><div class='unselected' id='arrowButtonRight'>&gt;</div></a>";
+	}
 	
-	$dmyArrowButtonRight = "<div class='unselected' id='arrowButtonRight'>&gt;</div>";
+	$arrowButtonsBox .= $arrowButtonLeft . $arrowButtonRight;
 	
-	$dmyArrowButtonsBox .= $dmyArrowButtonLeft . $dmyArrowButtonRight;
+	$arrowButtonsBox .= "</div>";
 	
-	$dmyArrowButtonsBox .= "</div>";
+	$dateBox = "<div id='dateBox' class='unselected'>";
+
+	$curDate = date('l\, F jS', $unixTime);
 	
-	$dmyDateBox = "<div id='dateBox' class='unselected'>";
+	$todayText = "";
 	
+	if(!isset($_GET['offset']) || $arrowOffset == 0) $todayText = "<small>Today</small>";
 	
-	$dmyCalDate = "<div id='calDate'><small>Today</small><br/><h3>Tuesday, March 24</h3></div>";
+	$calDate = "<div id='calDate'>$todayText<br/><h3>$curDate</h3></div>";
 	
-	$dmyDateBox .= $dmyCalDate;
+	$dateBox .= $calDate;
 	
-	$dmyDateBox .= "</div>";
+	$dateBox .= "</div>";
 	
 	$dmyCalListBox = "<div id='calListBox'>";
 	
@@ -85,10 +120,9 @@
 	
 	$showFiltersButton = "<div class='unselected' id='showFiltersButton'>Show Filters</div>";
 	
-	$dateMenuBar .= $dmyTodayButton . $dmyArrowButtonsBox .
-	$dmyDateBox . $dmyCalListBox . $showFiltersButton;
+	$dateMenuBar .= $todayButton . $arrowButtonsBox .
+	$dateBox . $dmyCalListBox . $showFiltersButton;
 	
-	########END DUMMY
 	
 	$dateMenuBar .= "</div>"; #close dateMenuBar
 	
@@ -100,80 +134,38 @@
 	#tab 1 - All Events
 	$tab1 = "<div id='homeTab1'>"; #open homeTab1
 	
-	########START DUMMY
+	########START DUMMY ///
 	
-	$dmyAllEventsTable = "<table class='eventsTable'>";
+	$allEventsTable = "<table class='eventsTable'>";
 	
-	$dmyAllEventsRows = "<tr><td><div class='headerRow'><h5>Anytime Events</h5></div></td></tr>";
+	$allEventsRows = "<tr><td><div class='headerRow'><h5>Anytime Events</h5></div></td></tr>";
 	
-	$dmyAllEventsRows .= "<tr><td>" .
-	"<div class='normalRow'><div class='rowBox'><span>Drop</span><span><br/> Off</span></div>" .
-	"<div class='rowText'>Drop off <a href='#'>Foot Surgery Tray</a> at <a href='#'>Mercy Hospital</a> for foot surgery w/ Dr. Bill</div>" .
-	"<div class='rowSelect'><select><option>Unassigned</option><option>Russell Wilson</option><option>Marshawn Lynch</option></select></div>" .
-	"</div></td></tr>";
 	
-	$dmyAllEventsRows .= "<tr><td>" .
-	"<div class='normalRowAlternate'><div class='rowBox'><span>Drop</span><span><br/> Off</span></div>" .
-	"<div class='rowText'>Drop off <a href='#'>Brain Surgery Tray</a> at <a href='#'>Mercy Hospital</a> for brain surgery w/ Dr. Bob</div>" .
-	"<div class='rowSelect'><select><option>Unassigned</option><option>Russell Wilson</option><option>Marshawn Lynch</option></select></div>" .
-	"</div></td></tr>";
+	#Build "Anytime Events"
+	$allEventsRows .= $gremlin->buildAnytimeEventsRows($user->ID, $user->teamID, $unixTime);
 	
-	$dmyAllEventsRows .= "<tr><td>" .
-	"<div class='normalRow'><div class='rowBox'><span>Pick</span><span><br/> Up</span></div>" .
-	"<div class='rowText'>Pick up <a href='#'>Shoulder Surgery Tray</a>, <a href='#'>FlipCutter1</a> at <a href='#'>Interfaith Hospital</a></div>" .
-	"<div class='rowSelect'><select><option>Unassigned</option><option>Russell Wilson</option><option>Marshawn Lynch</option></select></div>" .
-	"</div></td></tr>";
 	
-	$dmyAllEventsRows .= "<tr><td>" .
-	"<div class='normalRowAlternate'><div class='rowBox'><span>Pick</span><span><br/> Up</span></div>" .
-	"<div class='rowText'>Pick up <a href='#'>Brain Surgery Tray</a>, <a href='#'>FlipCutter2</a> at <a href='#'>Mercy Hospital</a></div>" .
-	"<div class='rowSelect'><select><option>Unassigned</option><option>Russell Wilson</option><option>Marshawn Lynch</option></select></div>" .
-	"</div></td></tr>";
+	$allEventsRows .= "<tr><td><div class='headerRow'><h5>Scheduled Events</h5></div></td></tr>";
 	
-	$dmyAllEventsRows .= "<tr><td><div class='headerRow'><h5>Scheduled Events</h5></div></td></tr>";
 	
-	$dmyAllEventsRows .= "<tr><td>" .
-	"<div class='normalRow'><div class='rowCircle'><h3>9am</h3></div>" .
-	"<div class='rowTextScheduled'>Tib. Ostiotomy at St. Joseph’s Paterson w/ Dr. Longobardi</div>" .
-	"<div class='traysNeeded'><select><option>Transtibila ACL 4</option><option>Master Graft 1</option> <option>Graft Bolt 2</option></select></div>" .
-	"<div class='rowSelectAlternate'><select><option>Unassigned</option><option>Russell Wilson</option><option>Marshawn Lynch</option></select></div>" .
-	"</div></td></tr>";
+	$allEventsRows .= $gremlin->buildScheduledEventsRows($user->ID, $user->teamID, $unixTime);
 	
-	$dmyAllEventsRows .= "<tr><td>" .
-	"<div class='normalRowAlternate'><div class='rowCircle'><h3>9am</h3></div>" .
-	"<div class='rowTextScheduled'>Distal Biceps at Ramapo Valley w/ Dr. Pflum</div>" .
-	"<div class='traysNeeded'><select><option>Transtibila ACL 4</option><option>Master Graft 1</option> <option>Graft Bolt 2</option></select><select><option>Transtibila ACL 4</option><option>Master Graft 1</option> <option>Graft Bolt 2</option></select></div>" .
-	"<div class='rowSelectAlternate'><select><option>Unassigned</option><option>Russell Wilson</option><option>Marshawn Lynch</option></select></div>" .
-	"</div></td></tr>";
 	
-	$dmyAllEventsRows .= "<tr><td>" .
-	"<div class='normalRow'><div class='rowCircle'><h3>10am</h3></div>" .
-	"<div class='trayNotOnSite'><small>Tray not on site!</small></div>" .
-	"<div class='rowTextScheduled'>[Procedure Name] at Hospital Name w/ [Doctor Name]</div>" .
-	"<div class='traysNeeded'><select><option>Transtibila ACL 4</option><option>Master Graft 1</option> <option>Graft Bolt 2</option></select><select><option>Transtibila ACL 4</option><option>Master Graft 1</option> <option>Graft Bolt 2</option></select></div>" .
-	"<div class='rowSelectAlternate'><select><option>Unassigned</option><option>Russell Wilson</option><option>Marshawn Lynch</option></select></div>" .
-	"</div></td></tr>";
 	
-	$dmyAllEventsRows .= "<tr><td>" .
-	"<div class='normalRowAlternate'><div class='rowCircle'><h3>10am</h3></div>" .
-	"<div class='rowTextScheduled'>[Procedure Name] at Hospital Name w/ [Doctor Name]</div>" .
-	"<div class='traysNeeded'><select><option>Transtibila ACL 4</option><option>Master Graft 1</option> <option>Graft Bolt 2</option></select><select><option>Transtibila ACL 4</option><option>Master Graft 1</option> <option>Graft Bolt 2</option></select><select><option>Transtibila ACL 4</option><option>Master Graft 1</option> <option>Graft Bolt 2</option></select></div>" .
-	"<div class='rowSelectAlternate'><select><option>Unassigned</option><option>Russell Wilson</option><option>Marshawn Lynch</option></select></div>" .
-	"</div></td></tr>";	
+	$allEventsTable .= $allEventsRows;
 	
-	$dmyAllEventsTable .= $dmyAllEventsRows;
+	$allEventsTable .= "</table>";
 	
-	$dmyAllEventsTable .= "</table>";
-	
-	$tab1 .= $dmyAllEventsTable;
+	$tab1 .= $allEventsTable;
 	
 	########END DUMMY
 	
 	$tab1 .= "</div>"; #close homeTab1
 	
 	#tab 2 - My Events
-	$tab2 = "<div id='homeTab2'>"; #open homeTab2
+	$tab2 = "<div id='homeTab2' style='display: none;'>"; #open homeTab2
 	
+	$tab2 .= "<h2>There's something here!</h2>";
 	
 	
 	$tab2 .= "</div>"; #close homeTab2
@@ -221,7 +213,7 @@
 	
 	
 	#assemble and print page
-	$page .= $colTabRow . $dateMenuBar . $col1 . $col2;
+	$page .= $script . $colTabRow . $dateMenuBar . $col1 . $col2;
 	
 	$page .= $gremlin->buildFooter();
 	

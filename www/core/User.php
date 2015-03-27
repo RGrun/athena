@@ -78,7 +78,8 @@
 			#load users's info from ID
 			$sql = "SELECT * FROM users WHERE usr_id='$userID'";
 			
-			$rawData = $gremlin->query($sql);
+			
+			$rawData = $gremlin->query($sql, true);
 			
 			extract($rawData);
 			
@@ -176,7 +177,7 @@
 			#first, look to see if person logging in is a user, and check their permissions
 			$sql = "SELECT usr_id FROM users WHERE uname='$username' AND pwd='$pass'";
 		
-			$rawResult = $gremlin->query($sql);
+			$rawResult = $gremlin->query($sql, true);
 			
 			if(!empty($rawResult)) {
 				#user found!
@@ -186,7 +187,7 @@
 			
 				$sql = "SELECT usr_id FROM clients WHERE uname='$username' AND pwd='$pass'";
 				
-				$rawResult = $gremlin->query($sql);
+				$rawResult = $gremlin->query($sql, true);
 				
 				if(!empty($rawResult)) {
 					#client found!

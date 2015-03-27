@@ -10,6 +10,7 @@
 	#check for login
 	
 	session_start();
+	//session_destroy();
 	
 	if(!empty($_SESSION)) {
 		header("Location: home.php");
@@ -29,15 +30,17 @@
 		if($userType != "not found") {
 			#login successful
 			
-			session_start();
+			//session_start();
 			
 			#find user's ID
 			
 			
 			if($userType == "user") {
 				$sql = "SELECT usr_id FROM users WHERE uname='$username'";
+				
+				echo $sql;
 			
-				$rawData = $gremlin->query($sql);
+				$rawData = $gremlin->query($sql, true);
 			
 				$userID = $rawData['usr_id'];
 				
@@ -46,7 +49,7 @@
 			
 				$sql = "SELECT cli_id FROM clients WHERE uname='$username'";
 			
-				$rawData = $gremlin->query($sql);
+				$rawData = $gremlin->query($sql, true);
 			
 				$cliID = $rawData['cli_id'];
 			
