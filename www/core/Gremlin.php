@@ -437,13 +437,14 @@
 			$select .= "<option value='none'>No Filter</option>";
 			$select .= "<option value='0'>Unassigned</option>";
 			
+			echo print_r($result);
+			
 			foreach($result as $user) {
 				$usr_id = $user['usr_id'];
 				$uname = $user['uname'];
 			
 				$select .= "<option value='$usr_id'>$uname</option>";
 				
-				echo $select;
 			
 			}
 			
