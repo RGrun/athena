@@ -429,7 +429,7 @@
 		public function createUserSelect() {
 		
 			$sql = "SELECT * FROM users WHERE active='1'";
-			echo $sql;
+			
 			
 			$result =  mysqli_query($this->connection, $sql);
 			
@@ -442,10 +442,13 @@
 				$uname = $user['uname'];
 			
 				$select .= "<option value='$usr_id'>$uname</option>";
+				
+				echo $select;
 			
 			}
 			
 			$select .= "</select>";
+			
 			
 			return $select;
 			
