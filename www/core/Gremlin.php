@@ -26,13 +26,13 @@
 		}
 		
 		#query wrapper
-		public function query($sql, $userLogin = false) {
+		public function query($sql, $alternate = false) {
 
 			$mysqliResult = mysqli_query($this->connection, $sql);
 			
-			//echo print_r($mysqliResult);
 			
-			if($userLogin == TRUE) {
+			
+			if($alternate == TRUE) {
 				return mysqli_fetch_assoc($mysqliResult);
 			
 			}
@@ -155,7 +155,7 @@
 		}
 		
 		#used on Home page to return "Anytime Events" rows
-		public function buildAnytimeEventsRows($userID, $teamID, $unixTime) {
+		public function buildAnytimeEventsRows($userID, $teamID, $unixTime, $myEvents = false) {
 		
 			#for controlling the "none found" label
 			$numRows = 0;
@@ -171,7 +171,13 @@
 			$databaseTimestampEndOfDay = date("Y-m-d H:i:s", mktime(23, 59, 59, $month, $day, $year));
 		
 			#Figure out what cases are related to user and user's team (or any unassigned case)
-			$cases = $this->query("SELECT * FROM cases WHERE (team_id='$teamID' OR team_id='0') AND (status='Pending')");
+			
+			if($myEvents == false) {
+				$sql = "SELECT * FROM cases WHERE (team_id='$teamID' OR team_id='0') AND (status='Pending')";
+			} else {
+				$sql = "SELECT * FROM cases WHERE (team_id='$teamID') AND (status='Pending')";
+			}
+			$cases = $this->query($sql);
 			
 			
 			if(count($cases) <= 0) {
@@ -187,7 +193,12 @@
 			
 				$thisCaseId = $thisCase['case_id'];
 				
-				$sql = "SELECT * FROM assigns WHERE (case_id='$thisCaseId') AND (do_usr='$userID' OR do_usr='0') AND (do_dttm BETWEEN '$databaseTimestamp' AND '$databaseTimestampEndOfDay') ORDER BY do_dttm DESC";
+				if($myEvents == false) {
+					$sql = "SELECT * FROM assigns WHERE (case_id='$thisCaseId') AND (do_usr='$userID' OR do_usr='0') AND (do_dttm BETWEEN '$databaseTimestamp' AND '$databaseTimestampEndOfDay') ORDER BY do_dttm DESC";
+				} else {
+					$sql = "SELECT * FROM assigns WHERE (case_id='$thisCaseId') AND (do_usr='$userID') AND (do_dttm BETWEEN '$databaseTimestamp' AND '$databaseTimestampEndOfDay') ORDER BY do_dttm DESC";
+				}
+				
 				
 				$DOassignments = array();
 				
@@ -209,17 +220,21 @@
 					
 					//echo print_r($thisAssign);
 					
-					#pending assignments only
-					if($thisAssign['status'] == 'Complete') continue;
+					if($thisAssign['status'] == 'Complete') $complete = "complete";
+					else $complete = "pending";
 					
 					$trayName = $this->findTrayData($thisAssign['tray_id'], "name");
 					$siteName = $this->findSiteData($thisCase['site_id'], "name");
 					$procName = $this->findProcedureData($thisCase['proc_id'], "name");
 					$drName = $this->findDoctorData($thisCase['doc_id'], "name");
 					
+					$thisAssignID = $thisAssign['asgn_id'];
+					
+					$doUsr = $thisAssign['do_usr'];
+					
 					$rows .= "<tr><td>";
-					$rows .= "<div class='normalRow'><div class='rowBox'><span>Drop</span><span><br/> Off</span></div>";
-					$rows .= "<div class='rowText'>Drop off <a href='#'>$trayName</a> at <a href='#'>$siteName</a> for $procName w/ $drName.</div>";
+					$rows .= "<div data-user='$doUsr' class='normalRow $complete'><div class='rowBox'><span>Drop</span><span><br/> Off</span></div>";
+					$rows .= "<div class='rowText'>$thisAssignID. Drop off <a href='#'>$trayName</a> at <a href='#'>$siteName</a> for $procName w/ $drName.</div>";
 					
 					$selectData = "<select><option value='0'>Unassigned</option>";
 					$availUsers = $this->query("SELECT usr_id, uname FROM users WHERE team_id='$teamID'");
@@ -240,7 +255,12 @@
 				#GOTO STATEMENTS ARE BAD
 				pu:
 				
-				$sql = "SELECT * FROM assigns WHERE (case_id='$thisCaseId') AND (pu_usr='$userID' OR pu_usr='0') AND (pu_dttm BETWEEN '$databaseTimestamp' AND '$databaseTimestampEndOfDay') ORDER BY pu_dttm DESC";
+				if($myEvents == false) {
+					$sql = "SELECT * FROM assigns WHERE (case_id='$thisCaseId') AND (pu_usr='$userID' OR pu_usr='0') AND (pu_dttm BETWEEN '$databaseTimestamp' AND '$databaseTimestampEndOfDay') ORDER BY pu_dttm DESC";
+				} else {
+					$sql = "SELECT * FROM assigns WHERE (case_id='$thisCaseId') AND (pu_usr='$userID') AND (pu_dttm BETWEEN '$databaseTimestamp' AND '$databaseTimestampEndOfDay') ORDER BY pu_dttm DESC";
+				}
+				
 				
 				#get pick-up events
 				$PUassignments = $this->query($sql);
@@ -253,15 +273,20 @@
 				
 					
 				
-					#pending assignments only
-					if($thisAssign['status'] == 'Complete') continue;
+					
+					if($thisAssign['status'] == 'Complete') $complete = "complete";
+					else $complete = "pending";
+					
+					$thisAssignID = $thisAssign['asgn_id'];
 					
 					$trayName = $this->findTrayData($thisAssign['tray_id'], "name");
 					$siteName = $this->findSiteData($thisCase['site_id'], "name");
 					
+					$puUsr = $thisAssign['pu_usr'];
+					
 					$rows .= "<tr><td>";
-					$rows .= "<div class='normalRow'><div class='rowBox'><span>Pick</span><span><br/> Up</span></div>";
-					$rows .= "<div class='rowText'>Pick up <a href='#'>$trayName</a> at <a href='#'>$siteName</a></div>";
+					$rows .= "<div data-user='$puUsr' class='normalRow $complete'><div class='rowBox'><span>Pick</span><span><br/> Up</span></div>";
+					$rows .= "<div class='rowText'>$thisAssignID. Pick up <a href='#'>$trayName</a> at <a href='#'>$siteName</a></div>";
 					
 					$selectData = "<select><option value='0'>Unassigned</option>";
 					$availUsers = $this->query("SELECT usr_id, uname FROM users WHERE team_id='$teamID'");
@@ -295,7 +320,7 @@
 		
 		}
 		
-		public function buildScheduledEventsRows($userID, $teamID, $unixTime) {
+		public function buildScheduledEventsRows($userID, $teamID, $unixTime, $myEvents = false) {
 		
 			#for controlling the "none found" label
 			$numRows = 0;
@@ -310,13 +335,18 @@
 			$databaseTimestamp = date("Y-m-d H:i:s", mktime(0, 0, 0, $month, $day, $year));
 			$databaseTimestampEndOfDay = date("Y-m-d H:i:s", mktime(23, 59, 59, $month, $day, $year));
 			
-			$sql = "SELECT * FROM cases WHERE team_id='$teamID' AND status='Pending' AND (dttm BETWEEN '$databaseTimestamp' AND '$databaseTimestampEndOfDay') ORDER BY dttm DESC";
+			if($myEvents == false) {	
+				$sql = "SELECT * FROM cases WHERE (team_id='$teamID' OR team_id='0') AND status='Pending' AND (dttm BETWEEN '$databaseTimestamp' AND '$databaseTimestampEndOfDay') ORDER BY dttm DESC";
+			} else {
+				$sql = "SELECT * FROM cases WHERE (team_id='$teamID') AND status='Pending' AND (dttm BETWEEN '$databaseTimestamp' AND '$databaseTimestampEndOfDay') ORDER BY dttm DESC";
+			}
+
 			
 			$cases = $this->query($sql);
 			
 			
 			if(count($cases) <= 0) {
-			
+				#echo "jumped to end!";
 				goto end;
 			
 			}
@@ -327,22 +357,51 @@
 			foreach ($cases as $thisCase) {
 				
 				$thisCaseId = $thisCase['case_id'];
+				$thisCaseDTTM = $thisCase['dttm'];
 				
-				$rows .= "<tr><td>" .
+				$rows .= "<tr><td>";
+				
+				#need to add alternate soon
+				$rows .= "<div class='normalRow'>"; #open Row
+				
+				$caseTimeStamp = strtotime($thisCaseDTTM);
+				$dateForCircle = date("ha", $caseTimeStamp);
+				
+				$rows .= "<div class='rowCircle'><h3>$dateForCircle</h3></div>";
+				
+				$siteName = $this->findSiteData($thisCase['site_id'], "name");
+				$procName = $this->findProcedureData($thisCase['proc_id'], "name");
+				$drName = $this->findDoctorData($thisCase['doc_id'], "name");
+				
+				$rows .= "<div class='rowTextScheduled'>$procName at $siteName w/ $drName</div>";
+				
+				$selectors = $this->createTTYPSelectors($thisCaseId);
+				
+				$rows .= "<div class='traysNeeded'>$selectors</div>";
+				
+				#rowSelectAlternate
+				$selectData = "<select><option value='0'>Unassigned</option>";
+				$sql = "SELECT usr_id, uname FROM users WHERE team_id='$teamID'";
+				$availUsers = $this->query($sql);
+					
+				foreach($availUsers as $userName) {
+					$localUserId = $userName['usr_id'];
+					$localUserName = $userName['uname'];
+					$selectData .= "<option value='$localUserId'>$localUserName</option>";
+				}
+				$selectData .= "</select>";
+				
+				$rows .= "<div class='rowSelectAlternate'>$selectData</div>";
 			
-				
-				
-				
-				"<tr><td>" .
-				"<div class='normalRowAlternate'><div class='rowCircle'><h3>10am</h3></div>" .
-				"<div class='rowTextScheduled'>[Procedure Name] at Hospital Name w/ [Doctor Name]</div>" .
-				"<div class='traysNeeded'><select><option>Transtibila ACL 4</option><option>Master Graft 1</option> <option>Graft Bolt 2</option></select><select><option>Transtibila ACL 4</option><option>Master Graft 1</option> <option>Graft Bolt 2</option></select><select><option>Transtibila ACL 4</option><option>Master Graft 1</option> <option>Graft Bolt 2</option></select></div>" .
-				"<div class='rowSelectAlternate'><select><option>Unassigned</option><option>Russell Wilson</option><option>Marshawn Lynch</option></select></div>" .
-				"</div></td></tr>";	
-				
 			
+				$rows .= "</div>"; #close Row
+				
+				$rows .= "</td></tr>";
+				
+				$numRows++;
 			}
 			end:
+			
 			
 			if($numRows > 0) {
 			
@@ -366,6 +425,90 @@
 		
 		
 		#lookup functions
+		
+		public function createUserSelect() {
+		
+			$sql = "SELECT * FROM users WHERE active='1'";
+			
+			$result =  mysqli_query($this->connection, $sql);
+			
+			$select = "<select onchange='filterUsers()' id='repFilterSelect'>";
+			$select .= "<option value='none'>No Filter</option>";
+			$select .= "<option value='0'>Unassigned</option>";
+			
+			foreach($result as $user) {
+				$usr_id = $user['usr_id'];
+				$uname = $user['uname'];
+			
+				$select .= "<option value='$usr_id'>$uname</option>";
+			
+			}
+			
+			$select .= "</select>";
+			
+			return $select;
+			
+		}
+		
+		public function createTTYPSelectors($caseID) {
+		
+			$caseTTYPSql = "SELECT * FROM case_ttyp WHERE case_id='$caseID'";
+			
+			
+			$caseTTYPResult = $this->query($caseTTYPSql);
+			
+			$selectors = "";
+			
+			foreach($caseTTYPResult as $thisTTYP) {
+			
+				$curSelect = "<select>";
+				$curSelect .= "<option value='0'>Unassigned</option>";
+				
+				$ttyp_id = $thisTTYP['ttyp_id'];
+				$tray_id = $thisTTYP['tray_id'];
+				
+				$tagsMatchingTTYPSql = "SELECT tag FROM ttyp_tag WHERE ttyp_id='$ttyp_id'";
+				$tagsMatchingTTYP = $this->query($tagsMatchingTTYPSql);
+				
+
+				foreach ($tagsMatchingTTYP as $thisTag) {
+					
+					
+					$curTag = $thisTag['tag'];
+					
+					$anotherSql = "SELECT DISTINCT tray_id FROM tray_tag WHERE tag='$curTag'";
+					
+					$trays = mysqli_query($this->connection, $anotherSql);
+					
+					#echo print_r($trays);
+					
+					if(count($trays) >= 2) $trays = $trays[0];
+					
+					foreach($trays as $tray) {
+					
+						#echo print_r($tray);
+					
+						$curTray = $tray['tray_id'];
+						
+						$trayName = $this->findTrayData($curTray, "name");
+					
+						$curSelect .= "<option value='$curTray'>$trayName</option>";
+						
+					
+					}
+				
+				}
+				
+				$curSelect .= "</select>";
+				
+				
+				$selectors .= $curSelect;
+			
+			}
+			#echo $selectors;
+			return $selectors;
+		
+		}
 		
 		public function findCompanyData($cid, $requestedField) {
 		

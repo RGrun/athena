@@ -12,6 +12,13 @@
 	#
 	#Col 2: Notifications
 	
+	/*
+	*TODO:
+	*create CSS class that highlights completed assignments/cases
+	*Make filters work properly
+	*
+	*/
+	
 	include_once "includes.php";
 	
 	session_start();
@@ -118,7 +125,7 @@
 	
 	$dmyCalListBox .= "</div>";
 	
-	$showFiltersButton = "<div class='unselected' id='showFiltersButton'>Show Filters</div>";
+	$showFiltersButton = "<div class='unselected'  onclick='toggleFilters()' id='showFiltersButton'>Show Filters</div>";
 	
 	$dateMenuBar .= $todayButton . $arrowButtonsBox .
 	$dateBox . $dmyCalListBox . $showFiltersButton;
@@ -126,6 +133,29 @@
 	
 	$dateMenuBar .= "</div>"; #close dateMenuBar
 	
+	#filters box
+	$filtersBox = "<div style='display:none;' class='filtersBox'>"; #open filtersBox
+	
+	$assignmentStatusDiv = "<div class='assignmentStatus'>" .
+	"<h3>Assignment Status</h3>";
+	
+	$assignmentStatusSelect = "<select onchange='filterAssignments()' id='assignmentStatusSelect'>" .
+	"<option value='none'>No Filter</option>" .
+	"<option value='pending'>Pending Assignments</option>" .
+	"<option value='complete'>Complete Assignments</option></select>";
+	
+	$assignmentStatusDiv .= $assignmentStatusSelect . "</div>";
+	
+	$repDiv = "<div class='repDiv'>" .
+	"<h3>Representative</h3>";
+	
+	$repDivSelector = $gremlin->createUserSelect();
+	
+	$repDiv .= $repDivSelector . "</div>";
+	
+	$filtersBox .= $assignmentStatusDiv . $repDiv;
+	
+	$filtersBox .= "</div>"; #close filtersBox
 	
 	#Col 1 - Event List
 	$col1 = "<div id='homeCol1'>"; #open homeCol1
@@ -158,15 +188,26 @@
 	
 	$tab1 .= $allEventsTable;
 	
-	########END DUMMY
-	
 	$tab1 .= "</div>"; #close homeTab1
 	
 	#tab 2 - My Events
 	$tab2 = "<div id='homeTab2' style='display: none;'>"; #open homeTab2
 	
-	$tab2 .= "<h2>There's something here!</h2>";
+	$myEventsTable = "<table class='eventsTable'>";
 	
+	$myEventsRows = "<tr><td><div class='headerRow'><h5>Anytime Events</h5></div></td></tr>";
+	
+	$myEventsRows .= $gremlin->buildAnytimeEventsRows($user->ID, $user->teamID, $unixTime, true);
+	
+	$myEventsRows .= "<tr><td><div class='headerRow'><h5>Scheduled Events</h5></div></td></tr>";
+	
+	$myEventsRows .= $gremlin->buildScheduledEventsRows($user->ID, $user->teamID, $unixTime, true);
+	
+	$myEventsTable .= $myEventsRows;
+	
+	$myEventsTable .= "</table>";
+	
+	$tab2 .= $myEventsTable;
 	
 	$tab2 .= "</div>"; #close homeTab2
 	
@@ -213,7 +254,7 @@
 	
 	
 	#assemble and print page
-	$page .= $script . $colTabRow . $dateMenuBar . $col1 . $col2;
+	$page .= $script . $colTabRow . $dateMenuBar . $filtersBox . $col1 . $col2;
 	
 	$page .= $gremlin->buildFooter();
 	

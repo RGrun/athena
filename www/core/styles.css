@@ -87,11 +87,29 @@ body {
 
 /*end calendar header*/
 
+/*filters Box*/
+
+.filtersBox {
+
+	background: #E8E8E6;
+	width: 65%;
+	margin-top: 5px;
+
+}
+
+.assignmentStatus , .repDiv {
+	display: inline-block;
+	margin: 5px 10px;
+	padding: 5px;
+
+
+}
+
+
 /*date menu */
 
 .dateMenuBar {
-	
-	
+		
 	width: 70%;
 	
 	height: 80px
@@ -259,6 +277,12 @@ body {
 
 	margin: 0px;
 	padding: 5px;
+
+}
+
+.complete {
+
+	background: #CCFFCC;
 
 }
 
