@@ -429,6 +429,7 @@
 		public function createUserSelect() {
 		
 			$sql = "SELECT * FROM users WHERE active='1'";
+			echo $sql
 			
 			$result =  mysqli_query($this->connection, $sql);
 			
