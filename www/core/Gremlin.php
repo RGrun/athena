@@ -437,11 +437,8 @@
 			$select .= "<option value='none'>No Filter</option>";
 			$select .= "<option value='0'>Unassigned</option>";
 			
-			$result = mysqli_fetch_assoc($result);
-			
-			echo print_r($result);
-			
-			foreach($result as $user) {
+			while($user = mysqli_fetch_assoc($result)) {
+				
 				$usr_id = $user['usr_id'];
 				$uname = $user['uname'];
 			
