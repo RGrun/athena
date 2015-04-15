@@ -26,13 +26,13 @@
 		}
 		
 		#query wrapper
-		public function query($sql, $alternate = false) {
+		public function query($sql, $direct = false) {
 
 			$mysqliResult = mysqli_query($this->connection, $sql);
 			
 			
 			
-			if($alternate == TRUE) {
+			if($direct == TRUE) {
 				return mysqli_fetch_assoc($mysqliResult);
 			
 			}
@@ -124,7 +124,9 @@
 			
 			$menu .= "<a href='teamActivity.php'><div class='navMenuButtonLeft navUnselected'><span class='navMenuText'><b>Team Activity</b></span></div></a>";
 			
-			$menu .= "<a href='newCase.php'><div class='navMenuButtonLeft navUnselected'><span class='navMenuText'><b>New Case</b></span></div></a>";
+			$menu .= "<a href='data.php'><div class='navMenuButtonLeft navUnselected'><span class='navMenuText'><b>Data</b></span></div></a>";
+			
+			$menu .= "<a href='newCase.php'><div id='newCaseButton' class='navMenuButtonLeft navUnselected'><span class='navMenuText'><b>New Case</b></span></div></a>";
 			
 			
 			#right-aligned buttons
@@ -155,7 +157,7 @@
 		}
 		
 		#used on Home page to return "Anytime Events" rows
-		public function buildAnytimeEventsRows($userID, $teamID, $unixTime, $myEvents = false) {
+		public function buildPickupDropoffRows($userID, $teamID, $unixTime, $myEvents = false) {
 		
 			#for controlling the "none found" label
 			$numRows = 0;
@@ -236,12 +238,28 @@
 					$rows .= "<div data-user='$doUsr' class='normalRow $complete'><div class='rowBox'><span>Drop</span><span><br/> Off</span></div>";
 					$rows .= "<div class='rowText'>$thisAssignID. Drop off <a href='#'>$trayName</a> at <a href='#'>$siteName</a> for $procName w/ $drName.</div>";
 					
-					$selectData = "<select><option value='0'>Unassigned</option>";
+					#Check to see if there's already a user assigned
+					$do_usr_sql = "SELECT do_usr FROM assigns WHERE asgn_id='$thisAssignID'";
+					
+					$do_usr = $this->query($do_usr_sql, true);
+					
+					if($do_usr['do_usr'] != 0) {
+					
+						$do_usr = $do_usr['do_usr'];
+						$do_usr_name = $this->findUserData($do_usr, "uname");
+						$selectData = "<select><option value='0'>Unassigned</option>";
+						$selectData .= "<option selected value='$do_usr'>$do_usr_name</option>";
+					} else {
+						$selectData = "<select class='unassignedSelect'><option selected value='0'>Unassigned</option>";
+					}
+					
+					
 					$availUsers = $this->query("SELECT usr_id, uname FROM users WHERE team_id='$teamID'");
 					
 					foreach($availUsers as $userName) {
 						$localUserId = $userName['usr_id'];
 						$localUserName = $userName['uname'];
+						if($localUserId == $do_usr) continue;
 						$selectData .= "<option value='$localUserId'>$localUserName</option>";
 					}
 					$selectData .= "</select>";
@@ -271,9 +289,6 @@
 				#assemble pick-up events
 				foreach($PUassignments as $thisAssign) {
 				
-					
-				
-					
 					if($thisAssign['status'] == 'Complete') $complete = "complete";
 					else $complete = "pending";
 					
@@ -288,12 +303,28 @@
 					$rows .= "<div data-user='$puUsr' class='normalRow $complete'><div class='rowBox'><span>Pick</span><span><br/> Up</span></div>";
 					$rows .= "<div class='rowText'>$thisAssignID. Pick up <a href='#'>$trayName</a> at <a href='#'>$siteName</a></div>";
 					
-					$selectData = "<select><option value='0'>Unassigned</option>";
+					#Check to see if there's already a user assigned
+					$pu_usr_sql = "SELECT pu_usr FROM assigns WHERE asgn_id='$thisAssignID'";
+					
+					$pu_usr = $this->query($pu_usr_sql, true);
+					
+					if($pu_usr['pu_usr'] != 0) {
+					
+						$pu_usr = $pu_usr['pu_usr'];
+						$pu_usr_name = $this->findUserData($pu_usr, "uname");
+						$selectData = "<select><option value='0'>Unassigned</option>";
+						$selectData .= "<option selected value='$pu_usr'>$pu_usr_name</option>";
+					} else {
+						$selectData = "<select class='unassignedSelect'><option selected value='0'>Unassigned</option>";
+					}
+					
 					$availUsers = $this->query("SELECT usr_id, uname FROM users WHERE team_id='$teamID'");
 					
 					foreach($availUsers as $userName) {
 						$localUserId = $userName['usr_id'];
 						$localUserName = $userName['uname'];
+						
+						if($localUserId == $pu_usr) continue;
 						$selectData .= "<option value='$localUserId'>$localUserName</option>";
 					}
 					$selectData .= "</select>";
@@ -320,7 +351,7 @@
 		
 		}
 		
-		public function buildScheduledEventsRows($userID, $teamID, $unixTime, $myEvents = false) {
+		public function buildCaseEventsRows($userID, $teamID, $unixTime, $myEvents = false) {
 		
 			#for controlling the "none found" label
 			$numRows = 0;
@@ -355,27 +386,45 @@
 			
 			#for each case, check assignments related to current user's team
 			foreach ($cases as $thisCase) {
-				
+			
 				$thisCaseId = $thisCase['case_id'];
 				$thisCaseDTTM = $thisCase['dttm'];
+			
+				# build and process selectors
+				$selectorsAndFlags = $this->createTTYPSelectors($thisCaseId);
 				
 				$rows .= "<tr><td>";
 				
-				#need to add alternate soon
-				$rows .= "<div class='normalRow'>"; #open Row
+				
+				# tray not assigned?
+				if($selectorsAndFlags['trayUnassigned'] == true) {
+					$rows .= "<div class='caseRow rowUnassigned'>"; #open Row
+					$warningText = "<span class='caseRowUnassigned'>Tray is not assigned!</span>";
+				# tray not on site?	
+				} else if ($selectorsAndFlags['trayNotAtSite'] == true) {
+					$warningText = "<span class='caseRowNotAtSite'>Tray is not at site!</span>";
+					$rows .= "<div class='caseRow rowTrayNotAtSite'>"; #open Row
+				# everything is fine
+				} else {				
+					$warningText = "";
+					$rows .= "<div class='caseRow'>"; #open Row				
+				}
+				
 				
 				$caseTimeStamp = strtotime($thisCaseDTTM);
-				$dateForCircle = date("ha", $caseTimeStamp);
+				$dateForBox = date("g:i a", $caseTimeStamp);
 				
-				$rows .= "<div class='rowCircle'><h3>$dateForCircle</h3></div>";
+				$rows .= "<div class='caseTime'><h3>$dateForBox</h3></div>";
 				
 				$siteName = $this->findSiteData($thisCase['site_id'], "name");
 				$procName = $this->findProcedureData($thisCase['proc_id'], "name");
 				$drName = $this->findDoctorData($thisCase['doc_id'], "name");
 				
-				$rows .= "<div class='rowTextScheduled'>$procName at $siteName w/ $drName</div>";
+				$rows .= "<div class='caseTextScheduled'>$procName at $siteName w/ $drName</div>";
+
+				$rows .= "<div class='trayWarning'>$warningText</div>";
 				
-				$selectors = $this->createTTYPSelectors($thisCaseId);
+				$selectors = $selectorsAndFlags['selectors'];
 				
 				$rows .= "<div class='traysNeeded'>$selectors</div>";
 				
@@ -454,20 +503,25 @@
 			
 		}
 		
+		#NEED TO REDO LOGIC IN THIS SECTION
 		public function createTTYPSelectors($caseID) {
 		
 			$caseTTYPSql = "SELECT * FROM case_ttyp WHERE case_id='$caseID'";
 			
+			$trayNotAtSite = false;
+			$trayUnassigned = false;
+			
 			
 			$caseTTYPResult = $this->query($caseTTYPSql);
+			
+			# find data about site
+			$caseSql = "SELECT * FROM cases WHERE case_id='$caseID'";
+			$thisCase = $this->query($caseSql, true);
 			
 			$selectors = "";
 			
 			foreach($caseTTYPResult as $thisTTYP) {
 			
-				$curSelect = "<select>";
-				$curSelect .= "<option value='0'>Unassigned</option>";
-				
 				$ttyp_id = $thisTTYP['ttyp_id'];
 				$tray_id = $thisTTYP['tray_id'];
 				
@@ -495,6 +549,41 @@
 						$curTray = $tray['tray_id'];
 						
 						$trayName = $this->findTrayData($curTray, "name");
+						
+						# find data about tray
+						$traySql = "SELECT * FROM trays WHERE tray_id='$curTray'";
+						$trayData = $this->query($traySql, true);
+						
+						# tray is at a site, but not the correct site
+						if($trayData['atnow'] == "site" && $trayData['site_id'] != $thisCase['site_id']) {
+							$trayNotAtSite = true;
+							
+							$siteName = $this->findSiteData($trayData['site_id'], "name");
+							$curSelect = "<select class='trayNotAtSite'>";
+							$curSelect .= "<option value='0'>Unassigned</option>";
+							$curSelect .= "<option value='$curTray' selected>$trayName</option>";
+							
+							continue;
+							
+						#tray is not assigned
+						} else if($tray_id == 0) {
+							$trayUnassigned = true;
+							
+							$curSelect = "<select class='trayUnassigned'>";
+							$curSelect .= "<option value='0' selected>Unassigned</option>";
+							
+							continue;
+						
+						#tray is at site
+						} else {
+							$curSelect = "<select>";
+							$curSelect .= "<option value='0'>Unassigned</option>";
+							$curSelect .= "<option value='$curTray' selected>$trayName</option>";
+							
+							continue;
+						
+						}
+						
 					
 						$curSelect .= "<option value='$curTray'>$trayName</option>";
 						
@@ -510,7 +599,14 @@
 			
 			}
 			#echo $selectors;
-			return $selectors;
+			
+			$selectorAndFlags = array(
+				'trayUnassigned' => $trayUnassigned,
+				'trayNotAtSite' => $trayNotAtSite,
+				'selectors' => $selectors,
+			);
+			
+			return $selectorAndFlags;
 		
 		}
 		

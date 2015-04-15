@@ -8,12 +8,17 @@
 body {
 
 	font-family: 'Oxygen', sans-serif;
+	
+	margin: 0px;
 
+	background: #eaebec; /* background gray */
 }
 
 #mainContentWrapper {
 
-	margin: 5px 10%;
+	/* margin: 5px 10%; */
+	
+	
 
 }
 
@@ -22,32 +27,46 @@ body {
 #homeCol1 {
 
 	float: left;
+	
+	margin-left: 20px;
+	
+	width: 860px;
+	
+	position: relative;
+	top: -10px;
 
 }
 
 #homeCol2 {
+	
+	width: 480px;
 
-	float: right;
+	position: absolute;
 	
-	width: 30%;
-
-	position: relative;
+	left: 920px;
 	
-	top: -140px;
+	top: 90px;
 	
-	left: 20px;
 }
 
 /* calendar header */
 .colTabRow {
 	
-	width: 70%;
+	width: 860px;
+	
+	margin-left: 20px;
+	
+	height: 65px;
 
 }
 
 .colTabRow div  {
 
 	display: inline-block;
+	
+	cursor: pointer;
+	
+	
 
 }
 
@@ -61,28 +80,31 @@ body {
 
 #tab1Button, #tab2Button {
 
-	margin: 0px 10px;
+	
+	
 	padding: 10px;
 	
 	font-family: 'Open Sans', sans-serif;
 	
 	font-weight: bold;
 	
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
+}
+
+.tabUnselected {
+
+	background: #d0d2d6;
 
 }
 
-.unselected {
-
-	background: #E8E8E6;
-
+.tabSelected {
+	background:  #71AEBF; /* nav-bar blue */
+	
+	color: white;
 }
 
 .selected {
-	background: #4DB84D;	
-	
-	color: white;
+	background: white !important;
+	color: #71AEBF !important; /* nav-bar blue */
 }
 
 /*end calendar header*/
@@ -92,8 +114,11 @@ body {
 .filtersBox {
 
 	background: #E8E8E6;
-	width: 65%;
+	width: 60%;
 	margin-top: 5px;
+	height: 80px;
+	
+	margin-left: 20px;
 
 }
 
@@ -105,15 +130,23 @@ body {
 
 }
 
+.assignmentStatus h3, .repDiv h3 {
+	margin: 5px 0px;
+
+}
+
 
 /*date menu */
 
 .dateMenuBar {
 		
-	width: 70%;
+	width: 860px;
 	
-	height: 80px
+	height: 60px;
+	
+	margin-left: 20px;
 
+	background: #71AEBF; /* nav-bar blue */
 }
 
 .dateMenuBar div {
@@ -126,27 +159,41 @@ body {
 }
 
 #todayButton  {
-
-	bottom: 10px;
+	bottom: 29px;
+	
+	color: white;
+	
+	height: 73%;
+	width: 8%;
+	
+	text-align: center;
 
 	font-family: 'Open Sans', sans-serif;
 	
 	font-weight: bold;
-	
-	padding: 5px 10px;
+
+	background: #4b8799;
+
 	margin: 3px;
 	
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
+	
+	cursor: pointer;
+
+}
+
+#todayButton small {
+	position: relative;
+
+	top: 20%;
 
 }
 
 #arrowButtonsBox {
 
-	bottom: 10px;
+	bottom: 20px;
 
 	position: relative;
-	left: 15px;
+	left: -14px;
 	margin-left: 15px;
 
 }
@@ -156,13 +203,18 @@ body {
 	font-family: 'Open Sans', sans-serif;
 	
 	padding: 5px 20px;
-	margin: 3px;
+	margin: 1px;
 	
 	
 	font-weight: bold;
 	
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
+	
+	background: #4b8799;
+	
+	color: white;
+	
+	
+	cursor: pointer;
 
 }
 
@@ -171,64 +223,86 @@ body {
 	font-family: 'Open Sans', sans-serif;
 
 	position: relative;
+	bottom: 10px;
 	left: 20px;
 	margin: 0px 40px;
 	text-align: center;
 	
 	width: 250px;
 	
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
+	color: white;
 	
 }
 
 #dateBox h3 {
 
-
-
-	margin: 5px 0px;
+	margin: 1px 0px;
 
 }
 
 
 #calListBox {
 
-	bottom: 10px;
+	bottom: 20px;
 
 	position: relative;
 	margin-left: 15px;
 	
+	
 	font-weight: bold;
 	
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
 
 }
 
 #calButton, #listButton  {
+
+	position: relative;
+	
 
 	font-family: 'Open Sans', sans-serif;
 	
 	padding: 5px 10px;
 	margin: 1px;
 	
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
+	color: white;
+	
+	background: #4b8799;
+	
+	
+	cursor: pointer;
+}
+
+#calButton small, #listButton small {
+	position: relative;
+	bottom: 2px;
 
 }
 
 #showFiltersButton {
 
-	bottom: 10px;
+	bottom: 29px;
 	
 	font-family: 'Open Sans', sans-serif;
+	
+	background: #4b8799;
+	
+	left: 32px;
+	
+	height: 73%;
+	width: 15%;
+	
+	color: white;
+	
+	font-weight: bold;
+	
+	text-align: center;
 
-	
-	left: 5px;
-	
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
-	
+	cursor: pointer;
+}
+
+#showFiltersButton span {
+	position: relative;
+	top: 10px;
 
 }
 
@@ -238,37 +312,33 @@ body {
 .eventsTable {
 	margin-top: 10px;
 	
-	-webkit-border-radius: 5px;
-
-	border-radius: 5px;
-	
-	width: 145%;
+	width: 850px;
 	
 	
 }
 
-.eventsTable a {
+.eventsTable td {
+	margin-left: 5px;
 
-	text-decoration: none;
+}
+
+.eventsTable a {
 	
-	color: #4DB84D;
+	color: #71AEBF; /* nav-bar blue */
 	
 	font-weight: bold;
 
 }
 
 .headerRow {	
-	background: #4DB84D;
+	background: #f2f4f5; /*header row background */
 	
 	color: white;
 	
 	font-size:20px;
 	
-	width: 720px;
-	
-	-webkit-border-radius: 5px;
-
-	border-radius: 5px;
+	width: 855px;
+	height: 20px;
 	
 
 }
@@ -277,6 +347,15 @@ body {
 
 	margin: 0px;
 	padding: 5px;
+	
+	color: gray;
+	
+	font-weight: normal;
+	font-size: 14px;
+	
+	position: relative;
+	
+	top: -5px;
 
 }
 
@@ -288,18 +367,16 @@ body {
 
 .normalRow, .normalRowAlternate {
 
-	border: 3px solid #E8E8E6;
+	
+	background: white;
 	
 	position: relative;
 	left: 7px;
-	width: 700px;
+	width: 840px;
 	
-	height: 90px;
-	
-	-webkit-border-radius: 5px;
+	height: 60px;
 
-	border-radius: 5px;
-	
+	margin: 0;
 	
 }
 
@@ -311,7 +388,7 @@ body {
 	
 	position: relative;
 	
-	top: 10px;
+	top: 4px;
 	
 	margin: 0px 10px;
 	
@@ -344,26 +421,41 @@ body {
 
 	position: relative;
 	
-	top: 40px;
+	right: 5px;
+	
+	top: -10px;
 	
 	float: right;
 
 }
 
-.normalRow .rowSelectAlternate, .normalRowAlternate .rowSelectAlternate {
-
-	position: relative;
+.normalRow select, .normalRowAlternate select {
+	height: 42px;
 	
-	clear: right;
-	
-	float: right;
+	width: 200px;
 
 }
+
+.unassignedSelect {
+	background: #f2e872 !important; /* unassigned select background (yellow) */
+
+}
+
 
 
 .normalRow {
 
 	
+
+}
+
+/* Case Rows */
+
+.caseRow {
+
+	background: white;
+	
+	height: 100px;
 
 }
 
@@ -373,28 +465,127 @@ body {
 
 }
 
-.rowCircle {
-	border: 1px solid black;
+.caseTime {
+	
+	background: #61a1b2; /* Case Table Blue */
 	
 	float: left;
 	
-	margin: 5px 5px 2px 5px;
+	margin: 0px 5px 0px 0px;
 
-	height: 55px;
-	width: 55px;
+	height: 100px;
+	width: 100px;
 	
-	-webkit-border-radius: 50%;
-
-	border-radius: 50%;
-
 }
 
-.rowCircle h3 {
+.caseTime h3 {
 
 	position: relative;
 	
-	top: 8px;
-	margin: 5px;
+	top: 35px;
+	margin: 0px 5px 0px 0px;
+	
+	color: white;
+	
+	text-align: center;
+
+}
+
+.caseTextScheduled {
+
+	position: relative;
+	top: 10px;
+	left: 5px;
+
+}
+
+.rowSelectAlternate {
+
+	position: relative;
+	float: right;
+	
+	top: 30px;
+	right: 5px;
+
+}
+
+.rowSelectAlternate select {
+	width: 150px;
+	height: 42px;
+
+}
+
+.rowUnassigned {
+	background: #ffd2b2 !important; /* tray unassigned (red) */
+
+
+}
+
+.rowUnassigned .rowSelectAlternate {
+
+	position: relative;
+	top: 15px !important;
+
+}
+
+.rowUnassigned .caseTime {
+	background: #ed785b !important;
+
+
+}
+
+.rowTrayNotAtSite {
+	background: #fffdbf !important; 
+
+}
+
+.rowTrayNotAtSite .caseTime {
+	background: #f2e872 !important;
+	color: black !important;
+
+}
+
+.rowUnassigned .traysNeeded {
+
+	top: 15px !important;
+	left: 5px !important;
+
+}
+
+.traysNeeded {
+
+	float: left;
+	position: relative;
+
+	top: 30px;
+
+}
+
+.traysNeeded select {
+
+	width: 150px;
+	height: 42px;
+	margin: 0px 5px 0px 5px;
+
+}
+
+
+
+.trayWarning {
+
+	position: relative;
+	
+	width: 250px;
+	
+	left: 600px;
+	top: -10px;
+
+}
+
+.trayWarning span {
+	font-size: 12px;
+	
+	float: right;
 
 }
 
@@ -411,6 +602,12 @@ body {
 
 }
 
+.trayUnassigned {
+
+	background: #ed785b; 
+
+}
+
 
 .rowTextScheduled {
 
@@ -422,16 +619,6 @@ body {
 
 }
 
-.traysNeeded {
-
-	float: left;
-	clear: left;
-	
-	position: relative;
-	
-	left: 30px;
-
-}
 
 
 /*Notifications Table stuff */
@@ -447,23 +634,17 @@ body {
 	margin: 0px;
 	padding: 5px;
 	
-	background: #4DB84D;
-	
-	color: white;
 	
 	font-size:20px;
 	
 	width: 400px;
-	
-	-webkit-border-radius: 5px;
 
-	border-radius: 5px;
 
 }
 
 .notification  {
 
-	border: 5px solid #E8E8E6;
+	background: white;
 	
 	position: relative;
 	
@@ -471,11 +652,7 @@ body {
 	
 	width: 380px;
 	
-	padding: 5px;
-	
-	-webkit-border-radius: 5px;
-
-	border-radius: 5px;
+	padding: 10px;
 	
 	float: left;
 }
@@ -486,6 +663,7 @@ body {
 	
 	top: 1px;
 
+	font-size: 14px;
 	
 	width: 350px;
 	
@@ -501,24 +679,16 @@ body {
 	
 	width: 20px;
 	
-	background: #E8E8E6;
-	
 	padding: 1px;
 	
 	text-align: center;
 	
-	-webkit-border-radius: 5px;
-
-	border-radius: 5px;
+	cursor: pointer;
 }
 
 .notificationsTableGoToButton {
 
 	background: #E8E8E6;
-	
-	-webkit-border-radius: 5px;
-
-	border-radius: 5px;
 	
 	padding: 5px;
 	
@@ -526,7 +696,7 @@ body {
 	
 	float: left;
 
-
+	cursor: pointer;
 }
 
 /*Nav-Menu stuff*/
@@ -535,19 +705,14 @@ body {
 
 	font-family: 'Open Sans', sans-serif;
 
-
-
-	margin: 0px auto;
 	
 	width: 100%;
 	position: relative;
 	
-	background:  #E8E8E6;
+	background:  #71AEBF; /* nav-bar blue */
 	
 	
-	-webkit-border-radius: 5px;
-
-	border-radius: 5px;
+	color: white;
 
 }
 
@@ -555,27 +720,23 @@ body {
 	
 	display: inline-block;
 	
-	text-decoration: none;
+	
 	
 	font-size: 10pt;
 	
-	
-	-webkit-border-radius: 5px;
-
-	border-radius: 5px;
-
 }
 
 .navSelected {
-
 	color: white;
-	
-	background: #4DB84D;
+
+	text-decoration: underline;
 
 }
 
 .navUnselected {
-	color: black;
+	color: white;
+	
+	text-decoration: none;
 
 }
 
@@ -604,6 +765,7 @@ body {
 	
 	transition: all 1s ease;
 	
+	text-decoration: underline;
 	
 }
 
@@ -625,6 +787,10 @@ body {
 	
 }
 
-
+#newCaseButton {
+	
+	background: #4a8698;
+	
+}
 
 

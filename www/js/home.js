@@ -8,22 +8,22 @@
 		$('#homeTab2').hide('fast');
 		$('#homeTab1').show('fast');
 		
-		$("#tab1Button").removeClass("unselected");
-		$("#tab1Button").addClass("selected");
+		$("#tab1Button").removeClass("tabUnselected");
+		$("#tab1Button").addClass("tabSelected");
 		
-		$('#tab2Button').removeClass("selected");
-		$("#tab2Button").addClass("unselected");
+		$('#tab2Button').removeClass("tabSelected");
+		$("#tab2Button").addClass("tabUnselected");
 	}
 	
 	function tab2Toggle() {
 		$('#homeTab1').hide('fast');
 		$('#homeTab2').show('fast');
 		
-		$("#tab2Button").removeClass("unselected");
-		$("#tab2Button").addClass("selected");
+		$("#tab2Button").removeClass("tabUnselected");
+		$("#tab2Button").addClass("tabSelected");
 		
-		$('#tab1Button').removeClass("selected");
-		$("#tab1Button").addClass("unselected");
+		$('#tab1Button').removeClass("tabSelected");
+		$("#tab1Button").addClass("tabUnselected");
 	}
 	
 	function toggleFilters() {

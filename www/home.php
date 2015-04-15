@@ -43,7 +43,7 @@
 	
 	$tabRow = "<div class='tabRowHeader'><h3>Calendar</h3></div>"; #tabRow
 	
-	$tabRow .= "<div id='tab1Button' onclick='tab1Toggle()' class='selected'>All Events</div><div id='tab2Button' class='unselected' onclick='tab2Toggle()'>My Events</div>";
+	$tabRow .= "<div id='tab1Button' onclick='tab1Toggle()' class='tabSelected'>All Events</div><div id='tab2Button' class='tabUnselected' onclick='tab2Toggle()'>My Events</div>";
 	
 	$tabRow .= "</div>"; #end tabRow
 	
@@ -72,14 +72,14 @@
 	
 	$todaySelected = "unselected";
 	
-	#current unixTime within one day? !!!UNTESTED!!!
+	/* #current unixTime within one day? !!!UNTESTED!!!
 	if($unixTime >= (time() - (12 * 60 * 60)) &&
 		$unixTime <= (time() + (12 * 60 * 60))) {
 		
 			$todaySelected = "selected";
-		} 
+		}  */
 	
-	$todayButton = "<a href='home.php'><div id='todayButton' class='$todaySelected'><small>Today</small></div></a>";
+	$todayButton = "<a href='home.php'><div id='todayButton'><small>Today</small></div></a>";
 
 	$arrowButtonsBox = "<div id='arrowButtonsBox'>";
 	
@@ -125,7 +125,7 @@
 	
 	$dmyCalListBox .= "</div>";
 	
-	$showFiltersButton = "<div class='unselected'  onclick='toggleFilters()' id='showFiltersButton'>Show Filters</div>";
+	$showFiltersButton = "<div class='unselected'  onclick='toggleFilters()' id='showFiltersButton'><span>Show Filters</span></div>";
 	
 	$dateMenuBar .= $todayButton . $arrowButtonsBox .
 	$dateBox . $dmyCalListBox . $showFiltersButton;
@@ -168,17 +168,17 @@
 	
 	$allEventsTable = "<table class='eventsTable'>";
 	
-	$allEventsRows = "<tr><td><div class='headerRow'><h5>Anytime Events</h5></div></td></tr>";
+	$allEventsRows = "<tr><td><div class='headerRow'><h5>Pick Ups and Drop Offs</h5></div></td></tr>";
 	
 	
 	#Build "Anytime Events"
-	$allEventsRows .= $gremlin->buildAnytimeEventsRows($user->ID, $user->teamID, $unixTime);
+	$allEventsRows .= $gremlin->buildPickupDropoffRows($user->ID, $user->teamID, $unixTime);
 	
 	
-	$allEventsRows .= "<tr><td><div class='headerRow'><h5>Scheduled Events</h5></div></td></tr>";
+	$allEventsRows .= "<tr><td><div class='headerRow'><h5>Cases</h5></div></td></tr>";
 	
 	
-	$allEventsRows .= $gremlin->buildScheduledEventsRows($user->ID, $user->teamID, $unixTime);
+	$allEventsRows .= $gremlin->buildCaseEventsRows($user->ID, $user->teamID, $unixTime);
 	
 	
 	
@@ -195,13 +195,13 @@
 	
 	$myEventsTable = "<table class='eventsTable'>";
 	
-	$myEventsRows = "<tr><td><div class='headerRow'><h5>Anytime Events</h5></div></td></tr>";
+	$myEventsRows = "<tr><td><div class='headerRow'><h5>Pick Ups and Drop Offs</h5></div></td></tr>";
 	
-	$myEventsRows .= $gremlin->buildAnytimeEventsRows($user->ID, $user->teamID, $unixTime, true);
+	$myEventsRows .= $gremlin->buildPickupDropoffRows($user->ID, $user->teamID, $unixTime, true);
 	
-	$myEventsRows .= "<tr><td><div class='headerRow'><h5>Scheduled Events</h5></div></td></tr>";
+	$myEventsRows .= "<tr><td><div class='headerRow'><h5>Cases</h5></div></td></tr>";
 	
-	$myEventsRows .= $gremlin->buildScheduledEventsRows($user->ID, $user->teamID, $unixTime, true);
+	$myEventsRows .= $gremlin->buildCaseEventsRows($user->ID, $user->teamID, $unixTime, true);
 	
 	$myEventsTable .= $myEventsRows;
 	
