@@ -7,6 +7,8 @@
 
 body {
 
+	font-size: 14px;
+
 	font-family: 'Oxygen', sans-serif;
 	
 	margin: 0px;
@@ -58,7 +60,7 @@ body {
 	
 	margin-left: 20px;
 	
-	height: 65px;
+	height: 61px;
 
 }
 
@@ -161,11 +163,12 @@ body {
 }
 
 #todayButton  {
-	bottom: 29px;
+	bottom: 34px;
+	left: -3px;
 	
 	color: white;
 	
-	height: 73%;
+	height: 80%;
 	width: 8%;
 	
 	text-align: center;
@@ -183,10 +186,12 @@ body {
 
 }
 
+
+
 #todayButton small {
 	position: relative;
 
-	top: 20%;
+	top: 25%;
 
 }
 
@@ -223,9 +228,12 @@ body {
 #dateBox {
 
 	font-family: 'Open Sans', sans-serif;
+	
+	font-weight: bold;
+	font-size: 16px;
 
 	position: relative;
-	bottom: 10px;
+	bottom: 11px;
 	left: 20px;
 	margin: 0px 40px;
 	text-align: center;
@@ -282,15 +290,15 @@ body {
 
 #showFiltersButton {
 
-	bottom: 29px;
+	bottom: 34px;
 	
 	font-family: 'Open Sans', sans-serif;
 	
 	background: #61A1B2;
 	
-	left: 32px;
+	left: 50px;
 	
-	height: 73%;
+	height: 80%;
 	width: 15%;
 	
 	color: white;
@@ -304,7 +312,7 @@ body {
 
 #showFiltersButton span {
 	position: relative;
-	top: 10px;
+	top: 15px;
 
 }
 
