@@ -1,4 +1,4 @@
-/*Styles.css for Athena*/
+/*Styles.css for Athena Home Page*/
 
 @import url(http://fonts.googleapis.com/css?family=Oxygen:400,700);
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,700);
@@ -12,6 +12,8 @@ body {
 	margin: 0px;
 
 	background: #eaebec; /* background gray */
+	
+	color: #5B626E;
 }
 
 #mainContentWrapper {
@@ -172,7 +174,7 @@ body {
 	
 	font-weight: bold;
 
-	background: #4b8799;
+	background: #61A1B2;
 
 	margin: 3px;
 	
@@ -284,7 +286,7 @@ body {
 	
 	font-family: 'Open Sans', sans-serif;
 	
-	background: #4b8799;
+	background: #61A1B2;
 	
 	left: 32px;
 	
@@ -331,9 +333,9 @@ body {
 }
 
 .headerRow {	
-	background: #f2f4f5; /*header row background */
+	background: #D0D2D6; /*header row background */
 	
-	color: white;
+	color: #5B626E ;
 	
 	font-size:20px;
 	
@@ -437,7 +439,7 @@ body {
 }
 
 .unassignedSelect {
-	background: #f2e872 !important; /* unassigned select background (yellow) */
+	background: #f2e772 !important; /* unassigned select background (yellow) */
 
 }
 
@@ -467,7 +469,7 @@ body {
 
 .caseTime {
 	
-	background: #61a1b2; /* Case Table Blue */
+	background: #71aebf;
 	
 	float: left;
 	
@@ -515,8 +517,25 @@ body {
 
 }
 
+.rowSelectAlternateNotOnSite {
+
+	position: relative;
+	float: right;
+	
+	top: 15px;
+	right: 5px;
+
+}
+
+.rowSelectAlternateNotOnSite select {
+	width: 150px;
+	height: 42px;
+
+}
+
+
 .rowUnassigned {
-	background: #ffd2b2 !important; /* tray unassigned (red) */
+	background: #F9D2B3  !important; /* tray unassigned (red) */
 
 
 }
@@ -529,23 +548,39 @@ body {
 }
 
 .rowUnassigned .caseTime {
-	background: #ed785b !important;
+	background: #ed785a !important;
 
 
 }
 
 .rowTrayNotAtSite {
-	background: #fffdbf !important; 
+	background: #FEFDBF !important; 
 
 }
 
-.rowTrayNotAtSite .caseTime {
-	background: #f2e872 !important;
+.rowTrayNotAtSiteSelect, .trayAssignedSelect {
+		position: relative;
+		bottom: 0px;
+}
+
+.rowTrayNotAtSiteSelect {
+
+	
+	background: #f2e772 !important; /* unassigned select background (yellow) */
+}
+
+.rowTrayNotAtSite .caseTime  {
+	background: #f2e772 !important;
 	color: black !important;
 
 }
 
-.rowUnassigned .traysNeeded {
+.rowTrayNotAtSite .caseTime h3  {
+	color: black !important;
+
+}
+
+.rowUnassigned .traysNeededUnassigned {
 
 	top: 15px !important;
 	left: 5px !important;
@@ -569,6 +604,36 @@ body {
 
 }
 
+.traysNeededUnassigned {
+	float: left;
+	position: relative;
+
+	top: 30px;
+	
+
+}
+
+.traysNeededUnassigned select {
+	width: 150px;
+	height: 42px;
+	margin: 0px 5px 0px 5px;
+
+
+}
+
+.traysNeededTrayNotAtSite {
+	float: left;
+	position: relative;
+	top: 15px;
+}
+
+.traysNeededTrayNotAtSite select {
+	width: 150px;
+	height: 42px;
+	margin: 0px 5px 0px 5px;
+
+
+}
 
 
 .trayWarning {
@@ -604,7 +669,7 @@ body {
 
 .trayUnassigned {
 
-	background: #ed785b; 
+	background: #ed785a; 
 
 }
 
@@ -712,7 +777,7 @@ body {
 	background:  #71AEBF; /* nav-bar blue */
 	
 	
-	color: white;
+	color: #5B626E ;
 
 }
 
@@ -789,7 +854,7 @@ body {
 
 #newCaseButton {
 	
-	background: #4a8698;
+	background: #4B8799;
 	
 }
 

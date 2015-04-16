@@ -7,7 +7,7 @@
 	
 	class Gremlin extends dbConnector {
 	
-		private $connection;
+		public $connection;
 		
 		public function __construct() {
 		
@@ -92,7 +92,7 @@
 		
 
 		#MUST BE CALLED AFTER session_start() ON PAGE
-		public function buildMenu($pageName) {
+		public function buildMenu($pageName, $whichPageForCss) {
 				
 			#We need HTML headers first
 			#this also handles the opening <body> tag for the page
@@ -101,7 +101,19 @@
 			$headers .= "<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />";
 			$headers .= "<meta content='utf-8' http-equiv='encoding'>";
 			$headers .= "<title>Athena System | $pageName</title>";
-			$headers .= "<link rel='stylesheet' type='text/css' href='core/styles.css'>";
+			
+			switch($whichPageForCss) {
+				case "home":
+					$headers .= "<link rel='stylesheet' type='text/css' href='core/homeStyles.css'>";
+					break;
+			
+				default:
+					$headers .= "<link rel='stylesheet' type='text/css' href='core/homeStyles.css'>";
+					break;
+			}
+			
+			
+			
 			$headers .= "<script src='js/jquery-2-1-3.js'></script>";
 			$headers .= "</head><body>";
 			
@@ -247,10 +259,10 @@
 					
 						$do_usr = $do_usr['do_usr'];
 						$do_usr_name = $this->findUserData($do_usr, "uname");
-						$selectData = "<select><option value='0'>Unassigned</option>";
+						$selectData = "<select id='assignmentSelect_$thisAssignID' data-type='dropoff' data-assignment='$thisAssignID' onchange='updateUserAssign($thisAssignID)'><option value='0'>Unassigned</option>";
 						$selectData .= "<option selected value='$do_usr'>$do_usr_name</option>";
 					} else {
-						$selectData = "<select class='unassignedSelect'><option selected value='0'>Unassigned</option>";
+						$selectData = "<select id='assignmentSelect_$thisAssignID' data-type='dropoff' data-assignment='$thisAssignID'  onchange='updateUserAssign($thisAssignID)' class='unassignedSelect'><option selected value='0'>Unassigned</option>";
 					}
 					
 					
@@ -312,10 +324,10 @@
 					
 						$pu_usr = $pu_usr['pu_usr'];
 						$pu_usr_name = $this->findUserData($pu_usr, "uname");
-						$selectData = "<select><option value='0'>Unassigned</option>";
+						$selectData = "<select id='assignmentSelect_$thisAssignID' data-type='pickup' data-assignment='$thisAssignID'  onchange='updateUserAssign($thisAssignID)'><option value='0'>Unassigned</option>";
 						$selectData .= "<option selected value='$pu_usr'>$pu_usr_name</option>";
 					} else {
-						$selectData = "<select class='unassignedSelect'><option selected value='0'>Unassigned</option>";
+						$selectData = "<select id='assignmentSelect_$thisAssignID' data-type='pickup' data-assignment='$thisAssignID'  onchange='updateUserAssign($thisAssignID)' class='unassignedSelect'><option selected value='0'>Unassigned</option>";
 					}
 					
 					$availUsers = $this->query("SELECT usr_id, uname FROM users WHERE team_id='$teamID'");
@@ -389,19 +401,22 @@
 			
 				$thisCaseId = $thisCase['case_id'];
 				$thisCaseDTTM = $thisCase['dttm'];
+				
+				$cmp_id = $this->findTeamData($userID, "cmp_id");
+				
 			
 				# build and process selectors
-				$selectorsAndFlags = $this->createTTYPSelectors($thisCaseId);
+				$selectorsAndFlags = $this->createTTYPSelectors($thisCaseId, $cmp_id);
 				
 				$rows .= "<tr><td>";
 				
 				
 				# tray not assigned?
-				if($selectorsAndFlags['trayUnassigned'] == true) {
+				if($selectorsAndFlags['trayUnassigned'] == 1) {
 					$rows .= "<div class='caseRow rowUnassigned'>"; #open Row
 					$warningText = "<span class='caseRowUnassigned'>Tray is not assigned!</span>";
 				# tray not on site?	
-				} else if ($selectorsAndFlags['trayNotAtSite'] == true) {
+				} else if ($selectorsAndFlags['trayNotAtSite'] == 1) {
 					$warningText = "<span class='caseRowNotAtSite'>Tray is not at site!</span>";
 					$rows .= "<div class='caseRow rowTrayNotAtSite'>"; #open Row
 				# everything is fine
@@ -426,21 +441,39 @@
 				
 				$selectors = $selectorsAndFlags['selectors'];
 				
-				$rows .= "<div class='traysNeeded'>$selectors</div>";
-				
+				if($selectorsAndFlags['trayUnassigned'] == 1) {
+					$rows .= "<div class='traysNeededUnassigned'>$selectors</div>";
+				} else if($selectorsAndFlags['trayNotAtSite'] == 1) {
+					$rows .= "<div class='traysNeededTrayNotAtSite'>$selectors</div>";
+				} else {
+					$rows .= "<div class='traysNeeded'>$selectors</div>";
+				}
+							
 				#rowSelectAlternate
-				$selectData = "<select><option value='0'>Unassigned</option>";
-				$sql = "SELECT usr_id, uname FROM users WHERE team_id='$teamID'";
-				$availUsers = $this->query($sql);
+				$selectData = "<select id='caseTeamSelect_$thisCaseId' onchange='updateTeamForCase($thisCaseId)'>";
+				$sql = "SELECT team_id, name FROM teams WHERE team_id='$teamID'";
+				$availTeams = $this->query($sql);
 					
-				foreach($availUsers as $userName) {
-					$localUserId = $userName['usr_id'];
-					$localUserName = $userName['uname'];
-					$selectData .= "<option value='$localUserId'>$localUserName</option>";
+				foreach($availTeams as $teamName) {
+					$localTeamId = $teamName['team_id'];
+					$localTeamName = $teamName['name'];
+					
+					if($localTeamId == $thisCase['team_id']) {
+						$selectData .= "<option value='0'>Unassigned</option>";
+						$selectData .= "<option value='$localTeamId' selected>$localTeamName</option>";	
+					} else {	
+						$selectData .= "<option value='0'>Unassigned</option>";	
+					}
+					if($localTeamId == $thisCase['team_id']) continue;
+					$selectData .= "<option value='$localTeamId'>$localTeamName</option>";
 				}
 				$selectData .= "</select>";
 				
-				$rows .= "<div class='rowSelectAlternate'>$selectData</div>";
+				if($selectorsAndFlags['trayNotAtSite'] == true) {
+					$rows .= "<div class='rowSelectAlternateNotOnSite'>$selectData</div>";
+				} else {
+					$rows .= "<div class='rowSelectAlternate'>$selectData</div>";
+				}
 			
 			
 				$rows .= "</div>"; #close Row
@@ -503,241 +536,460 @@
 			
 		}
 		
-		#NEED TO REDO LOGIC IN THIS SECTION
-		public function createTTYPSelectors($caseID) {
+		public function createTTYPSelectors($caseID, $userCmpId) {
 		
-			$caseTTYPSql = "SELECT * FROM case_ttyp WHERE case_id='$caseID'";
-			
-			$trayNotAtSite = false;
-			$trayUnassigned = false;
-			
-			
-			$caseTTYPResult = $this->query($caseTTYPSql);
-			
-			# find data about site
-			$caseSql = "SELECT * FROM cases WHERE case_id='$caseID'";
-			$thisCase = $this->query($caseSql, true);
-			
+			$isATrayNotAssigned = 0;
+			$isATrayNotAtSite = 0;
+		
 			$selectors = "";
 			
-			foreach($caseTTYPResult as $thisTTYP) {
+			# 1. get tray types needed for case
+			$trayTypes = $this->mapCaseTTYP($caseID);
 			
-				$ttyp_id = $thisTTYP['ttyp_id'];
-				$tray_id = $thisTTYP['tray_id'];
+			
+			foreach($trayTypes as $curType) {
+			
+				# returns <option> rows
+				$optionRowsWrapped = $this->createTTYPSelector($curType, $userCmpId, $caseID);
 				
-				$tagsMatchingTTYPSql = "SELECT tag FROM ttyp_tag WHERE ttyp_id='$ttyp_id'";
-				$tagsMatchingTTYP = $this->query($tagsMatchingTTYPSql);
+				$ttyp_id = $curType['ttyp_id'];
 				
-
-				foreach ($tagsMatchingTTYP as $thisTag) {
+				if($optionRowsWrapped['isTrayNotAssigned'] == 1) {
+					$isATrayNotAssigned = 1;
+					$selector = "<select id='ttypSelect_$ttyp_id' class='trayUnassigned' onchange='updateTrayTTYP($ttyp_id, $caseID)'>";				
+					$selector .= $optionRowsWrapped['optionRows'];				
+					$selector .= "</select>";
+				
+				} else if($optionRowsWrapped['isTrayNotAtSite'] == 1) {
+					$isATrayNotAtSite = 1;
+					$selector = "<select id='ttypSelect_$ttyp_id' class='rowTrayNotAtSiteSelect' onchange='updateTrayTTYP($ttyp_id, $caseID)'>";					
+					$selector .= $optionRowsWrapped['optionRows'];			
+					$selector .= "</select>";				
+				
+				} else {				
+					$selector = "<select id='ttypSelect_$ttyp_id' class='trayAssignedSelect' onchange='updateTrayTTYP($ttyp_id, $caseID)'>";					
+					$selector .= $optionRowsWrapped['optionRows'];					
+					$selector .= "</select>";								
+				}
+				
+				$selectors .= $selector;
+			}
+			
+			return array(
+				'trayUnassigned' => $isATrayNotAssigned,
+				'trayNotAtSite' => $isATrayNotAtSite,
+				'selectors' => $selectors,
+			);
+		
+		}
+		
+		# returns <option> rows
+		public function createTTYPSelector($curType, $userCmpId, $caseID) {
+		
+			$trayIsNotAssigned = 0;
+			$trayIsNotAtSite = 0;
+			
+			$case = $this->caseFromId($caseID);
+			
+			$optionRows = "";
+		
+			# $curType below
+			/* 'case_id' => $row['case_id'],
+			'ttyp_id' => $row['ttyp_id'],
+			'cmt' => $row['cmt'],
+			'tray_id' => $row['tray_id'], */
+			
+			# 2. grab trays fuffilling type
+			$tags = $this->mapTTYPTags($curType['ttyp_id']);
+			#echo print_r($curType);
+			
+			# $tags below
+			/* 'ttyp_id' => $row['ttyp_id'],
+			tag' => $row['tag'], */
+			
+			# 3. check to see if tray is assigned
+			if($curType['tray_id'] == 0) {
+				# Tray not assigned!
+				$trayIsNotAssigned = 1;
+				
+				$optionRows .= "<option value='0'>Unassigned</option>";
+				
+				# print rows
+				foreach($tags as $curTag) {
+				
+					$traysFromTag = $this->mapTagTray($curTag['tag']);
+					
+					# process tray and add to optionRows
+					foreach($traysFromTag as $curTray) {
 					
 					
-					$curTag = $thisTag['tag'];
-					
-					$anotherSql = "SELECT DISTINCT tray_id FROM tray_tag WHERE tag='$curTag'";
-					
-					$trays = mysqli_query($this->connection, $anotherSql);
-					
-					#echo print_r($trays);
-					
-					if(count($trays) >= 2) $trays = $trays[0];
-					
-					foreach($trays as $tray) {
-					
-						#echo print_r($tray);
-					
-						$curTray = $tray['tray_id'];
+						$tray = $this->trayFromId($curTray['tray_id']);
 						
-						$trayName = $this->findTrayData($curTray, "name");
 						
-						# find data about tray
-						$traySql = "SELECT * FROM trays WHERE tray_id='$curTray'";
-						$trayData = $this->query($traySql, true);
 						
-						# tray is at a site, but not the correct site
-						if($trayData['atnow'] == "site" && $trayData['site_id'] != $thisCase['site_id']) {
-							$trayNotAtSite = true;
-							
-							$siteName = $this->findSiteData($trayData['site_id'], "name");
-							$curSelect = "<select class='trayNotAtSite'>";
-							$curSelect .= "<option value='0'>Unassigned</option>";
-							$curSelect .= "<option value='$curTray' selected>$trayName</option>";
-							
-							continue;
-							
-						#tray is not assigned
-						} else if($tray_id == 0) {
-							$trayUnassigned = true;
-							
-							$curSelect = "<select class='trayUnassigned'>";
-							$curSelect .= "<option value='0' selected>Unassigned</option>";
-							
-							continue;
-						
-						#tray is at site
-						} else {
-							$curSelect = "<select>";
-							$curSelect .= "<option value='0'>Unassigned</option>";
-							$curSelect .= "<option value='$curTray' selected>$trayName</option>";
-							
-							continue;
-						
-						}
-						
+						# echo print_r($tray);
 					
-						$curSelect .= "<option value='$curTray'>$trayName</option>";
+						# does tray not belong to user's company?
+						# if so, skip
+						if($tray['cmp_id'] != $userCmpId) continue;
+						
+						$trayId = $tray['tray_id'];
+						$trayName = $tray['name'];
+						
+						$optionRows .= "<option value='$trayId'>$trayName</option>";
 						
 					
 					}
 				
 				}
 				
-				$curSelect .= "</select>";
-				
-				
-				$selectors .= $curSelect;
+				return array(
+					'isTrayNotAssigned' => $trayIsNotAssigned,
+					'isTrayNotAtSite' => $trayIsNotAtSite,
+					'optionRows' => $optionRows,
+				);
 			
+			# check to see if tray is not at site
+			} else {
+			
+				$optionRows .= "<option value='0'>Unassigned</option>";
+				
+				# print rows
+				foreach($tags as $curTag) {
+				
+					$traysFromTag = $this->mapTagTray($curTag['tag']);
+					
+					# process tray and add to optionRows
+					foreach($traysFromTag as $curTray) {
+					
+						$tray = $this->trayFromId($curTray['tray_id']);
+					
+						# does tray not belong to user's company?
+						# if so, skip
+						if($tray['cmp_id'] != $userCmpId) continue;
+						
+						# Does the tray's site_id match the cases site_id?
+						if($tray['site_id'] != $case['site_id'])
+							$trayIsNotAtSite = 1;
+							
+						if($tray['site_id'] == $case['site_id'] ||
+										($trayIsNotAtSite == 1 && $curType['tray_id'] == $tray['tray_id'])) {
+							$isSelected = "selected";
+						} else {
+							$isSelected = "";
+						
+						}
+						
+						$trayId = $tray['tray_id'];
+						$trayName = $tray['name'];
+						
+						# echo print_r($tray) . $trayIsNotAtSite .  "<br/>";
+						
+						# set currently assigned tray as default
+						if($tray['atnow'] == "site" && $tray['site_id'] == $case['site_id']  && $trayIsNotAtSite == 0) {						
+							$siteName = $this->findSiteData($case['site_id'], "name");
+							# browsers do not allow line breaks in select lists
+							$optionRows .= "<option value='$trayId' $isSelected>$trayName</option>";
+						} else if($tray['atnow'] != "site" && $trayIsNotAtSite == 1) {
+							$optionRows .= "<option value='$trayId' $isSelected>$trayName</option>";
+						}
+						
+						
+					
+					}
+				
+				}
+		
+				return array(
+					'isTrayNotAssigned' => $trayIsNotAssigned,
+					'isTrayNotAtSite' => $trayIsNotAtSite,
+					'optionRows' => $optionRows,
+				);
+					
 			}
-			#echo $selectors;
-			
-			$selectorAndFlags = array(
-				'trayUnassigned' => $trayUnassigned,
-				'trayNotAtSite' => $trayNotAtSite,
-				'selectors' => $selectors,
-			);
-			
-			return $selectorAndFlags;
 		
 		}
 		
-		public function findCompanyData($cid, $requestedField) {
+	public function findCompanyData($cid, $requestedField) {
+	
+		//$requestedField MUST match the name of a database column
 		
-			//$requestedField MUST match the name of a database column
-			
-			$sql = "SELECT * FROM company WHERE cmp_id='$cid'";
-			$result = $this->query($sql);
-			
-			return $result[0]["$requestedField"];
-		}
+		$sql = "SELECT * FROM company WHERE cmp_id='$cid'";
+		$result = $this->query($sql);
 		
-		public function findRegionData($cid, $requestedField) {
+		return $result[0]["$requestedField"];
+	}
+	
+	public function findRegionData($cid, $requestedField) {
+	
+		//$requestedField MUST match the name of a database column
 		
-			//$requestedField MUST match the name of a database column
-			
-			$sql = "SELECT * FROM regions WHERE reg_id='$cid'";
-			$result = $this->query($sql);
-			
-			return $result[0]["$requestedField"];
-		}
+		$sql = "SELECT * FROM regions WHERE reg_id='$cid'";
+		$result = $this->query($sql);
 		
-		public function findUserData($uid, $requestedField) {
-					
-			//$requestedField MUST match the name of a database column
-			
-			$sql = "SELECT * FROM users WHERE usr_id='$uid'";
-			$result = $this->query($sql);
-			
-			return $result[0]["$requestedField"];
-		}
-		
-		public function findSiteData($uid, $requestedField) {
-					
-			//$requestedField MUST match the name of a database column
-			
-			$sql = "SELECT * FROM sites WHERE site_id='$uid'";
-			$result = $this->query($sql);
-			
-			return $result[0]["$requestedField"];
-		}
-		
-		public function findTeamData($uid, $requestedField) {
-					
-			//$requestedField MUST match the name of a database column
-			
-			$sql = "SELECT * FROM teams WHERE team_id='$uid'";
-			$result = $this->query($sql);
-			
-			return $result[0]["$requestedField"];
-		}
-		
-		public function findInstrumentData($uid, $requestedField) {
-					
-			//$requestedField MUST match the name of a database column
-			
-			$sql = "SELECT * FROM instruments WHERE inst_id='$uid'";
-			$result = $this->query($sql);
-			
-			return $result[0]["$requestedField"];
-		}
-		
-		public function findStorageData($sid, $requestedField) {
-					
-			//$requestedField MUST match the name of a database column
-			
-			$sql = "SELECT * FROM storage WHERE stor_id='$sid'";
-			$result = $this->query($sql);
-			
-			return $result[0]["$requestedField"];
-		}
-		
-		
-		public function findDoctorData($uid, $requestedField) {
-					
-			//$requestedField MUST match the name of a database column
-			
-			$sql = "SELECT * FROM doctors WHERE doc_id='$uid'";
-			$result = $this->query($sql);
-			
-			return $result[0]["$requestedField"];
-		}
-		
-		public function findProcedureData($uid, $requestedField) {
-					
-			//$requestedField MUST match the name of a database column
-			
-			$sql = "SELECT * FROM procs WHERE proc_id='$uid'";
-			$result = $this->query($sql);
-			
-			return $result[0]["$requestedField"];
-		}
+		return $result[0]["$requestedField"];
+	}
+	
+	public function findUserData($uid, $requestedField) {
 				
+		//$requestedField MUST match the name of a database column
+		
+		$sql = "SELECT * FROM users WHERE usr_id='$uid'";
+		$result = $this->query($sql);
+		
+		return $result[0]["$requestedField"];
+	}
+	
+	public function findSiteData($uid, $requestedField) {
 				
-		public function findTrayData($uid, $requestedField) {
-					
-			//$requestedField MUST match the name of a database column
-			
-			$sql = "SELECT * FROM trays WHERE tray_id='$uid'";
-			$result = $this->query($sql);
-			
-			return $result[0]["$requestedField"];
-		}	
+		//$requestedField MUST match the name of a database column
 		
-		public function findClientData($uid, $requestedField) {
-					
-			//$requestedField MUST match the name of a database column
-			
-			$sql = "SELECT * FROM clients WHERE cli_id='$uid'";
-			$result = $this->query($sql);
-			
-			return $result[0]["$requestedField"];
-		}
+		$sql = "SELECT * FROM sites WHERE site_id='$uid'";
+		$result = $this->query($sql);
 		
-		public function findTrayTypeData($ttypId, $requestedField) {
+		return $result[0]["$requestedField"];
+	}
+	
+	public function findTeamData($uid, $requestedField) {
+				
+		//$requestedField MUST match the name of a database column
 		
-			//$requestedField MUST match the name of a database column
+		$sql = "SELECT * FROM teams WHERE team_id='$uid'";
+		$result = $this->query($sql);
+		
+		return $result[0]["$requestedField"];
+	}
+	
+	public function findInstrumentData($uid, $requestedField) {
+				
+		//$requestedField MUST match the name of a database column
+		
+		$sql = "SELECT * FROM instruments WHERE inst_id='$uid'";
+		$result = $this->query($sql);
+		
+		return $result[0]["$requestedField"];
+	}
+	
+	public function findStorageData($sid, $requestedField) {
+				
+		//$requestedField MUST match the name of a database column
+		
+		$sql = "SELECT * FROM storage WHERE stor_id='$sid'";
+		$result = $this->query($sql);
+		
+		return $result[0]["$requestedField"];
+	}
+	
+	
+	public function findDoctorData($uid, $requestedField) {
+				
+		//$requestedField MUST match the name of a database column
+		
+		$sql = "SELECT * FROM doctors WHERE doc_id='$uid'";
+		$result = $this->query($sql);
+		
+		return $result[0]["$requestedField"];
+	}
+	
+	public function findProcedureData($uid, $requestedField) {
+				
+		//$requestedField MUST match the name of a database column
+		
+		$sql = "SELECT * FROM procs WHERE proc_id='$uid'";
+		$result = $this->query($sql);
+		
+		return $result[0]["$requestedField"];
+	}
 			
-			$sql = "SELECT * FROM ttyp WHERE ttyp_id='$ttypId'";
-			$result = $this->query($sql);
 			
-			
-			return $result[0]["$requestedField"];
+	public function findTrayData($uid, $requestedField) {
+				
+		//$requestedField MUST match the name of a database column
+		
+		$sql = "SELECT * FROM trays WHERE tray_id='$uid'";
+		$result = $this->query($sql);
+		
+		return $result[0]["$requestedField"];
+	}	
+	
+	public function findClientData($uid, $requestedField) {
+				
+		//$requestedField MUST match the name of a database column
+		
+		$sql = "SELECT * FROM clients WHERE cli_id='$uid'";
+		$result = $this->query($sql);
+		
+		return $result[0]["$requestedField"];
+	}
+	
+	public function findTrayTypeData($ttypId, $requestedField) {
+	
+		//$requestedField MUST match the name of a database column
+		
+		$sql = "SELECT * FROM ttyp WHERE ttyp_id='$ttypId'";
+		$result = $this->query($sql);
 		
 		
-		}
+		return $result[0]["$requestedField"];
 	
 	
 	}
+	
+	
+	
+	
+	# Misc
+	
+	public function mapCaseTTYP($caseID) {
+	
+		# Returns array of arrays.
+		$sql = "SELECT * FROM case_ttyp WHERE case_id='$caseID'";
+			
+			if($result = mysqli_query($this->connection, $sql)) {
+			
+				$toReturn = array();
+			
+				while($row = mysqli_fetch_assoc($result)) {
+				
+					$toReturn[] = array (
+						'case_id' => $row['case_id'],
+						'ttyp_id' => $row['ttyp_id'],
+						'cmt' => $row['cmt'],
+						'tray_id' => $row['tray_id'],
+						);
+				
+				
+				
+				}
+			
+				return $toReturn;
+			
+			} 
+			
+			
+		return NULL;
+	
+	}
+	
+	public function mapTTYPTags($TTYPID) {
+	
+		# Returns array of arrays.
+		$sql = "SELECT * FROM ttyp_tag WHERE ttyp_id='$TTYPID'";
+			
+			if($result = mysqli_query($this->connection, $sql)) {
+			
+				$toReturn = array();
+			
+				while($row = mysqli_fetch_assoc($result)) {
+				
+					$toReturn[] = array (
+						'ttyp_id' => $row['ttyp_id'],
+						'tag' => $row['tag'],
+						);
+				
+				}
+			
+				return $toReturn;
+			
+			} 
+			
+			
+		return NULL;
+	
+	}
+	
+	public function mapTagTray($tag) {
+	
+		# Returns array of arrays.
+		$sql = "SELECT * FROM tray_tag WHERE tag='$tag'";
+			
+			if($result = mysqli_query($this->connection, $sql)) {
+			
+				$toReturn = array();
+			
+				while($row = mysqli_fetch_assoc($result)) {
+				
+					$toReturn[] = array (
+						'tray_id' => $row['tray_id'],
+						'tag' => $row['tag'],
+						);
+				
+				}
+			
+				return $toReturn;
+			
+			} 
+			
+			
+		return NULL;
+	
+	}
 
+	public function caseFromId($caseID) {
+	
+		# Returns array with case information
+		$sql = "SELECT * FROM cases WHERE case_id='$caseID'";
+			
+			if($result = mysqli_query($this->connection, $sql)) {
+			
+				while($row = mysqli_fetch_assoc($result)) {
+				
+					$toReturn = array (
+						'case_id' => $row['case_id'],
+						'team_id' => $row['team_id'],
+						'doc_id' => $row['doc_id'],
+						'proc_id' => $row['proc_id'],
+						'site_id' => $row['site_id'],
+						'status' => $row['status'],
+						'dttm' => $row['dttm'],
+						'cmt' => $row['cmt'],
+						);
+				
+				}
+			
+				return $toReturn;
+			
+			} 
+			
+			
+		return NULL;
+	
+	}
+	
+	
+	public function trayFromId($trayId) {
+	
+		# Returns array with tray information
+		$sql = "SELECT * FROM trays WHERE tray_id='$trayId'";
+			
+			if($result = mysqli_query($this->connection, $sql)) {
+			
+				while($row = mysqli_fetch_assoc($result)) {
+				
+					$toReturn = array (
+						'tray_id' => $row['tray_id'],
+						'name' => $row['name'],
+						'cmp_id' => $row['cmp_id'],
+						'team_id' => $row['team_id'],
+						'atnow' => $row['atnow'],
+						'usr_id' => $row['usr_id'],
+						'site_id' => $row['site_id'],
+						'stor_id' => $row['stor_id'],
+						'loan_team' => $row['loan_team'],
+						);
+				
+				}
+			
+				return $toReturn;
+			
+			} 
+			
+			
+		return NULL;
+	
+	}
+}
+	
 
 
 ?>

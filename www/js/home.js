@@ -119,6 +119,76 @@
 		
 		});
 	
+	}
+	
+	function updateUserAssign(thisAssignId) {
+	
+		var idForSelect = "#assignmentSelect_";
+		idForSelect = idForSelect.concat(thisAssignId);
+		
+		var emptyString = "";
+		
+		var userFromSelect = $(idForSelect).val();
+		var assignmentID = emptyString.concat(thisAssignId);
+		var pageOffset = getParameterByName('offset');
+		var type = $(idForSelect).attr("data-type");
+		
+		$.post("home_updateUserForAssignment.php",
+		{newUser: userFromSelect, assignment: assignmentID, asgnType: type, offset: pageOffset },
+		function(data, status, xhr) {
+			location.reload();
+		
+		});
+		
+	}
+	
+	function updateTeamForCase(thisCaseId) {
+		
+		var idForSelect = "#caseTeamSelect_";
+		idForSelect = idForSelect.concat(thisCaseId);
+		
+		var emptyString = "";
+		
+		var teamFromSelect = $(idForSelect).val();
+		var thisCaseId = emptyString.concat(thisCaseId);
+		
+		console.log(teamFromSelect);
+		console.log(thisCaseId);
+		
+		$.post("home_updateTeamForCase.php",
+		{newTeam: teamFromSelect, caseId: thisCaseId },
+		function(data, status, xhr) {
+			location.reload();	
+		});
 	
 	}
 	
+	function updateTrayTTYP(ttypID, caseID) {
+	
+		var idForSelect = "#ttypSelect_";
+		idForSelect = idForSelect.concat(ttypID);
+		
+		var emptyString = "";
+		
+		var trayFromSelect = $(idForSelect).val();
+		var thisCaseId = emptyString.concat(caseID);
+		
+		console.log(idForSelect);
+		console.log(trayFromSelect);
+		console.log(thisCaseId);
+		
+		$.post("home_updateTrayForTTYP.php",
+		{newTray: trayFromSelect, tray_type: ttypID, newCaseId: thisCaseId },
+		function(data, status, xhr) {
+			location.reload();	
+		});
+		
+	
+	}
+	
+	function getParameterByName(name) {
+		name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+		var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+			results = regex.exec(location.search);
+		return results === null ? 0 : decodeURIComponent(results[1].replace(/\+/g, " "));
+}

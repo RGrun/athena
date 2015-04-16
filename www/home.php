@@ -32,7 +32,7 @@
 	
 	$page = "";
 	
-	$page .= $gremlin->buildMenu("$user->uname" . "'s Home");
+	$page .= $gremlin->buildMenu("$user->uname" . "'s Home", "home");
 	
 	$script = "<script src='js/home.js'></script>";
 	
