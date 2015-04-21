@@ -37,7 +37,7 @@ body {
 	width: 860px;
 	
 	position: relative;
-	top: -10px;
+	top: 20px;
 
 }
 
@@ -162,8 +162,8 @@ body {
 	position: relative;
 }
 
-#todayButton  {
-	bottom: 34px;
+#thisWeekButton  {
+	bottom: 20px;
 	left: -3px;
 	
 	color: white;
@@ -188,7 +188,7 @@ body {
 
 
 
-#todayButton small {
+#thisWeekButton small {
 	position: relative;
 
 	top: 25%;
@@ -197,7 +197,7 @@ body {
 
 #arrowButtonsBox {
 
-	bottom: 20px;
+	bottom: 6px;
 
 	position: relative;
 	left: -14px;
@@ -253,8 +253,8 @@ body {
 
 #calListBox {
 
-	bottom: 20px;
-	left: 33px;
+	bottom: 5px;
+	left: -1px;
 
 	position: relative;
 	margin-left: 15px;
@@ -291,13 +291,12 @@ body {
 	
 }
 
-#listButton a {
-	text-decoration: none;
-
-}
-
 #calButton a {
 
+	text-decoration: none;
+}
+
+#listButton a {
 	text-decoration: none;
 }
 
@@ -314,13 +313,13 @@ body {
 
 #showFiltersButton {
 
-	bottom: 34px;
+	bottom: 20px;
 	
 	font-family: 'Open Sans', sans-serif;
 	
 	background: #61A1B2;
 	
-	left: 50px;
+	left: 10px;
 	
 	height: 80%;
 	width: 15%;
@@ -332,6 +331,12 @@ body {
 	text-align: center;
 
 	cursor: pointer;
+}
+
+.disabled {
+	background: #bbbbbb !important;
+	color: #5B626E !important;
+
 }
 
 #showFiltersButton span {
@@ -888,4 +893,50 @@ body {
 	
 	background: #4B8799;
 	
+}
+
+/* list view-specific */
+
+#dateBoxCal {
+	font-family: 'Open Sans', sans-serif;
+	
+	font-weight: bold;
+	font-size: 11px;
+
+	position: relative;
+	bottom: 0px;
+	left: 20px;
+	margin: 0px 40px;
+	text-align: center;
+	
+	width: 290px;
+	
+	color: white;
+
+}
+
+#dateBoxCal h3 {
+
+	margin: 1px 0px;
+
+}
+
+/* list view-specific stuff */
+
+.listTable {
+	margin: 10px 0px 10px 0px;
+	
+
+
+}
+
+.listTable table {
+
+	border: 1px solid #808080;
+}
+
+.listDate {
+	font-weight: bold;
+	font-size: 20px;
+
 }

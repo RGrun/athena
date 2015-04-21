@@ -77,6 +77,7 @@
 		
 		}
 		
+		# returns user object and checks login
 		public function spawnPage($ID, $userType) {
 			
 			#logged-in users only
@@ -106,7 +107,9 @@
 				case "home":
 					$headers .= "<link rel='stylesheet' type='text/css' href='core/homeStyles.css'>";
 					break;
-			
+				case "homeList":
+					$headers .= "<link rel='stylesheet' type='text/css' href='core/homeListStyles.css'>";
+					break;
 				default:
 					$headers .= "<link rel='stylesheet' type='text/css' href='core/homeStyles.css'>";
 					break;
