@@ -940,3 +940,8 @@ body {
 	font-size: 20px;
 
 }
+
+.rowText a {
+	font-weight: bold;
+	color: #71AEBF;
+}
